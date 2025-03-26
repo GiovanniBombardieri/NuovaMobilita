@@ -18,19 +18,25 @@ const Login = () => {
         body: JSON.stringify({ email, password }),
       });
 
+      const data = await response.json();
+      console.log("Risposta API:", data);
+
       if (!response.ok) {
-        throw new Error("Login fallito");
+        throw new Error(data.message || "Errore nel login");
       }
 
-      const data = await response.json();
+      if (!data.user || !data.access_token) {
+        throw new Error("Dati mancanti nella risposta");
+      }
+
       login({
         name: data.user.name,
         email: data.user.email,
-        token: data.token,
+        token: data.access_token,
       });
       navigate("/dashboard");
-    } catch (error) {
-      console.error("Errore nel login:", error);
+    } catch (err) {
+      console.error("Errore nel login:", err);
     }
   };
 
