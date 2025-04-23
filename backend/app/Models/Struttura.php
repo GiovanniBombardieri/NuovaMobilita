@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Struttura extends Model
+{
+    protected $table = 'struttura';
+    protected $primaryKey = 'id_struttura';
+    public $incrementing = FALSE;
+    protected $keyType = 'string';
+
+    public $timestamps = FALSE;
+
+    protected $fillable = [
+        'id_struttura',
+        'id_posizione',
+        'id_sito_web',
+        'id_recapito',
+        'ragione_sociale',
+        'time_modifica',
+        'record_attivo',
+    ];
+
+    // Relazioni con le altre tabelle
+
+    public function posizione()
+    {
+        return $this->belongsTo(Posizione::class, 'id_posizione', 'id_posizione');
+    }
+
+    public function sitoWeb()
+    {
+        return $this->belongsTo(SitoWeb::class, 'id_sito_web', 'id_sito_web');
+    }
+
+    public function recapito()
+    {
+        return $this->hasMany(Recapito::class, 'id_recapito', 'id_recapito');
+    }
+}
