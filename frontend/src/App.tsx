@@ -4,18 +4,15 @@ import ProtectedRoute from "./components/protectedRoute";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import Home from "./pages/Home";
 import "./App.css";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="min-h-screen bg-green-800 flex flex-col items-center justify-center">
-          <h1 className="text-4xl font-bold text-red-600 mb-6">
-            Benvenuto in Tailwind + React
-          </h1>
-        </div>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route

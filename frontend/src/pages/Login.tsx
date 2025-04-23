@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -41,15 +41,64 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
+    <div className="flex flex-col items-center justify-center w-screen h-screen">
+      <form
+        onSubmit={handleLogin}
+        className="w-full flex flex-col items-center justify-center"
+      >
+        <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 w-1/4 flex flex-col items-center">
+          <legend className="fieldset-legend">Login</legend>
+
+          <label className="label">Email</label>
+          <input
+            type="email"
+            className="input text-center w-3/4"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <label className="label">Password</label>
+          <input
+            type="password"
+            className="input text-center w-3/4"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <button type="submit" className="btn btn-neutral my-4 w-3/4">
+            Login
+          </button>
+        </fieldset>
+      </form>
+
+      <hr className="my-8"></hr>
+
+      <div className="flex flex-row items-center justify-center m-3">
+        <p className="mr-3">Non hai un account?</p>
+        <Link to="/register" className="btn btn-outline btn-primary">
+          Registrati
+        </Link>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
+
+{
+  /* <h1 className="text-3xl text-center mb-5">Login</h1>
+      <form onSubmit={handleLogin} className="flex flex-col items-center p-2">
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          className="mb-2 rounded-md p-1 text-center w-2/3"
         />
         <input
           type="password"
@@ -57,11 +106,13 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          className="mb-4 rounded-md p-1 text-center w-2/3"
         />
-        <button type="submit">Accedi</button>
-      </form>
-    </div>
-  );
-};
-
-export default Login;
+        <button
+          type="submit"
+          className="w-24 text-white border p-1 rounded-lg hover:underline hover:bg-white hover:text-blue-700"
+        >
+          Accedi
+        </button>
+      </form> */
+}
