@@ -1,6 +1,7 @@
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -75,9 +76,31 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="navbar-center">
-          <a className="btn btn-ghost text-xl">
-            {showWelcome ? `Benvenuto ${user?.name}` : "Nuova Mobilità"}
-          </a>
+          <AnimatePresence mode="wait">
+            {showWelcome ? (
+              <motion.span
+                key="welcome"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.7 }}
+                className="btn btn-ghost text-xl"
+              >
+                Benvenuto {user?.name}
+              </motion.span>
+            ) : (
+              <motion.span
+                key="brand"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.7 }}
+                className="btn btn-ghost text-xl"
+              >
+                Nuova Mobilità
+              </motion.span>
+            )}
+          </AnimatePresence>
         </div>
         <div className="navbar-end">
           <button className="btn btn-ghost btn-circle">
