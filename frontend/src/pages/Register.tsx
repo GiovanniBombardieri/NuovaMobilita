@@ -4,6 +4,8 @@ import { useNavigate, Link } from "react-router-dom";
 
 const Register = () => {
   const [name, setName] = useState("");
+  const [cognome, setCognome] = useState("");
+  const [ruolo, setRuolo] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuth();
@@ -16,7 +18,7 @@ const Register = () => {
       const response = await fetch("http://localhost:8000/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, cognome, ruolo, email, password }),
       });
 
       if (!response.ok) {
@@ -44,17 +46,52 @@ const Register = () => {
         <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 w-1/4 flex flex-col items-center">
           <legend className="fieldset-legend">Registrazione</legend>
 
-          <label className="label">Nome</label>
+          <div className="flex flex-row gap-4">
+            <label className="label">Ruolo</label>
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="Ruolo"
+                value="utente"
+                checked={ruolo === "utente"}
+                onChange={(e) => setRuolo(e.target.value)}
+                className="radio radio-primary"
+                required
+              />
+              Utente
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="Ruolo"
+                value="struttura"
+                checked={ruolo === "struttura"}
+                onChange={(e) => setRuolo(e.target.value)}
+                className="radio radio-primary"
+                required
+              />
+              Struttura
+            </label>
+          </div>
+
           <input
             type="text"
-            className="input text-center w-3/4"
+            className="input text-center w-3/4 mt-5"
             placeholder="Nome"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
 
-          <label className="label">Email</label>
+          <input
+            type="text"
+            className="input text-center w-3/4"
+            placeholder="Cognome"
+            value={cognome}
+            onChange={(e) => setCognome(e.target.value)}
+            required
+          />
+
           <input
             type="email"
             className="input text-center w-3/4"
@@ -64,7 +101,7 @@ const Register = () => {
             required
           />
 
-          <label className="label">Password</label>
+          <label className="label mt-5">Password</label>
           <input
             type="password"
             className="input text-center w-3/4"
