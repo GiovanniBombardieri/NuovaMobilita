@@ -28,6 +28,10 @@ const Register = () => {
       const data = await response.json();
       login({
         name: data.user.name,
+        cognome: data.user.cognome,
+        indirizzo: data.user.indirizzo,
+        telefono: data.user.telefono,
+        ruolo: data.user.ruolo,
         email: data.user.email,
         token: data.token,
       });
@@ -130,36 +134,3 @@ const Register = () => {
 };
 
 export default Register;
-
-{
-  /* <input
-type="text"
-placeholder="Nome"
-value={name}
-onChange={(e) => setName(e.target.value)}
-required
-className="mb-2 rounded-md p-1 text-center w-2/3"
-/>
-<input
-type="email"
-placeholder="Email"
-value={email}
-onChange={(e) => setEmail(e.target.value)}
-required
-className="mb-2 rounded-md p-1 text-center w-2/3"
-/>
-<input
-type="password"
-placeholder="Password"
-value={password}
-onChange={(e) => setPassword(e.target.value)}
-required
-className="mb-2 rounded-md p-1 text-center w-2/3"
-/>
-<button
-type="submit"
-className="w-24 text-white border p-1 rounded-lg hover:underline hover:bg-white hover:text-blue-700"
->
-Registrati
-</button> */
-}

@@ -3,6 +3,10 @@ import { createContext, useContext, useState, ReactNode } from "react";
 // Definizione del tipo per l'utente
 interface User {
   name: string;
+  cognome: string;
+  indirizzo: string;
+  telefono: string;
+  ruolo: string;
   email: string;
   token: string;
 }

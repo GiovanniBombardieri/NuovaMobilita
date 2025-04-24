@@ -62,7 +62,11 @@ class AuthController extends Controller
 		return response()->json([
 			'user' => [
 				'name' => $user->name,
-				'email' => $user->email
+				'cognome' => $user->cognome,
+				'ruolo' => $user->ruolo,
+				'email' => $user->email,
+				'telefono' => $user->telefono,
+				'indirizzo' => $user->indirizzo,
 			],
 			'access_token' => $token,
 			'token_type' => 'Bearer',
@@ -75,6 +79,30 @@ class AuthController extends Controller
 
 		return response()->json([
 			'message' => 'Logout effettuato con successo.',
+		]);
+	}
+
+	public function updateProfile(Request $request)
+	{
+		$user = $request->user();
+
+		$request->validate([
+			'telefono' => 'nullable|string|max:20',
+			'indirizzo' => 'nullable|string|max:255',
+		]);
+
+		$user->telefono = $request->telefono;
+		$user->indirizzo = $request->indirizzo;
+		$user->save();
+
+		return response()->json([
+			'name' => $user->name,
+			'cognome' => $user->cognome,
+			'email' => $user->email,
+			'telefono' => $user->telefono,
+			'indirizzo' => $user->indirizzo,
+			'ruolo' => $user->ruolo,
+			'token' => $request->bearerToken(),
 		]);
 	}
 }
