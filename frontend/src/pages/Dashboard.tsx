@@ -10,7 +10,13 @@ const Dashboard = () => {
       <ServiceOverview />
       <div className="flex justify-between">
         <UserDetails />
-        <StructureMaps />
+        <StructureMaps
+          structures={[
+            { id: 1, name: "Ospedale A", lat: 41.8902, lng: 12.4922 },
+            { id: 2, name: "Clinica B", lat: 41.9002, lng: 12.4962 },
+          ]}
+          userLocation={{ lat: 41.9028, lng: 12.4964 }}
+        />
       </div>
     </div>
   );
