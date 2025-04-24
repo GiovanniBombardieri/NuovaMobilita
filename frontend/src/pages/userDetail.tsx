@@ -17,7 +17,7 @@ const UserDetails = () => {
   return (
     <div>
       <header className="w-1/2 h-full m-5">
-        <div className="card bg-base-100 w-1/2 shadow-sm">
+        <div className="card bg-base-100 w-1/2 shadow-xl">
           <AnimatePresence mode="wait">
             {showWelcome ? (
               <motion.span
