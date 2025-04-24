@@ -26,7 +26,8 @@ class User extends Authenticatable
         'indirizzo',
         'telefono',
         'ruolo',
-        'record_attivo'
+        'record_attivo',
+        'id_struttura',
     ];
 
     /**
@@ -47,6 +48,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
+            'id_struttura' => 'string',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];

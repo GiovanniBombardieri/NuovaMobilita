@@ -3,15 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Struttura;
+use App\Models\Posizione;
+use App\Models\Recapito;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
 	public function register(Request $request)
 	{
+
+		if ($request->ruolo === 'struttura') {
+			return $this->registerStruttura($request);
+		}
+
 		$request->validate([
 			'name' => 'required|string|max:255',
 			'cognome' => 'required|string|max:255',
@@ -41,6 +52,79 @@ class AuthController extends Controller
 			'access_token' => $token,
 			'token_type' => 'Bearer',
 		]);
+	}
+
+	public function registerStruttura(Request $request)
+	{
+		DB::beginTransaction();
+		try {
+			Log::info('Inizio registrazione struttura');
+
+			// Creo id_struttura, id_posizione, id_recapito
+			$id_struttura = (string) Str::uuid();
+			$id_posizione = (string) Str::uuid();
+			$id_recapito = (string) Str::uuid();
+
+			// Salvo utente con email, password e ruolo
+			Log::info('Creazione utente', ['id_struttura' => $id_struttura]);
+			$user = User::create([
+				'email' => $request->email,
+				'password' => Hash::make($request->password),
+				'ruolo' => 'struttura',
+				'id_struttura' => $id_struttura,
+			]);
+
+			// Salvo la posizione
+			Log::info('Creazione posizione');
+			$posizione = Posizione::create([
+				'id_posizione' => $id_posizione,
+				'comune' => $request->comune,
+				'provincia' => $request->provincia,
+				'via' => $request->via,
+				'numero_civico' => $request->numero_civico,
+				'cap' => $request->cap,
+			]);
+
+			// Salvo il recapito
+			Log::info('Creazione recapito');
+			$recapito = Recapito::create([
+				'id_recapito' => $id_recapito,
+				'id_tipo_recapito' => '0000004a-0000-0000-0000-000000000001',
+				'email' => $request->email,
+			]);
+
+			// Salvo la struttura
+			Log::info('Creazione struttura');
+			$struttura = Struttura::create([
+				'id_struttura' => $id_struttura,
+				'id_posizione' => $id_posizione,
+				'id_recapito' => $id_recapito,
+				'ragione_sociale' => $request->ragione_sociale,
+			]);
+
+			DB::commit();
+
+			// Genero il token
+			$token = $user->createToken('auth_token')->plainTextToken;
+
+			return response()->json([
+				'user' => [
+					'ruolo' => $user->ruolo,
+					'email' => $user->email,
+					'ragione_sociale' => $struttura->ragione_sociale,
+					'comune' => $posizione->comune,
+					'provincia' => $posizione->provincia,
+					'via' => $posizione->via,
+					'numero_civico' => $posizione->numero_civico,
+					'cap' => $posizione->cap,
+				],
+				'access_token' => $token,
+				'token_type' => 'Bearer',
+			]);
+		} catch (\Exception $e) {
+			DB::rollBack();
+			return response()->json(['error' => 'Errore nella registrazione della struttura', 'details' => $e->getMessage()], 500);
+		}
 	}
 
 	public function login(Request $request)

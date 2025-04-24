@@ -1,13 +1,24 @@
-import { useAuth } from "../context/AuthContext";
+import { useAuth, User, Struttura } from "../context/AuthContext";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+
+// Funzioni di type guard
+function isUser(user: User | Struttura | null): user is User {
+  return (user as User)?.ruolo === "utente";
+}
+
+function isStruttura(user: User | Struttura | null): user is Struttura {
+  return (user as Struttura)?.ruolo === "struttura";
+}
 
 const UserDetails = () => {
   const { user } = useAuth();
   const { login } = useAuth();
   const [showWelcome, setShowWelcome] = useState(true);
-  const [telefono, setTelefono] = useState(user?.telefono || "");
-  const [indirizzo, setIndirizzo] = useState(user?.indirizzo || "");
+  const [telefono, setTelefono] = useState(isUser(user) ? user.telefono : "");
+  const [indirizzo, setIndirizzo] = useState(
+    isUser(user) ? user.indirizzo : ""
+  );
 
   const updateProfile = async () => {
     try {
@@ -56,7 +67,12 @@ const UserDetails = () => {
               transition={{ duration: 0.7 }}
               className="text-center font-bold text-2xl my-8"
             >
-              Benvenuto {user?.name}
+              Benvenuto{" "}
+              {isUser(user)
+                ? user.name
+                : isStruttura(user)
+                ? user.ragione_sociale
+                : "Utente generico"}
             </motion.span>
           ) : (
             <motion.span
@@ -74,9 +90,16 @@ const UserDetails = () => {
 
         <figure className="px-10">
           <div className="w-48 h-48 rounded-full bg-primary text-white flex items-center justify-center text-7xl font-bold">
-            {`${user?.name?.charAt(0)?.toUpperCase() ?? ""}${
-              user?.cognome?.charAt(0)?.toUpperCase() ?? ""
-            }`}
+            {isUser(user)
+              ? `${user.name.charAt(0)?.toUpperCase() ?? ""}${
+                  user.cognome.charAt(0)?.toUpperCase() ?? ""
+                }`
+              : isStruttura(user)
+              ? `${
+                  user.ragione_sociale.charAt(0)?.toUpperCase() +
+                  user.ragione_sociale.charAt(1)?.toUpperCase()
+                }`
+              : "UG"}
           </div>
         </figure>
         <div className="card-body flex flex-col">
@@ -94,18 +117,26 @@ const UserDetails = () => {
           </div>
           <div className="flex flex-row items-center text-center">
             <h3 className="card-title mr-3">Telefono:</h3>
-            {user?.telefono ? (
-              <p>{user.telefono}</p>
+            {isUser(user) ? (
+              user.telefono ? (
+                <p>{user.telefono}</p>
+              ) : (
+                <p className="text-red-600">Telefono non inserito</p>
+              )
             ) : (
-              <p className="text-red-600">Telefono non inserito</p>
+              <p className="text-red-600">Ruolo non corretto</p>
             )}
           </div>
           <div className="flex flex-row items-center text-center">
             <h3 className="card-title mr-3">Indirizzo:</h3>
-            {user?.indirizzo ? (
-              <p>{user.indirizzo}</p>
+            {isUser(user) ? (
+              user?.indirizzo ? (
+                <p>{user.indirizzo}</p>
+              ) : (
+                <p className="text-red-600">Indirizzo non inserito</p>
+              )
             ) : (
-              <p className="text-red-600">Indirizzo non inserito</p>
+              <p className="text-red-600">Ruolo non corretto</p>
             )}
           </div>
 

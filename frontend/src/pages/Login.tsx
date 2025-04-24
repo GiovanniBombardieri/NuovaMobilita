@@ -29,11 +29,30 @@ const Login = () => {
         throw new Error("Dati mancanti nella risposta");
       }
 
-      login({
-        name: data.user.name,
-        email: data.user.email,
-        token: data.access_token,
-      });
+      // Differenzio i dati di login in base al ruolo selezionato
+      if (data.user.ruolo === "utente") {
+        login({
+          name: data.user.name,
+          cognome: data.user.cognome,
+          indirizzo: data.user.indirizzo,
+          telefono: data.user.telefono,
+          ruolo: data.user.ruolo,
+          email: data.user.email,
+          token: data.token,
+        });
+      } else if (data.user.ruolo === "struttura") {
+        login({
+          ragione_sociale: data.user.ragione_sociale,
+          comune: data.user.comune,
+          provincia: data.user.provincia,
+          via: data.user.via,
+          numero_civico: data.user.numero_civico,
+          cap: data.user.cap,
+          ruolo: data.user.ruolo,
+          email: data.user.email,
+          token: data.token,
+        });
+      }
       navigate("/dashboard");
     } catch (err) {
       console.error("Errore nel login:", err);

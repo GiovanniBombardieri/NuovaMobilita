@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 
-// Definizione del tipo per l'utente
-interface User {
+// Definizione del tipo per il ruolo Utente
+export interface User {
   name: string;
   cognome: string;
   indirizzo: string;
@@ -11,10 +11,23 @@ interface User {
   token: string;
 }
 
+// Definizione del tipo per il ruolo Struttura
+export interface Struttura {
+  ragione_sociale: string;
+  comune: string;
+  provincia: string;
+  via: string;
+  numero_civico: string;
+  cap: string;
+  ruolo: string;
+  email: string;
+  token: string;
+}
+
 // Definizione del tipo per il contesto
 interface AuthContextType {
-  user: User | null;
-  login: (userData: User) => void;
+  user: User | Struttura | null;
+  login: (userData: User | Struttura) => void;
   logout: () => void;
 }
 
@@ -33,12 +46,12 @@ export const useAuth = () => {
 
 // Provider che avvolge l'intera app per gestire l'autenticazione
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(() => {
+  const [user, setUser] = useState<User | Struttura | null>(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
-  const login = (userData: User) => {
+  const login = (userData: User | Struttura) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
   };

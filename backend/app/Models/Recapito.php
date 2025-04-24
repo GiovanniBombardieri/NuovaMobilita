@@ -15,7 +15,7 @@ class Recapito extends Model
         'id_recapito',
         'id_tipo_recapito',
         'telefono',
-        'mail',
+        'email',
         'time_modifica',
         'record_attivo',
     ];
