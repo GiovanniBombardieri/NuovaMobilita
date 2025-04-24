@@ -1,6 +1,7 @@
 import { useAuth, User, Struttura } from "../context/AuthContext";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ModificaProfilo from "./ModificaProfilo";
 
 // Funzioni di type guard
 function isUser(user: User | Struttura | null): user is User {
@@ -152,7 +153,7 @@ const UserDetails = () => {
             )}
           </div>
 
-          {/** MODIFICA PROFILO */}
+          {/** PULSANTE MODIFICA PROFILO */}
           <button
             // onClick={handleEditProfile}
             onClick={() =>
@@ -180,50 +181,7 @@ const UserDetails = () => {
           </button>
 
           {/** DIALOG */}
-          <dialog
-            id="edit_profile"
-            className="modal modal-bottom sm:modal-middle"
-          >
-            <div className="modal-box">
-              <h3 className="font-bold text-lg mb-4">Modifica profilo</h3>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  updateProfile();
-                }}
-              >
-                <div className="form-control mb-4">
-                  <label className="label mx-3">Telefono</label>
-                  <input
-                    type="text"
-                    className="input input-bordered"
-                    value={telefono}
-                    onChange={(e) => setTelefono(e.target.value)}
-                  />
-                </div>
-
-                <div className="form-control mb-4">
-                  <label className="label mx-3">Indirizzo</label>
-                  <input
-                    type="text"
-                    className="input input-bordered"
-                    value={indirizzo}
-                    onChange={(e) => setIndirizzo(e.target.value)}
-                  />
-                </div>
-
-                <div className="modal-action">
-                  <button type="submit" className="btn btn-primary mr-2">
-                    Salva
-                  </button>
-                  <form method="dialog">
-                    {/* if there is a button in form, it will close the modal */}
-                    <button className="btn">Close</button>
-                  </form>
-                </div>
-              </form>
-            </div>
-          </dialog>
+          <ModificaProfilo />
         </div>
       </div>
     </div>
@@ -231,3 +189,46 @@ const UserDetails = () => {
 };
 
 export default UserDetails;
+
+{
+  /* <dialog id="edit_profile" className="modal modal-bottom sm:modal-middle">
+  <div className="modal-box">
+    <h3 className="font-bold text-lg mb-4">Modifica profilo</h3>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        updateProfile();
+      }}
+    >
+      <div className="form-control mb-4">
+        <label className="label mx-3">Telefono</label>
+        <input
+          type="text"
+          className="input input-bordered"
+          value={telefono}
+          onChange={(e) => setTelefono(e.target.value)}
+        />
+      </div>
+
+      <div className="form-control mb-4">
+        <label className="label mx-3">Indirizzo</label>
+        <input
+          type="text"
+          className="input input-bordered"
+          value={indirizzo}
+          onChange={(e) => setIndirizzo(e.target.value)}
+        />
+      </div>
+
+      <div className="modal-action">
+        <button type="submit" className="btn btn-primary mr-2">
+          Salva
+        </button>
+        <form method="dialog">
+          <button className="btn">Close</button>
+        </form>
+      </div>
+    </form>
+  </div>
+</dialog> */
+}

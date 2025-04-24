@@ -2,6 +2,22 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 
+const geocodeAddress = async (address: string) => {
+  const response = await fetch(
+    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+      address
+    )}`
+  );
+  const data = await response.json();
+  if (data && data.length > 0) {
+    return {
+      lat: parseFloat(data[0].lat),
+      lng: parseFloat(data[0].lon),
+    };
+  }
+  throw new Error("Geocoding fallito.");
+};
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,6 +69,9 @@ const Login = () => {
           token: data.token,
         });
       } else if (data.user.ruolo === "struttura") {
+        const fullAddress = `${data.user.via} ${data.user.numero_civico}, ${data.user.cap} ${data.user.comune}, ${data.user.provincia}`;
+        const location = await geocodeAddress(fullAddress);
+
         login({
           ragione_sociale: data.user.ragione_sociale,
           comune: data.user.comune,
@@ -63,6 +82,7 @@ const Login = () => {
           ruolo: data.user.ruolo,
           email: data.user.email,
           token: data.token,
+          location,
         });
       }
       navigate("/dashboard");

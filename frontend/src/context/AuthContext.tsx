@@ -22,6 +22,10 @@ export interface Struttura {
   ruolo: string;
   email: string;
   token: string;
+  location?: {
+    lat: number;
+    lng: number;
+  };
 }
 
 // Definizione del tipo per il contesto
