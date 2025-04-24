@@ -7,6 +7,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [erroreLogin, setErroreLogin] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -14,15 +15,25 @@ const Login = () => {
     try {
       const response = await fetch("http://localhost:8000/api/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      const contentType = response.headers.get("content-type");
+      const data =
+        contentType && contentType.includes("application/json")
+          ? await response.json()
+          : null;
+
       console.log("Risposta API:", data);
 
       if (!response.ok) {
-        throw new Error(data.message || "Errore nel login");
+        const errorMessage =
+          data?.errors?.email[0] || data?.message || "Errore durante il login.";
+        throw new Error(errorMessage);
       }
 
       if (!data.user || !data.access_token) {
@@ -55,7 +66,15 @@ const Login = () => {
       }
       navigate("/dashboard");
     } catch (err) {
-      console.error("Errore nel login:", err);
+      if (err instanceof TypeError && err.message === "Failed to fetch") {
+        setErroreLogin(
+          "Impossibile connettersi al server. Verifica la connessione o i permessi CORS."
+        );
+      } else if (err instanceof Error) {
+        setErroreLogin(err.message);
+      } else {
+        setErroreLogin("Errore sconosciuto.");
+      }
     }
   };
 
@@ -94,6 +113,8 @@ const Login = () => {
         </fieldset>
       </form>
 
+      {erroreLogin && <div className="text-red-600 mt-3">{erroreLogin}</div>}
+
       <hr className="my-8"></hr>
 
       <div className="flex flex-row items-center justify-center m-3">
@@ -107,31 +128,3 @@ const Login = () => {
 };
 
 export default Login;
-
-{
-  /* <h1 className="text-3xl text-center mb-5">Login</h1>
-      <form onSubmit={handleLogin} className="flex flex-col items-center p-2">
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="mb-2 rounded-md p-1 text-center w-2/3"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="mb-4 rounded-md p-1 text-center w-2/3"
-        />
-        <button
-          type="submit"
-          className="w-24 text-white border p-1 rounded-lg hover:underline hover:bg-white hover:text-blue-700"
-        >
-          Accedi
-        </button>
-      </form> */
-}

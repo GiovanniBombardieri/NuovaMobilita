@@ -53,4 +53,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function struttura()
+    {
+        return $this->belongsTo(\App\Models\Struttura::class, 'id_struttura', 'id_struttura');
+    }
 }

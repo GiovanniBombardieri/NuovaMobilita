@@ -103,6 +103,7 @@ const UserDetails = () => {
           </div>
         </figure>
         <div className="card-body flex flex-col">
+          {/** RUOLO */}
           <div className="flex flex-row items-center text-center">
             <h3 className="card-title mr-3">Ruolo:</h3>
             <p>
@@ -111,10 +112,14 @@ const UserDetails = () => {
                 : ""}
             </p>
           </div>
+
+          {/** EMAIL */}
           <div className="flex flex-row items-center text-center">
             <h3 className="card-title mr-3">E-mail:</h3>
             <p>{user?.email}</p>
           </div>
+
+          {/** TELEFONO */}
           <div className="flex flex-row items-center text-center">
             <h3 className="card-title mr-3">Telefono:</h3>
             {isUser(user) ? (
@@ -127,6 +132,8 @@ const UserDetails = () => {
               <p className="text-red-600">Ruolo non corretto</p>
             )}
           </div>
+
+          {/** INDIRIZZO */}
           <div className="flex flex-row items-center text-center">
             <h3 className="card-title mr-3">Indirizzo:</h3>
             {isUser(user) ? (
@@ -135,11 +142,17 @@ const UserDetails = () => {
               ) : (
                 <p className="text-red-600">Indirizzo non inserito</p>
               )
+            ) : isStruttura(user) ? (
+              <p>
+                {user.via} {user.numero_civico}, {user.comune} {user.cap} (
+                {user.provincia})
+              </p>
             ) : (
               <p className="text-red-600">Ruolo non corretto</p>
             )}
           </div>
 
+          {/** MODIFICA PROFILO */}
           <button
             // onClick={handleEditProfile}
             onClick={() =>
@@ -165,6 +178,8 @@ const UserDetails = () => {
             </svg>
             Modifica profilo
           </button>
+
+          {/** DIALOG */}
           <dialog
             id="edit_profile"
             className="modal modal-bottom sm:modal-middle"

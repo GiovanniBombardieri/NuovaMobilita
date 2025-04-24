@@ -141,20 +141,55 @@ class AuthController extends Controller
 		}
 
 		$user = Auth::user();
+		Log::info('Utente loggato', ['email' => $user->email, 'ruolo' => $user->ruolo]);
 		$token = $user->createToken('auth_token')->plainTextToken;
 
-		return response()->json([
-			'user' => [
-				'name' => $user->name,
-				'cognome' => $user->cognome,
-				'ruolo' => $user->ruolo,
-				'email' => $user->email,
-				'telefono' => $user->telefono,
-				'indirizzo' => $user->indirizzo,
-			],
-			'access_token' => $token,
-			'token_type' => 'Bearer',
-		]);
+		if ($user->ruolo === "utente") {
+			$risposta = response()->json([
+				'user' => [
+					'name' => $user->name,
+					'cognome' => $user->cognome,
+					'ruolo' => $user->ruolo,
+					'email' => $user->email,
+					'telefono' => $user->telefono,
+					'indirizzo' => $user->indirizzo,
+				],
+				'access_token' => $token,
+				'token_type' => 'Bearer',
+			]);
+			Log::info('Risposta', [$risposta]);
+
+			return response()->json([
+				'user' => [
+					'name' => $user->name,
+					'cognome' => $user->cognome,
+					'ruolo' => $user->ruolo,
+					'email' => $user->email,
+					'telefono' => $user->telefono,
+					'indirizzo' => $user->indirizzo,
+				],
+				'access_token' => $token,
+				'token_type' => 'Bearer',
+			]);
+		} else if ($user->ruolo === "struttura") {
+			$struttura = $user->struttura;
+			$posizione = $struttura?->posizione;
+
+			return response()->json([
+				'user' => [
+					'ruolo' => $user->ruolo,
+					'email' => $user->email,
+					'ragione_sociale' => $struttura->ragione_sociale,
+					'comune' => $posizione->comune,
+					'provincia' => $posizione->provincia,
+					'via' => $posizione->via,
+					'numero_civico' => $posizione->numero_civico,
+					'cap' => $posizione->cap,
+				],
+				'access_token' => $token,
+				'token_type' => 'Bearer',
+			]);
+		}
 	}
 
 	public function logout(Request $request)
