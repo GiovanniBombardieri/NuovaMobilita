@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Struttura;
 use App\Models\Posizione;
+use App\Models\PosizioneUtente;
 use App\Models\Recapito;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,13 +32,27 @@ class AuthController extends Controller
 			'password' => 'required|string|min:8',
 		]);
 
+		$id_posizione = (string) Str::uuid();
+
 		$user = User::create([
 			'name' => $request->name,
 			'cognome' => $request->cognome,
 			'ruolo' => $request->ruolo,
 			'email' => $request->email,
 			'password' => Hash::make($request->password),
+			'id_posizione_utente' => $id_posizione,
 			'record_attivo' => 1,
+		]);
+
+		// Salvo la posizione dell'utente
+		Log::info('Creazione posizione');
+		$posizione = PosizioneUtente::create([
+			'id_posizione' => $id_posizione,
+			'comune' => null,
+			'provincia' => null,
+			'via' => null,
+			'numero_civico' => null,
+			'cap' => null,
 		]);
 
 		$token = $user->createToken('auth_token')->plainTextToken;
@@ -142,7 +157,11 @@ class AuthController extends Controller
 
 		$user = Auth::user();
 		Log::info('Utente loggato', ['email' => $user->email, 'ruolo' => $user->ruolo]);
-		$token = $user->createToken('auth_token')->plainTextToken;
+		if ($user && $user instanceof \App\Models\User) {
+			$token = $user->createToken('auth_token')->plainTextToken;
+		} else {
+			return response()->json(['error' => 'Utente non autenticato'], 401);
+		}
 
 		if ($user->ruolo === "utente") {
 			$risposta = response()->json([

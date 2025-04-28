@@ -28,6 +28,7 @@ class User extends Authenticatable
         'ruolo',
         'record_attivo',
         'id_struttura',
+        'id_posizione_utente',
     ];
 
     /**
@@ -57,5 +58,10 @@ class User extends Authenticatable
     public function struttura()
     {
         return $this->belongsTo(\App\Models\Struttura::class, 'id_struttura', 'id_struttura');
+    }
+
+    public function posizione_utente()
+    {
+        return $this->belongsTo(\App\Models\PosizioneUtente::class, 'id_posizione_utente', 'id_posizione_utente');
     }
 }

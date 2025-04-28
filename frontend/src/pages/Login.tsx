@@ -66,7 +66,7 @@ const Login = () => {
           telefono: data.user.telefono,
           ruolo: data.user.ruolo,
           email: data.user.email,
-          token: data.token,
+          token: data.access_token,
         });
       } else if (data.user.ruolo === "struttura") {
         const fullAddress = `${data.user.via} ${data.user.numero_civico}, ${data.user.cap} ${data.user.comune}, ${data.user.provincia}`;
