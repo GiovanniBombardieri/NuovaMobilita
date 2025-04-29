@@ -18,9 +18,11 @@ const ModificaProfilo = () => {
   // Utente
   const [name, setName] = useState(isUser(user) ? user.name : "");
   const [cognome, setCognome] = useState(isUser(user) ? user.cognome : "");
-  const [telefono, setTelefono] = useState(isUser(user) ? user.telefono : "");
+  const [telefono, setTelefono] = useState(
+    isUser(user) ? user.telefono || "" : ""
+  );
   const [indirizzo, setIndirizzo] = useState(
-    isUser(user) ? user.indirizzo : ""
+    isUser(user) ? user.indirizzo || "" : ""
   );
 
   // Struttura
@@ -205,9 +207,9 @@ const ModificaProfilo = () => {
             <button type="submit" className="btn btn-primary mr-2">
               Salva
             </button>
-            <form method="dialog">
+            <div>
               <button className="btn">Close</button>
-            </form>
+            </div>
           </div>
         </form>
       </div>

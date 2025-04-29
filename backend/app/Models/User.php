@@ -28,7 +28,7 @@ class User extends Authenticatable
         'ruolo',
         'record_attivo',
         'id_struttura',
-        'id_posizione_utente',
+        'id_posizione',
     ];
 
     /**
@@ -62,6 +62,6 @@ class User extends Authenticatable
 
     public function posizione_utente()
     {
-        return $this->belongsTo(\App\Models\PosizioneUtente::class, 'id_posizione_utente', 'id_posizione_utente');
+        return $this->hasOne(\App\Models\PosizioneUtente::class, 'id_posizione', 'id_posizione');
     }
 }

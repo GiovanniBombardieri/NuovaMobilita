@@ -21,4 +21,11 @@ class PosizioneUtente extends Model
         'time_modifica',
         'record_attivo',
     ];
+
+    public $timestamps = FALSE;
+
+    // public function users()
+    // {
+    //     return $this->hasOne(User::class, 'id_posizione', 'id_posizione');
+    // }
 }

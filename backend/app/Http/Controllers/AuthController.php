@@ -23,24 +23,28 @@ class AuthController extends Controller
 		if ($request->ruolo === 'struttura') {
 			return $this->registerStruttura($request);
 		}
-
+		Log::info('Validazione della richiesta');
+		Log::info($request->all());
 		$request->validate([
+			'ruolo' => 'required|string|max:50',
 			'name' => 'required|string|max:255',
 			'cognome' => 'required|string|max:255',
-			'ruolo' => 'required|string|max:50',
 			'email' => 'required|string|email|max:255|unique:users',
 			'password' => 'required|string|min:8',
 		]);
 
+		Log::info('Creazione dell\'id_posizione');
 		$id_posizione = (string) Str::uuid();
+		Log::info($id_posizione);
 
+		Log::info('Creazione dell\'utente');
 		$user = User::create([
+			'id_posizione' => $id_posizione,
 			'name' => $request->name,
 			'cognome' => $request->cognome,
 			'ruolo' => $request->ruolo,
 			'email' => $request->email,
 			'password' => Hash::make($request->password),
-			'id_posizione_utente' => $id_posizione,
 			'record_attivo' => 1,
 		]);
 
@@ -63,6 +67,13 @@ class AuthController extends Controller
 				'cognome' => $user->cognome,
 				'ruolo' => $user->ruolo,
 				'email' => $user->email,
+			],
+			'user_position' => [
+				'comune' => $posizione->comune,
+				'provincia' => $posizione->provincia,
+				'via' => $posizione->via,
+				'numero_civico' => $posizione->numero_civico,
+				'cap' => $posizione->cap,
 			],
 			'access_token' => $token,
 			'token_type' => 'Bearer',
