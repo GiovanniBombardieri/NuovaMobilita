@@ -21,8 +21,16 @@ const ModificaProfilo = () => {
   const [telefono, setTelefono] = useState(
     isUser(user) ? user.telefono || "" : ""
   );
-  const [indirizzo, setIndirizzo] = useState(
-    isUser(user) ? user.indirizzo || "" : ""
+  const [comuneUtente, setComuneUtente] = useState(
+    isUser(user) ? user.comune : ""
+  );
+  const [provinciaUtente, setProvinciaUtente] = useState(
+    isUser(user) ? user.provincia : ""
+  );
+  const [capUtente, setCapUtente] = useState(isStruttura(user) ? user.cap : "");
+  const [viaUtente, setViaUtente] = useState(isStruttura(user) ? user.via : "");
+  const [numero_civicoUtente, setNumeroCivicoUtente] = useState(
+    isUser(user) ? user.numero_civico : ""
   );
 
   // Struttura
@@ -41,7 +49,17 @@ const ModificaProfilo = () => {
 
   const updateProfile = async () => {
     const updateData = isUser(user)
-      ? { email, name, cognome, telefono, indirizzo }
+      ? {
+          email,
+          name,
+          cognome,
+          telefono,
+          comune,
+          provincia,
+          cap,
+          via,
+          numero_civico,
+        }
       : { ragione_sociale, comune, provincia, cap, via, numero_civico };
     console.log(updateData);
     try {
@@ -84,52 +102,92 @@ const ModificaProfilo = () => {
             <>
               <div>
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-1/5">Email</label>
+                  <label className="label w-2/5">Email</label>
                   <input
                     type="email"
-                    className="input input-bordered w-4/5"
+                    className="input input-bordered w-3/5"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
 
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-1/5">Nome</label>
+                  <label className="label w-2/5">Nome</label>
                   <input
                     type="text"
-                    className="input input-bordered w-4/5"
+                    className="input input-bordered w-3/5"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   />
                 </div>
 
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-1/5">Cognome</label>
+                  <label className="label w-2/5">Cognome</label>
                   <input
                     type="text"
-                    className="input input-bordered w-4/5"
+                    className="input input-bordered w-3/5"
                     value={cognome}
                     onChange={(e) => setCognome(e.target.value)}
                   />
                 </div>
 
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-1/5">Telefono</label>
+                  <label className="label w-2/5">Telefono</label>
                   <input
                     type="text"
-                    className="input input-bordered w-4/5"
+                    className="input input-bordered w-3/5"
                     value={telefono}
                     onChange={(e) => setTelefono(e.target.value)}
                   />
                 </div>
 
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-1/5">Indirizzo</label>
+                  <label className="label w-2/5">Comune</label>
                   <input
                     type="text"
-                    className="input input-bordered w-4/5"
-                    value={indirizzo}
-                    onChange={(e) => setIndirizzo(e.target.value)}
+                    className="input input-bordered w-3/5"
+                    value={comuneUtente}
+                    onChange={(e) => setComuneUtente(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-control mb-4 w-full flex items-center justify-between">
+                  <label className="label w-2/5">Provincia</label>
+                  <input
+                    type="text"
+                    className="input input-bordered w-3/5"
+                    value={provinciaUtente}
+                    onChange={(e) => setProvinciaUtente(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-control mb-4 w-full flex items-center justify-between">
+                  <label className="label w-2/5">CAP</label>
+                  <input
+                    type="text"
+                    className="input input-bordered w-3/5"
+                    value={capUtente}
+                    onChange={(e) => setCapUtente(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-control mb-4 w-full flex items-center justify-between">
+                  <label className="label w-2/5">Via</label>
+                  <input
+                    type="text"
+                    className="input input-bordered w-3/5"
+                    value={viaUtente}
+                    onChange={(e) => setViaUtente(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-control mb-4 w-full flex items-center justify-between">
+                  <label className="label w-2/5">Numero civico</label>
+                  <input
+                    type="text"
+                    className="input input-bordered w-3/5"
+                    value={numero_civicoUtente}
+                    onChange={(e) => setNumeroCivicoUtente(e.target.value)}
                   />
                 </div>
               </div>

@@ -28,4 +28,9 @@ class Posizione extends Model
     {
         return $this->hasOne(Struttura::class, 'id_posizione', 'id_posizione');
     }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id_posizione', 'id_posizione');
+    }
 }

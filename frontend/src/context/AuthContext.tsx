@@ -4,11 +4,15 @@ import { createContext, useContext, useState, ReactNode } from "react";
 export interface User {
   name: string;
   cognome: string;
-  indirizzo: string;
   telefono: string;
   ruolo: string;
   email: string;
   token: string;
+  comune: string | undefined;
+  provincia: string | undefined;
+  via: string | undefined;
+  numero_civico: string | undefined;
+  cap: string | undefined;
 }
 
 // Definizione del tipo per il ruolo Struttura

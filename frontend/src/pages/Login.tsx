@@ -62,11 +62,15 @@ const Login = () => {
         login({
           name: data.user.name,
           cognome: data.user.cognome,
-          indirizzo: data.user.indirizzo,
           telefono: data.user.telefono,
           ruolo: data.user.ruolo,
           email: data.user.email,
           token: data.access_token,
+          comune: data.user.user_position.comune,
+          provincia: data.user.user_position.provincia,
+          via: data.user.user_position.via,
+          numero_civico: data.user.user_position.numero_civico,
+          cap: data.user.user_position.cap,
         });
       } else if (data.user.ruolo === "struttura") {
         const fullAddress = `${data.user.via} ${data.user.numero_civico}, ${data.user.cap} ${data.user.comune}, ${data.user.provincia}`;

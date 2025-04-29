@@ -50,7 +50,7 @@ class AuthController extends Controller
 
 		// Salvo la posizione dell'utente
 		Log::info('Creazione posizione');
-		$posizione = PosizioneUtente::create([
+		$posizione = Posizione::create([
 			'id_posizione' => $id_posizione,
 			'comune' => null,
 			'provincia' => null,
@@ -175,6 +175,8 @@ class AuthController extends Controller
 		}
 
 		if ($user->ruolo === "utente") {
+			$posizione = $user->posizione_utente;
+
 			$risposta = response()->json([
 				'user' => [
 					'name' => $user->name,
@@ -182,7 +184,11 @@ class AuthController extends Controller
 					'ruolo' => $user->ruolo,
 					'email' => $user->email,
 					'telefono' => $user->telefono,
-					'indirizzo' => $user->indirizzo,
+					'comune' => $posizione->comune,
+					'provincia' => $posizione->provincia,
+					'via' => $posizione->via,
+					'numero_civico' => $posizione->numero_civico,
+					'cap' => $posizione->cap,
 				],
 				'access_token' => $token,
 				'token_type' => 'Bearer',
@@ -196,7 +202,13 @@ class AuthController extends Controller
 					'ruolo' => $user->ruolo,
 					'email' => $user->email,
 					'telefono' => $user->telefono,
-					'indirizzo' => $user->indirizzo,
+					'user_position' => [
+						'comune' => $posizione->comune,
+						'provincia' => $posizione->provincia,
+						'via' => $posizione->via,
+						'numero_civico' => $posizione->numero_civico,
+						'cap' => $posizione->cap,
+					],
 				],
 				'access_token' => $token,
 				'token_type' => 'Bearer',
