@@ -54,14 +54,15 @@ const ModificaProfilo = () => {
           name,
           cognome,
           telefono,
-          comune,
-          provincia,
-          cap,
-          via,
-          numero_civico,
+          comuneUtente,
+          provinciaUtente,
+          capUtente,
+          viaUtente,
+          numero_civicoUtente,
         }
       : { ragione_sociale, comune, provincia, cap, via, numero_civico };
-    console.log(updateData);
+    console.log(JSON.stringify(updateData));
+
     try {
       const response = await fetch("http://localhost:8000/api/update-profile", {
         method: "PUT",

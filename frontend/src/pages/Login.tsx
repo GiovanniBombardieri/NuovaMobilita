@@ -59,6 +59,9 @@ const Login = () => {
 
       // Differenzio i dati di login in base al ruolo selezionato
       if (data.user.ruolo === "utente") {
+        const fullAddress = `${data.user.user_position.via} ${data.user.user_position.numero_civico}, ${data.user.user_position.cap} ${data.user.user_position.comune}, ${data.user.user_position.provincia}`;
+        const location = await geocodeAddress(fullAddress);
+
         login({
           name: data.user.name,
           cognome: data.user.cognome,
@@ -71,6 +74,7 @@ const Login = () => {
           via: data.user.user_position.via,
           numero_civico: data.user.user_position.numero_civico,
           cap: data.user.user_position.cap,
+          location: location,
         });
       } else if (data.user.ruolo === "struttura") {
         const fullAddress = `${data.user.via} ${data.user.numero_civico}, ${data.user.cap} ${data.user.comune}, ${data.user.provincia}`;

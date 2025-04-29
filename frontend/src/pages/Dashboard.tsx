@@ -1,22 +1,18 @@
-import { useAuth, User, Struttura } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import Navbar from "./Navbar";
 import UserDetails from "./userDetail";
 import ServiceOverview from "./ServiceOverview";
 import StructureMaps from "./StructuresMap";
 
-function isStruttura(user: User | Struttura | null): user is Struttura {
-  return (user as Struttura)?.ruolo === "struttura";
-}
-
 const Dashboard = () => {
   const { user } = useAuth();
-  const userLocation = isStruttura(user)
+
+  const userLocation = user?.location
     ? user.location
     : {
         lat: 41.9028,
         lng: 12.4964,
       };
-
   return (
     <div className="h-screen">
       <Navbar />

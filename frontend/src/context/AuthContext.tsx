@@ -13,6 +13,10 @@ export interface User {
   via: string | undefined;
   numero_civico: string | undefined;
   cap: string | undefined;
+  location?: {
+    lat: number;
+    lng: number;
+  };
 }
 
 // Definizione del tipo per il ruolo Struttura
