@@ -10,6 +10,24 @@ function isStruttura(user: User | Struttura | null): user is Struttura {
   return (user as Struttura)?.ruolo === "struttura";
 }
 
+const geocodeAddress = async (address: string) => {
+  console.log(address);
+
+  const response = await fetch(
+    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+      address
+    )}`
+  );
+  const data = await response.json();
+  if (data && data.length > 0) {
+    return {
+      lat: parseFloat(data[0].lat),
+      lng: parseFloat(data[0].lon),
+    };
+  }
+  throw new Error("Geocoding fallito.");
+};
+
 const ModificaProfilo = () => {
   const { user, login } = useAuth();
 
@@ -27,8 +45,8 @@ const ModificaProfilo = () => {
   const [provinciaUtente, setProvinciaUtente] = useState(
     isUser(user) ? user.provincia : ""
   );
-  const [capUtente, setCapUtente] = useState(isStruttura(user) ? user.cap : "");
-  const [viaUtente, setViaUtente] = useState(isStruttura(user) ? user.via : "");
+  const [capUtente, setCapUtente] = useState(isUser(user) ? user.cap : "");
+  const [viaUtente, setViaUtente] = useState(isUser(user) ? user.via : "");
   const [numero_civicoUtente, setNumeroCivicoUtente] = useState(
     isUser(user) ? user.numero_civico : ""
   );
@@ -62,6 +80,7 @@ const ModificaProfilo = () => {
         }
       : { ragione_sociale, comune, provincia, cap, via, numero_civico };
     console.log(JSON.stringify(updateData));
+    console.log(user?.token);
 
     try {
       const response = await fetch("http://localhost:8000/api/update-profile", {
@@ -73,6 +92,8 @@ const ModificaProfilo = () => {
         body: JSON.stringify(updateData),
       });
 
+      console.log(response);
+
       if (!response.ok)
         throw new Error(
           "Errore nel salvataggio dei dati aggiornati del profilo"
@@ -80,9 +101,85 @@ const ModificaProfilo = () => {
 
       const updateUser = await response.json();
 
-      login(updateUser);
-
       (document.getElementById("edit_profile") as HTMLDialogElement)?.close();
+
+      const fullAddress = `${updateUser.via} ${updateUser.numero_civico}, ${updateUser.cap} ${updateUser.comune}, ${updateUser.provincia}`;
+      try {
+        const location = await geocodeAddress(fullAddress);
+
+        if (updateUser.ruolo === "utente") {
+          login({
+            name: updateUser.name,
+            cognome: updateUser.cognome,
+            telefono: updateUser.telefono,
+            ruolo: updateUser.ruolo,
+            email: updateUser.email,
+            token: updateUser.access_token,
+            comune: updateUser.comune,
+            provincia: updateUser.provincia,
+            via: updateUser.via,
+            numero_civico: updateUser.numero_civico,
+            cap: updateUser.cap,
+            location: location,
+          });
+
+          window.location.reload();
+        } else if (updateUser.ruolo === "struttura") {
+          login({
+            ragione_sociale: updateUser.ragione_sociale,
+            comune: updateUser.comune,
+            provincia: updateUser.provincia,
+            via: updateUser.via,
+            numero_civico: updateUser.numero_civico,
+            cap: updateUser.cap,
+            ruolo: updateUser.ruolo,
+            email: updateUser.email,
+            token: updateUser.access_token,
+            location: location,
+          });
+
+          window.location.reload();
+        }
+      } catch (error) {
+        console.log(error);
+        const defaultLocation = {
+          lat: 41.9028,
+          lng: 12.4964,
+        };
+        if (updateUser.ruolo === "utente") {
+          login({
+            name: updateUser.name,
+            cognome: updateUser.cognome,
+            telefono: updateUser.telefono,
+            ruolo: updateUser.ruolo,
+            email: updateUser.email,
+            token: updateUser.access_token,
+            comune: updateUser.comune,
+            provincia: updateUser.provincia,
+            via: updateUser.via,
+            numero_civico: updateUser.numero_civico,
+            cap: updateUser.cap,
+            location: defaultLocation,
+          });
+
+          window.location.reload();
+        } else if (updateUser.ruolo === "struttura") {
+          login({
+            ragione_sociale: updateUser.ragione_sociale,
+            comune: updateUser.comune,
+            provincia: updateUser.provincia,
+            via: updateUser.via,
+            numero_civico: updateUser.numero_civico,
+            cap: updateUser.cap,
+            ruolo: updateUser.ruolo,
+            email: updateUser.email,
+            token: updateUser.access_token,
+            location: defaultLocation,
+          });
+
+          window.location.reload();
+        }
+      }
     } catch (err) {
       console.error("Errore nel salvataggio del profilo", err);
     }
@@ -266,9 +363,16 @@ const ModificaProfilo = () => {
             <button type="submit" className="btn btn-primary mr-2">
               Salva
             </button>
-            <div>
-              <button className="btn">Close</button>
-            </div>
+            <button
+              className="btn"
+              onClick={() =>
+                (
+                  document.getElementById("edit_profile") as HTMLDialogElement
+                )?.close()
+              }
+            >
+              Close
+            </button>
           </div>
         </form>
       </div>

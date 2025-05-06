@@ -14,38 +14,7 @@ function isStruttura(user: User | Struttura | null): user is Struttura {
 
 const UserDetails = () => {
   const { user } = useAuth();
-  const { login } = useAuth();
   const [showWelcome, setShowWelcome] = useState(true);
-  const [telefono, setTelefono] = useState(isUser(user) ? user.telefono : "");
-  const [indirizzo, setIndirizzo] = useState(
-    isUser(user) ? user.indirizzo : ""
-  );
-
-  const updateProfile = async () => {
-    try {
-      const response = await fetch("http://localhost:8000/api/update-profile", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user?.token}`,
-        },
-        body: JSON.stringify({ telefono, indirizzo }),
-      });
-
-      if (!response.ok)
-        throw new Error(
-          "Errore nel salvataggio dei dati aggiornati del profilo"
-        );
-
-      const updateUser = await response.json();
-
-      login(updateUser);
-
-      (document.getElementById("edit_profile") as HTMLDialogElement)?.close();
-    } catch (err) {
-      console.error("Errore nel salvataggio del profilo", err);
-    }
-  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -106,50 +75,88 @@ const UserDetails = () => {
         <div className="card-body flex flex-col">
           {/** RUOLO */}
           <div className="flex flex-row items-center text-center">
-            <h3 className="card-title mr-3">Ruolo:</h3>
-            <p>
-              {user?.ruolo
-                ? user.ruolo.charAt(0).toUpperCase() + user.ruolo.slice(1)
-                : ""}
-            </p>
+            <div className="flex w-1/3 justify-start">
+              <h3 className="card-title">Ruolo:</h3>
+            </div>
+            <div className="flex w-2/3 justify-center">
+              <p>
+                {user?.ruolo
+                  ? user.ruolo.charAt(0).toUpperCase() + user.ruolo.slice(1)
+                  : ""}
+              </p>
+            </div>
           </div>
 
           {/** EMAIL */}
-          <div className="flex flex-row items-center text-center">
-            <h3 className="card-title mr-3">E-mail:</h3>
-            <p>{user?.email}</p>
+          <div className="flex flex-row items-center text-center w-full">
+            <div className="flex w-1/3 justify-start">
+              <h3 className="card-title">E-mail:</h3>
+            </div>
+            <div className="flex w-2/3 justify-center">
+              <p>{user?.email}</p>
+            </div>
           </div>
 
           {/** TELEFONO */}
-          <div className="flex flex-row items-center text-center">
-            <h3 className="card-title mr-3">Telefono:</h3>
+          <div className="flex flex-row items-center text-center w-full">
+            <div className="flex w-1/3 justify-start">
+              <h3 className="card-title">Telefono:</h3>
+            </div>
             {isUser(user) ? (
               user.telefono ? (
-                <p>{user.telefono}</p>
+                <div className="flex w-2/3 justify-center">
+                  <p>{user.telefono}</p>
+                </div>
               ) : (
-                <p className="text-red-600">Telefono non inserito</p>
+                <p className="text-red-600 text-xs">Telefono non inserito</p>
               )
             ) : (
-              <p className="text-red-600">Ruolo non corretto</p>
+              <p className="text-red-600 text-xs">Telefono non inserito</p>
             )}
           </div>
 
           {/** INDIRIZZO */}
-          <div className="flex flex-row items-center text-center">
-            <h3 className="card-title mr-3">Indirizzo:</h3>
+          <div className="flex flex-row items-center text-center w-full">
+            <div className="flex w-1/3 justify-start">
+              <h3 className="card-title">Indirizzo:</h3>
+            </div>
             {isUser(user) ? (
-              user?.indirizzo ? (
-                <p>{user.indirizzo}</p>
+              user?.comune &&
+              user?.via &&
+              user?.numero_civico &&
+              user?.cap &&
+              user?.provincia ? (
+                <div className="flex w-2/3 justify-center">
+                  <p>
+                    {user.via} {user.numero_civico}, {user.cap} {user.comune},{" "}
+                    {user.provincia}
+                  </p>
+                </div>
               ) : (
-                <p className="text-red-600">Indirizzo non inserito</p>
+                <div className="flex flex-col w-2/3 text-xs items-center">
+                  <p className="text-red-600">Indirizzo non corretto</p>
+                  <p className="text-red-600">
+                    Inserire tutti i dati richiesti
+                  </p>
+                </div>
               )
-            ) : isStruttura(user) ? (
-              <p>
-                {user.via} {user.numero_civico}, {user.comune} {user.cap} (
-                {user.provincia})
-              </p>
+            ) : isStruttura(user) &&
+              user?.comune &&
+              user?.via &&
+              user?.numero_civico &&
+              user?.cap &&
+              user?.provincia ? (
+              <div className="flex w-2/3 justify-center">
+                <p>
+                  {user.via} {user.numero_civico}, {user.comune} {user.cap} (
+                  {user.provincia})
+                </p>
+              </div>
             ) : (
-              <p className="text-red-600">Ruolo non corretto</p>
+              <div className="flex flex-col w-2/3 text-xs items-center">
+                <p className="text-red-600">Indirizzo non corretto</p>
+                <p className="text-red-600">Inserire tutti i dati richiesti</p>
+              </div>
             )}
           </div>
 
@@ -189,46 +196,3 @@ const UserDetails = () => {
 };
 
 export default UserDetails;
-
-{
-  /* <dialog id="edit_profile" className="modal modal-bottom sm:modal-middle">
-  <div className="modal-box">
-    <h3 className="font-bold text-lg mb-4">Modifica profilo</h3>
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        updateProfile();
-      }}
-    >
-      <div className="form-control mb-4">
-        <label className="label mx-3">Telefono</label>
-        <input
-          type="text"
-          className="input input-bordered"
-          value={telefono}
-          onChange={(e) => setTelefono(e.target.value)}
-        />
-      </div>
-
-      <div className="form-control mb-4">
-        <label className="label mx-3">Indirizzo</label>
-        <input
-          type="text"
-          className="input input-bordered"
-          value={indirizzo}
-          onChange={(e) => setIndirizzo(e.target.value)}
-        />
-      </div>
-
-      <div className="modal-action">
-        <button type="submit" className="btn btn-primary mr-2">
-          Salva
-        </button>
-        <form method="dialog">
-          <button className="btn">Close</button>
-        </form>
-      </div>
-    </form>
-  </div>
-</dialog> */
-}

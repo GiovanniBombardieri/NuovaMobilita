@@ -57,11 +57,11 @@ class User extends Authenticatable
 
     public function struttura()
     {
-        return $this->belongsTo(\App\Models\Struttura::class, 'id_struttura', 'id_struttura');
+        return $this->hasOne(Struttura::class, 'id_struttura', 'id_struttura');
     }
 
     public function posizione_utente()
     {
-        return $this->hasOne(\App\Models\Posizione::class, 'id_posizione', 'id_posizione');
+        return $this->hasOne(Posizione::class, 'id_posizione', 'id_posizione');
     }
 }

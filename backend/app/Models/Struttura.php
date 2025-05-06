@@ -25,6 +25,11 @@ class Struttura extends Model
 
     // Relazioni con le altre tabelle
 
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id_struttura', 'id_struttura');
+    }
+
     public function posizione()
     {
         return $this->belongsTo(Posizione::class, 'id_posizione', 'id_posizione');

@@ -216,6 +216,7 @@ class AuthController extends Controller
 		} else if ($user->ruolo === "struttura") {
 			$struttura = $user->struttura;
 			$posizione = $struttura?->posizione;
+			Log::info('Ragione sociale', ['ragione_sociale' => $struttura->ragione_sociale]);
 
 			return response()->json([
 				'user' => [
@@ -246,50 +247,79 @@ class AuthController extends Controller
 	public function updateProfile(Request $request)
 	{
 		$user = $request->user();
-		$posizione = $user->posizione_utente;
 		Log::info('Utente:', [$user]);
-		Log::info('Posizione:', [$posizione]);
 
-		$request->validate([
-			'name' => 'nullable|string|max:255',
-			'cognome' => 'nullable|string|max:255',
-			'email' => 'nullable|string|max:255',
-			'telefono' => 'nullable|string|max:20',
-			'indirizzo' => 'nullable|string|max:255',
-			'comune' => 'nullable|string|max:100',
-			'provincia' => 'nullable|char|max:2',
-			'cap' => 'nullable|char|max:5',
-			'via' => 'nullable|string|max:100',
-			'numero_civico' => 'nullable|string|max:10',
-		]);
+		if ($user->ruolo === "utente") {
+			$posizione = $user->posizione_utente;
+			Log::info('Posizione:', [$posizione]);
 
-		$user->name = $request->name;
-		$user->cognome = $request->cognome;
-		$user->email = $request->email;
-		$user->telefono = $request->telefono;
-		$posizione->comune = $request->comuneUtente;
-		$posizione->provincia = $request->provinciaUtente;
-		$posizione->cap = $request->capUtente;
-		$posizione->via = $request->viaUtente;
-		$posizione->numero_civico = $request->numero_civicoUtente;
+			$request->validate([
+				'name' => 'nullable|string|max:255',
+				'cognome' => 'nullable|string|max:255',
+				'email' => 'nullable|string|max:255',
+				'telefono' => 'nullable|string|max:20',
+				'indirizzo' => 'nullable|string|max:255',
+				'comune' => 'nullable|string|max:100',
+				'provincia' => 'nullable|char|max:2',
+				'cap' => 'nullable|char|max:5',
+				'via' => 'nullable|string|max:100',
+				'numero_civico' => 'nullable|string|max:10',
+			]);
 
-		$user->save();
-		$posizione->save();
+			$user->name = $request->name;
+			$user->cognome = $request->cognome;
+			$user->email = $request->email;
+			$user->telefono = $request->telefono;
+			$posizione->comune = $request->comuneUtente;
+			$posizione->provincia = $request->provinciaUtente;
+			$posizione->cap = $request->capUtente;
+			$posizione->via = $request->viaUtente;
+			$posizione->numero_civico = $request->numero_civicoUtente;
 
-		return response()->json([
-			'name' => $user->name,
-			'cognome' => $user->cognome,
-			'email' => $user->email,
-			'telefono' => $user->telefono,
-			'ruolo' => $user->ruolo,
-			'token' => $request->bearerToken(),
-			'user_position' => [
+			$user->save();
+			$posizione->save();
+
+			return response()->json([
+				'name' => $user->name,
+				'cognome' => $user->cognome,
+				'email' => $user->email,
+				'telefono' => $user->telefono,
+				'ruolo' => $user->ruolo,
+				'access_token' => $request->bearerToken(),
 				'comune' => $posizione->comune,
 				'provincia' => $posizione->provincia,
 				'via' => $posizione->via,
 				'numero_civico' => $posizione->numero_civico,
 				'cap' => $posizione->cap,
-			],
-		]);
+			]);
+		} else if ($user->ruolo === "struttura") {
+			$struttura = $user->struttura;
+			Log::info('Struttura:', [$struttura]);
+			$posizione = $struttura?->posizione;
+			Log::info('Posizione:', [$posizione]);
+
+			$struttura->ragione_sociale = $request->ragione_sociale;
+			$posizione->comune = $request->comune;
+			$posizione->provincia = $request->provincia;
+			$posizione->via = $request->via;
+			$posizione->numero_civico = $request->numero_civico;
+			$posizione->cap = $request->cap;
+
+			$user->save();
+			$struttura->save();
+			$posizione->save();
+
+			return response()->json([
+				'ruolo' => $user->ruolo,
+				'email' => $user->email,
+				'ragione_sociale' => $struttura->ragione_sociale,
+				'comune' => $posizione->comune,
+				'provincia' => $posizione->provincia,
+				'via' => $posizione->via,
+				'numero_civico' => $posizione->numero_civico,
+				'cap' => $posizione->cap,
+				'access_token' => $request->bearerToken(),
+			]);
+		}
 	}
 }

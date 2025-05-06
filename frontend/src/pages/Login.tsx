@@ -3,6 +3,8 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 
 const geocodeAddress = async (address: string) => {
+  console.log(address);
+
   const response = await fetch(
     `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
       address
@@ -60,38 +62,84 @@ const Login = () => {
       // Differenzio i dati di login in base al ruolo selezionato
       if (data.user.ruolo === "utente") {
         const fullAddress = `${data.user.user_position.via} ${data.user.user_position.numero_civico}, ${data.user.user_position.cap} ${data.user.user_position.comune}, ${data.user.user_position.provincia}`;
-        const location = await geocodeAddress(fullAddress);
+        try {
+          const location = await geocodeAddress(fullAddress);
 
-        login({
-          name: data.user.name,
-          cognome: data.user.cognome,
-          telefono: data.user.telefono,
-          ruolo: data.user.ruolo,
-          email: data.user.email,
-          token: data.access_token,
-          comune: data.user.user_position.comune,
-          provincia: data.user.user_position.provincia,
-          via: data.user.user_position.via,
-          numero_civico: data.user.user_position.numero_civico,
-          cap: data.user.user_position.cap,
-          location: location,
-        });
+          login({
+            name: data.user.name,
+            cognome: data.user.cognome,
+            telefono: data.user.telefono,
+            ruolo: data.user.ruolo,
+            email: data.user.email,
+            token: data.access_token,
+            comune: data.user.user_position.comune,
+            provincia: data.user.user_position.provincia,
+            via: data.user.user_position.via,
+            numero_civico: data.user.user_position.numero_civico,
+            cap: data.user.user_position.cap,
+            location: location,
+          });
+        } catch (error) {
+          const defaultLocation = {
+            lat: 41.9028,
+            lng: 12.4964,
+          };
+
+          login({
+            name: data.user.name,
+            cognome: data.user.cognome,
+            telefono: data.user.telefono,
+            ruolo: data.user.ruolo,
+            email: data.user.email,
+            token: data.access_token,
+            comune: data.user.user_position.comune,
+            provincia: data.user.user_position.provincia,
+            via: data.user.user_position.via,
+            numero_civico: data.user.user_position.numero_civico,
+            cap: data.user.user_position.cap,
+            location: defaultLocation,
+          });
+
+          console.error(error);
+        }
       } else if (data.user.ruolo === "struttura") {
         const fullAddress = `${data.user.via} ${data.user.numero_civico}, ${data.user.cap} ${data.user.comune}, ${data.user.provincia}`;
-        const location = await geocodeAddress(fullAddress);
+        try {
+          const location = await geocodeAddress(fullAddress);
 
-        login({
-          ragione_sociale: data.user.ragione_sociale,
-          comune: data.user.comune,
-          provincia: data.user.provincia,
-          via: data.user.via,
-          numero_civico: data.user.numero_civico,
-          cap: data.user.cap,
-          ruolo: data.user.ruolo,
-          email: data.user.email,
-          token: data.token,
-          location,
-        });
+          login({
+            ragione_sociale: data.user.ragione_sociale,
+            comune: data.user.comune,
+            provincia: data.user.provincia,
+            via: data.user.via,
+            numero_civico: data.user.numero_civico,
+            cap: data.user.cap,
+            ruolo: data.user.ruolo,
+            email: data.user.email,
+            token: data.access_token,
+            location,
+          });
+        } catch (error) {
+          const defaultLocation = {
+            lat: 41.9028,
+            lng: 12.4964,
+          };
+
+          login({
+            ragione_sociale: data.user.ragione_sociale,
+            comune: data.user.comune,
+            provincia: data.user.provincia,
+            via: data.user.via,
+            numero_civico: data.user.numero_civico,
+            cap: data.user.cap,
+            ruolo: data.user.ruolo,
+            email: data.user.email,
+            token: data.access_token,
+            location: defaultLocation,
+          });
+
+          console.log(error);
+        }
       }
       navigate("/dashboard");
     } catch (err) {
