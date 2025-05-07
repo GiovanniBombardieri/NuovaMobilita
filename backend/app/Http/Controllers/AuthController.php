@@ -193,7 +193,6 @@ class AuthController extends Controller
 				'access_token' => $token,
 				'token_type' => 'Bearer',
 			]);
-			Log::info('Risposta', [$risposta]);
 
 			return response()->json([
 				'user' => [
@@ -216,12 +215,17 @@ class AuthController extends Controller
 		} else if ($user->ruolo === "struttura") {
 			$struttura = $user->struttura;
 			$posizione = $struttura?->posizione;
-			Log::info('Ragione sociale', ['ragione_sociale' => $struttura->ragione_sociale]);
+
+			$recapiti = $struttura?->recapiti;
+			$recapitoConTelefono = $recapiti?->first(function ($r) {
+				return !empty($r->telefono);
+			});
 
 			return response()->json([
 				'user' => [
 					'ruolo' => $user->ruolo,
 					'email' => $user->email,
+					'telefono' => $recapitoConTelefono->telefono,
 					'ragione_sociale' => $struttura->ragione_sociale,
 					'comune' => $posizione->comune,
 					'provincia' => $posizione->provincia,
@@ -247,11 +251,9 @@ class AuthController extends Controller
 	public function updateProfile(Request $request)
 	{
 		$user = $request->user();
-		Log::info('Utente:', [$user]);
 
 		if ($user->ruolo === "utente") {
 			$posizione = $user->posizione_utente;
-			Log::info('Posizione:', [$posizione]);
 
 			$request->validate([
 				'name' => 'nullable|string|max:255',
@@ -294,16 +296,56 @@ class AuthController extends Controller
 			]);
 		} else if ($user->ruolo === "struttura") {
 			$struttura = $user->struttura;
-			Log::info('Struttura:', [$struttura]);
 			$posizione = $struttura?->posizione;
-			Log::info('Posizione:', [$posizione]);
+			$recapiti = $struttura?->recapiti;
 
 			$struttura->ragione_sociale = $request->ragione_sociale;
+			$user->email = $request->email;
 			$posizione->comune = $request->comune;
 			$posizione->provincia = $request->provincia;
 			$posizione->via = $request->via;
 			$posizione->numero_civico = $request->numero_civico;
 			$posizione->cap = $request->cap;
+
+			if ($request->telefonoStruttura) {
+				$recapitoConTelefonoAttivo = $recapiti?->first(function ($r) {
+					return (!empty($r->telefono) && $r->record_attivo === 1);
+				});
+				if ($recapitoConTelefonoAttivo) {
+					$recapitoConTelefonoAttivo->telefono = $request->telefonoStruttura;
+					$recapitoConTelefonoAttivo->save();
+				} else {
+					$nuovoRecapito = new Recapito();
+					$nuovoRecapito->id_recapito = (string) \Illuminate\Support\Str::uuid();
+					$nuovoRecapito->id_struttura = $struttura->id_struttura;
+					$nuovoRecapito->telefono = $request->telefonoStruttura;
+					$nuovoRecapito->id_tipo_recapito = '0000004e-0000-0000-0000-000000000002';
+					$nuovoRecapito->time_modifica = now();
+					$nuovoRecapito->record_attivo = 1;
+
+					$nuovoRecapito->save();
+				}
+			} else if ($request->telefonoStruttura === NULL) {
+				$recapitoConTelefono = $recapiti?->first(function ($r) {
+					return !empty($r->telefono);
+				});
+
+				if ($recapitoConTelefono) {
+					$recapitoConTelefono->record_attivo = 0;
+					$recapitoConTelefono->save();
+				}
+			}
+
+			if ($request->email) {
+				$recapitoConEmail = $recapiti?->first(function ($r) {
+					return !empty($r->email);
+				});
+
+				if ($recapitoConEmail) {
+					$recapitoConEmail->email = $request->email;
+					$recapitoConEmail->save();
+				}
+			}
 
 			$user->save();
 			$struttura->save();
@@ -311,7 +353,8 @@ class AuthController extends Controller
 
 			return response()->json([
 				'ruolo' => $user->ruolo,
-				'email' => $user->email,
+				'email' => ($user->email === $recapitoConEmail->email) ? $user->email : null,
+				'telefono' => (isset($nuovoRecapito) ? $nuovoRecapito->telefono : (isset($recapitoConTelefonoAttivo) ? $recapitoConTelefonoAttivo->telefono : null)),
 				'ragione_sociale' => $struttura->ragione_sociale,
 				'comune' => $posizione->comune,
 				'provincia' => $posizione->provincia,

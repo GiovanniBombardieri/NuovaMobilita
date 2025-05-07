@@ -11,8 +11,6 @@ function isStruttura(user: User | Struttura | null): user is Struttura {
 }
 
 const geocodeAddress = async (address: string) => {
-  console.log(address);
-
   const response = await fetch(
     `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
       address
@@ -55,6 +53,10 @@ const ModificaProfilo = () => {
   const [ragione_sociale, setRagioneSociale] = useState(
     isStruttura(user) ? user.ragione_sociale : ""
   );
+  const [telefonoStruttura, setTelefonoStruttura] = useState(
+    isStruttura(user) ? user.telefono || "" : ""
+  );
+
   const [comune, setComune] = useState(isStruttura(user) ? user.comune : "");
   const [provincia, setProvincia] = useState(
     isStruttura(user) ? user.provincia : ""
@@ -78,9 +80,16 @@ const ModificaProfilo = () => {
           viaUtente,
           numero_civicoUtente,
         }
-      : { ragione_sociale, comune, provincia, cap, via, numero_civico };
-    console.log(JSON.stringify(updateData));
-    console.log(user?.token);
+      : {
+          ragione_sociale,
+          email,
+          telefonoStruttura,
+          comune,
+          provincia,
+          cap,
+          via,
+          numero_civico,
+        };
 
     try {
       const response = await fetch("http://localhost:8000/api/update-profile", {
@@ -91,8 +100,6 @@ const ModificaProfilo = () => {
         },
         body: JSON.stringify(updateData),
       });
-
-      console.log(response);
 
       if (!response.ok)
         throw new Error(
@@ -134,6 +141,7 @@ const ModificaProfilo = () => {
             cap: updateUser.cap,
             ruolo: updateUser.ruolo,
             email: updateUser.email,
+            telefono: updateUser.telefono,
             token: updateUser.access_token,
             location: location,
           });
@@ -173,6 +181,7 @@ const ModificaProfilo = () => {
             cap: updateUser.cap,
             ruolo: updateUser.ruolo,
             email: updateUser.email,
+            telefono: updateUser.telefono,
             token: updateUser.access_token,
             location: defaultLocation,
           });
@@ -303,6 +312,26 @@ const ModificaProfilo = () => {
                     className="input input-bordered w-3/5"
                     value={ragione_sociale}
                     onChange={(e) => setRagioneSociale(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-control mb-4 w-full flex items-center justify-between">
+                  <label className="label w-2/5">Email</label>
+                  <input
+                    type="email"
+                    className="input input-bordered w-3/5"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-control mb-4 w-full flex items-center justify-between">
+                  <label className="label w-2/5">Telefono</label>
+                  <input
+                    type="text"
+                    className="input input-bordered w-3/5"
+                    value={telefonoStruttura}
+                    onChange={(e) => setTelefonoStruttura(e.target.value)}
                   />
                 </div>
 

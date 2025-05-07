@@ -40,8 +40,8 @@ class Struttura extends Model
         return $this->belongsTo(SitoWeb::class, 'id_sito_web', 'id_sito_web');
     }
 
-    public function recapito()
+    public function recapiti()
     {
-        return $this->hasMany(Recapito::class, 'id_recapito', 'id_recapito');
+        return $this->hasMany(Recapito::class, 'id_struttura', 'id_struttura');
     }
 }

@@ -108,10 +108,18 @@ const UserDetails = () => {
                   <p>{user.telefono}</p>
                 </div>
               ) : (
-                <p className="text-red-600 text-xs">Telefono non inserito</p>
+                <div className="flex w-2/3 justify-center">
+                  <p className="text-red-600 text-xs">Telefono non inserito</p>
+                </div>
               )
+            ) : isStruttura(user) && user?.telefono ? (
+              <div className="flex w-2/3 justify-center">
+                <p>{user.telefono}</p>
+              </div>
             ) : (
-              <p className="text-red-600 text-xs">Telefono non inserito</p>
+              <div className="flex w-2/3 justify-center">
+                <p className="text-red-600 text-xs">Telefono non inserito</p>
+              </div>
             )}
           </div>
 

@@ -29,6 +29,7 @@ export interface Struttura {
   cap: string;
   ruolo: string;
   email: string;
+  telefono: string;
   token: string;
   location?: {
     lat: number;
@@ -66,7 +67,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = (userData: User | Struttura) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
-    console.log("Dati che sto verificando:", userData);
   };
 
   const logout = () => {

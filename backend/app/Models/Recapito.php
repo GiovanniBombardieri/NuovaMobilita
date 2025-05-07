@@ -29,6 +29,6 @@ class Recapito extends Model
 
     public function struttura()
     {
-        return $this->belongsTo(Struttura::class, 'id_recapito', 'id_recapito');
+        return $this->belongsTo(Struttura::class, 'id_struttura', 'id_struttura');
     }
 }

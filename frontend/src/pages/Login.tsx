@@ -3,8 +3,6 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 
 const geocodeAddress = async (address: string) => {
-  console.log(address);
-
   const response = await fetch(
     `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
       address
@@ -46,8 +44,6 @@ const Login = () => {
         contentType && contentType.includes("application/json")
           ? await response.json()
           : null;
-
-      console.log("Risposta API:", data);
 
       if (!response.ok) {
         const errorMessage =
@@ -116,6 +112,7 @@ const Login = () => {
             cap: data.user.cap,
             ruolo: data.user.ruolo,
             email: data.user.email,
+            telefono: data.user.telefono,
             token: data.access_token,
             location,
           });
@@ -134,6 +131,7 @@ const Login = () => {
             cap: data.user.cap,
             ruolo: data.user.ruolo,
             email: data.user.email,
+            telefono: data.user.telefono,
             token: data.access_token,
             location: defaultLocation,
           });
