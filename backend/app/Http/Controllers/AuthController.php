@@ -218,14 +218,14 @@ class AuthController extends Controller
 
 			$recapiti = $struttura?->recapiti;
 			$recapitoConTelefono = $recapiti?->first(function ($r) {
-				return !empty($r->telefono);
+				return (!empty($r->telefono) && $r->record_attivo === 1);
 			});
 
 			return response()->json([
 				'user' => [
 					'ruolo' => $user->ruolo,
 					'email' => $user->email,
-					'telefono' => $recapitoConTelefono->telefono,
+					'telefono' => $recapitoConTelefono->telefono ?? null,
 					'ragione_sociale' => $struttura->ragione_sociale,
 					'comune' => $posizione->comune,
 					'provincia' => $posizione->provincia,
