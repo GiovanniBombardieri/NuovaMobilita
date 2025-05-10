@@ -31,7 +31,7 @@ const StructureMaps = ({ structures, userLocation }: Props) => {
       center={[defaultPosition.lat, defaultPosition.lng] as [number, number]}
       zoom={13}
       scrollWheelZoom={true}
-      className="w-2/3 mx-5 mb-5 rounded-lg shadow"
+      className="w-1/3 mb-5 mx-5 rounded-lg shadow"
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'

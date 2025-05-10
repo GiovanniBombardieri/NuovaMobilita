@@ -1,8 +1,18 @@
-import { useAuth } from "../context/AuthContext";
+import { useAuth, User, Struttura } from "../context/AuthContext";
 import Navbar from "./Navbar";
 import UserDetails from "./userDetail";
 import ServiceOverview from "./ServiceOverview";
 import StructureMaps from "./StructuresMap";
+import Prestazioni from "./Prestazioni";
+
+// Funzioni di type guard
+// function isUser(user: User | Struttura | null): user is User {
+//   return (user as User)?.ruolo === "utente";
+// }
+
+function isStruttura(user: User | Struttura | null): user is Struttura {
+  return (user as Struttura)?.ruolo === "struttura";
+}
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -15,10 +25,13 @@ const Dashboard = () => {
       };
   return (
     <div className="h-screen">
-      <Navbar />
-      <ServiceOverview />
-      <div className="flex justify-between">
+      <div className="h-2/5">
+        <Navbar />
+        <ServiceOverview />
+      </div>
+      <div className="flex flex-row justify-between h-3/5">
         <UserDetails />
+        {isStruttura(user) ? <Prestazioni /> : null}
         <StructureMaps
           structures={[
             { id: 1, name: "Ospedale A", lat: 41.8902, lng: 12.4922 },

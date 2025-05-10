@@ -1,7 +1,7 @@
 const ServiceOverview = () => {
   return (
-    <div className="h-1/3 m-5">
-      <div className="card bg-base-100 w-full h-full shadow-xl">
+    <div className="h-3/4 m-5">
+      <div className="card bg-base-100 w-full h-full shadow-l">
         <div className="card-body flex flex-col items-center text-center">
           <h3 className="card-title">
             Cos'è e cosa puoi fare su Nuova Mobilità?

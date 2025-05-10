@@ -25,8 +25,8 @@ const UserDetails = () => {
   }, []);
 
   return (
-    <div className="w-1/3 h-full mx-5 mb-5">
-      <div className="card bg-base-100 shadow-xl w-2/2">
+    <div className="w-1/3 h-[583px] mx-5">
+      <div className="card bg-base-100 shadow-xl w-2/2 h-full">
         <AnimatePresence mode="wait">
           {showWelcome ? (
             <motion.span
@@ -58,7 +58,7 @@ const UserDetails = () => {
           )}
         </AnimatePresence>
 
-        <figure className="px-10">
+        <figure className="px-10 mb-10">
           <div className="w-48 h-48 rounded-full bg-primary text-white flex items-center justify-center text-7xl font-bold">
             {isUser(user)
               ? `${user.name.charAt(0)?.toUpperCase() ?? ""}${
