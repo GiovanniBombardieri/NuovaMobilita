@@ -7,21 +7,25 @@ import img_prest_psicologica from "../../public/icona-prest-psicologica.jpg";
 const Prestazioni = () => {
   const { user } = useAuth();
 
-  const [prestazioni, setPrestazioni] = useState([]);
+  const [prestazioni, setPrestazioni] = useState<Prestazione[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
+
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/get_prestazioni", {
+      .get(`http://localhost:8000/api/get_prestazioni?page=${currentPage}`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
       })
       .then((res) => {
-        setPrestazioni(res.data);
+        setPrestazioni(res.data.data);
+        setLastPage(res.data.last_page);
       })
       .catch((err) => {
         console.error("Errore nel recupero prestazioni", err);
       });
-  }, []);
+  }, [currentPage, user?.token]);
 
   return (
     <div className="rounded-box w-3/3 h-[583px] w-1/3 mx-5 mb-5">
@@ -49,7 +53,14 @@ const Prestazioni = () => {
                   <strong>{prestazione.tipo_prestazione?.titolo}</strong>
                 </div>
                 <p className="list-col-wrap text-xs mt-0">
-                  {prestazione.tipo_prestazione?.descrizione}
+                  {prestazione.tipo_prestazione?.descrizione
+                    ? prestazione.tipo_prestazione?.descrizione.length > 150
+                      ? prestazione.tipo_prestazione?.descrizione.slice(
+                          0,
+                          150
+                        ) + "..."
+                      : prestazione.tipo_prestazione?.descrizione
+                    : ""}
                 </p>
               </div>
               <div className="w-1/12 text-end">
@@ -72,6 +83,21 @@ const Prestazioni = () => {
             </div>
           </li>
         ))}
+        <div className="w-full h-full flex flex-row justify-center items-center">
+          <div className="join">
+            {[...Array(lastPage)].map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentPage(index + 1)}
+                className={`join-item btn ${
+                  currentPage === index + 1 ? "btn-active" : ""
+                }`}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+        </div>
       </ul>
     </div>
   );

@@ -371,7 +371,7 @@ class AuthController extends Controller
 		$user = $request->user();
 		$struttura = $user->struttura;
 
-		$prestazioni = $struttura?->prestazioni()->with(['tipoPrestazione', 'valore'])->get();
+		$prestazioni = $struttura?->prestazioni()->with(['tipoPrestazione', 'valore'])->paginate(4);
 
 		return response()->json($prestazioni);
 	}
