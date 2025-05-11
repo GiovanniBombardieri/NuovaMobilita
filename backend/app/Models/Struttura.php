@@ -44,4 +44,9 @@ class Struttura extends Model
     {
         return $this->hasMany(Recapito::class, 'id_struttura', 'id_struttura');
     }
+
+    public function prestazioni()
+    {
+        return $this->hasMany(Prestazione::class, 'id_struttura', 'id_struttura');
+    }
 }

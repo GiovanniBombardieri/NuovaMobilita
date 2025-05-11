@@ -37,6 +37,32 @@ export interface Struttura {
   };
 }
 
+// Definizione del tipo per la prestazione
+export interface Prestazione {
+  id_prestazione: string;
+  id_struttura: string;
+  id_tipo_prestazione: string;
+  id_valore: string;
+  time_modifica: Date;
+  record_attivo: number;
+  tipo_prestazione?: {
+    id_tipo_prestazione: string;
+    tipologia: string;
+    titolo: string;
+    descrizione: string;
+    time_modifica: Date;
+    record_attivo: number;
+  };
+  valore?: {
+    id_valore: string;
+    valore_numerico: number;
+    inizio_validita: Date;
+    fine_validita: Date;
+    time_modifica: Date;
+    record_attivo: number;
+  };
+}
+
 // Definizione del tipo per il contesto
 interface AuthContextType {
   user: User | Struttura | null;

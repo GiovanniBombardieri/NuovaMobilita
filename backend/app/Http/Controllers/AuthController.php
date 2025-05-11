@@ -365,4 +365,14 @@ class AuthController extends Controller
 			]);
 		}
 	}
+
+	public function getPrestazioni(Request $request)
+	{
+		$user = $request->user();
+		$struttura = $user->struttura;
+
+		$prestazioni = $struttura?->prestazioni()->with(['tipoPrestazione', 'valore'])->get();
+
+		return response()->json($prestazioni);
+	}
 }
