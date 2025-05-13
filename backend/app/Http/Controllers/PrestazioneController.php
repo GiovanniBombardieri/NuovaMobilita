@@ -26,7 +26,7 @@ class PrestazioneController extends Controller
             ?->prestazioni()
             ->where('record_attivo', 1)
             ->with(['tipoPrestazione', 'valore'])
-            ->paginate(4);
+            ->paginate($user->ruolo === 'struttura' ? 7 : 4);
 
         return response()->json($prestazioni);
     }

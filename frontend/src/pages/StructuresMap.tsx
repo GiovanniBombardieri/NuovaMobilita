@@ -1,6 +1,12 @@
+import { useAuth, User, Struttura } from "../context/AuthContext";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+
+// Funzioni di type guard
+function isStruttura(user: User | Struttura | null): user is Struttura {
+  return (user as Struttura)?.ruolo === "struttura";
+}
 
 const userIcon = new L.Icon({
   iconUrl: "/markers/marker-icon-red.png",
@@ -24,6 +30,7 @@ type Props = {
 };
 
 const StructureMaps = ({ structures, userLocation }: Props) => {
+  const { user } = useAuth();
   const defaultPosition = userLocation || { lat: 41.9028, lng: 12.4964 };
 
   return (
@@ -31,7 +38,9 @@ const StructureMaps = ({ structures, userLocation }: Props) => {
       center={[defaultPosition.lat, defaultPosition.lng] as [number, number]}
       zoom={10}
       scrollWheelZoom={true}
-      className="w-1/3 mb-5 mx-5 rounded-lg shadow"
+      className={`${
+        isStruttura(user) ? "w-1/2 h-full overflow-auto" : "w-full h-full"
+      } rounded-lg shadow`}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'

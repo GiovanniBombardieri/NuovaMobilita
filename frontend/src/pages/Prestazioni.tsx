@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Prestazione, useAuth } from "../context/AuthContext";
+import { Prestazione, useAuth, User, Struttura } from "../context/AuthContext";
 import axios from "axios";
 
 import img_prest_sanitaria from "../../public/icona-prest-sanitaria.jpg";
@@ -7,6 +7,15 @@ import img_prest_psicologica from "../../public/icona-prest-psicologica.jpg";
 
 import ModificaPrestazione from "./ModificaPrestazione";
 import AggiungiPrestazione from "./AggiungiPrestazione";
+
+// Funzioni di type guard
+// function isUser(user: User | Struttura | null): user is User {
+//   return (user as User)?.ruolo === "utente";
+// }
+
+function isStruttura(user: User | Struttura | null): user is Struttura {
+  return (user as Struttura)?.ruolo === "struttura";
+}
 
 const Prestazioni = () => {
   const { user } = useAuth();
@@ -69,7 +78,13 @@ const Prestazioni = () => {
   };
 
   return (
-    <div className="rounded-box w-3/3 h-[583px] w-1/3 mx-5 mb-5">
+    <div
+      className={`rounded-box ${
+        isStruttura(user)
+          ? "h-full w-auto overflow-auto"
+          : "h-[583px] w-1/2 mx-5 mb-5"
+      }`}
+    >
       <ul className="list bg-base-100 rounded-box shadow-md h-full">
         <div className="flex flex-row justify-between items-center">
           <li className="p-4 pb-2 text-2xl opacity-60 tracking-wide">
