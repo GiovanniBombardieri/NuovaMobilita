@@ -29,7 +29,7 @@ const StructureMaps = ({ structures, userLocation }: Props) => {
   return (
     <MapContainer
       center={[defaultPosition.lat, defaultPosition.lng] as [number, number]}
-      zoom={13}
+      zoom={10}
       scrollWheelZoom={true}
       className="w-1/3 mb-5 mx-5 rounded-lg shadow"
     >
