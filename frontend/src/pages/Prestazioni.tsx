@@ -32,6 +32,42 @@ const Prestazioni = () => {
       });
   }, [currentPage, user?.token]);
 
+  const deletePrestazione = async (id_prestazione: string) => {
+    if (!id_prestazione || !user?.token) return;
+
+    const conferma = confirm(
+      "Sei sicuro di voler eliminare questa prestazione?"
+    );
+    if (!conferma) return;
+
+    try {
+      await axios.put(
+        `http://localhost:8000/api/delete_prestazione/${id_prestazione}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        }
+      );
+
+      const res = await axios.get(
+        `http://localhost:8000/api/get_prestazioni?page=${currentPage}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        }
+      );
+
+      setPrestazioni(res.data.data);
+      setLastPage(res.data.last_page);
+    } catch (error) {
+      console.error("Errore durante l'eliminazione della prestazione: ", error);
+      alert("Errore nell'eliminazione della prestazione");
+    }
+  };
+
   return (
     <div className="rounded-box w-3/3 h-[583px] w-1/3 mx-5 mb-5">
       <ul className="list bg-base-100 rounded-box shadow-md h-full">
@@ -118,7 +154,10 @@ const Prestazioni = () => {
                     <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
                   </svg>
                 </button>
-                <button className="btn btn-square btn-ghost">
+                <button
+                  onClick={() => deletePrestazione(prestazione.id_prestazione)}
+                  className="btn btn-square btn-ghost"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="size-[1.2em]"

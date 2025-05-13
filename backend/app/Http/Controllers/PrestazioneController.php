@@ -22,7 +22,11 @@ class PrestazioneController extends Controller
         $user = $request->user();
         $struttura = $user->struttura;
 
-        $prestazioni = $struttura?->prestazioni()->with(['tipoPrestazione', 'valore'])->paginate(4);
+        $prestazioni = $struttura
+            ?->prestazioni()
+            ->where('record_attivo', 1)
+            ->with(['tipoPrestazione', 'valore'])
+            ->paginate(4);
 
         return response()->json($prestazioni);
     }
@@ -34,6 +38,7 @@ class PrestazioneController extends Controller
 
         $prestazione = $struttura
             ?->prestazioni()
+            ->where('record_attivo', 1)
             ->with(['tipoPrestazione', 'valore'])
             ->find($id_prestazione);
 
@@ -115,5 +120,14 @@ class PrestazioneController extends Controller
             Log::error("Errore creazione prestazione: " . $e->getMessage());
             return response()->json(['message' => 'Errore durante la creazione della prestazione'], 500);
         }
+    }
+
+    function deletePrestazione($id_prestazione)
+    {
+        $prestazione = Prestazione::findOrFail($id_prestazione);
+        $prestazione->record_attivo = 0;
+        $prestazione->save();
+
+        return response()->json(['message' => 'Prestazione eliminata con successo'], 201);
     }
 }

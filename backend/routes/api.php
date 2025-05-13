@@ -17,4 +17,5 @@ Route::middleware('auth:sanctum')->group(function () {
 	Route::get('/get_prestazioni', [PrestazioneController::class, 'getPrestazioni']);
 	Route::put('/update_prestazione/{id_prestazione}', [PrestazioneController::class, 'updatePrestazione']);
 	Route::post('/create_prestazione', [PrestazioneController::class, 'createPrestazione']);
+	Route::put('/delete_prestazione/{id_prestazione}', [PrestazioneController::class, 'deletePrestazione']);
 });
