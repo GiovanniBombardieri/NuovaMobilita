@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Struttura;
 use App\Models\Posizione;
-use App\Models\PosizioneUtente;
+use App\Models\Prestazione;
 use App\Models\Recapito;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,12 +19,10 @@ class AuthController extends Controller
 {
 	public function register(Request $request)
 	{
-
 		if ($request->ruolo === 'struttura') {
 			return $this->registerStruttura($request);
 		}
-		Log::info('Validazione della richiesta');
-		Log::info($request->all());
+
 		$request->validate([
 			'ruolo' => 'required|string|max:50',
 			'name' => 'required|string|max:255',
@@ -33,11 +31,8 @@ class AuthController extends Controller
 			'password' => 'required|string|min:8',
 		]);
 
-		Log::info('Creazione dell\'id_posizione');
 		$id_posizione = (string) Str::uuid();
-		Log::info($id_posizione);
 
-		Log::info('Creazione dell\'utente');
 		$user = User::create([
 			'id_posizione' => $id_posizione,
 			'name' => $request->name,
@@ -49,7 +44,6 @@ class AuthController extends Controller
 		]);
 
 		// Salvo la posizione dell'utente
-		Log::info('Creazione posizione');
 		$posizione = Posizione::create([
 			'id_posizione' => $id_posizione,
 			'comune' => null,
@@ -364,15 +358,5 @@ class AuthController extends Controller
 				'access_token' => $request->bearerToken(),
 			]);
 		}
-	}
-
-	public function getPrestazioni(Request $request)
-	{
-		$user = $request->user();
-		$struttura = $user->struttura;
-
-		$prestazioni = $struttura?->prestazioni()->with(['tipoPrestazione', 'valore'])->paginate(4);
-
-		return response()->json($prestazioni);
 	}
 }

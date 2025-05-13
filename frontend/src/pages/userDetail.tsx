@@ -170,7 +170,6 @@ const UserDetails = () => {
 
           {/** PULSANTE MODIFICA PROFILO */}
           <button
-            // onClick={handleEditProfile}
             onClick={() =>
               (
                 document.getElementById("edit_profile") as HTMLDialogElement
