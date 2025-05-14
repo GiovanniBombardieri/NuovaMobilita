@@ -63,6 +63,24 @@ export interface Prestazione {
   };
 }
 
+export interface StrutturaDatiCompleti {
+  id_struttura: string;
+  ruolo: string;
+  email: string;
+  struttura?: {
+    id_posizione: string;
+    id_sito_web: string;
+    ragione_sociale: string;
+    posizione?: {
+      comune: string;
+      provincia: string;
+      via: string;
+      numero_civico: string;
+      cap: string;
+    };
+  };
+}
+
 // Definizione del tipo per il contesto
 interface AuthContextType {
   user: User | Struttura | null;

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PrestazioneController;
+use App\Http\Controllers\StrutturaController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -18,4 +19,7 @@ Route::middleware('auth:sanctum')->group(function () {
 	Route::put('/update_prestazione/{id_prestazione}', [PrestazioneController::class, 'updatePrestazione']);
 	Route::post('/create_prestazione', [PrestazioneController::class, 'createPrestazione']);
 	Route::put('/delete_prestazione/{id_prestazione}', [PrestazioneController::class, 'deletePrestazione']);
+
+	// Strutture
+	Route::get('/get_strutture', [StrutturaController::class, 'getStrutture']);
 });

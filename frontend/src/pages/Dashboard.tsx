@@ -4,6 +4,7 @@ import UserDetails from "./userDetail";
 import ServiceOverview from "./ServiceOverview";
 import StructureMaps from "./StructuresMap";
 import Prestazioni from "./Prestazioni";
+import Strutture from "./Strutture";
 
 // Funzioni di type guard
 function isUser(user: User | Struttura | null): user is User {
@@ -64,7 +65,7 @@ const Dashboard = () => {
             </div>
             <div className="flex-1 flex flex-row justify-between overflow-hidden pl-4 pb-4 pt-2 pr-2 gap-4">
               <UserDetails />
-              {isStruttura(user) ? <Prestazioni /> : null}
+              {isStruttura(user) ? <Prestazioni /> : <Strutture />}
             </div>
           </div>
           {/** Colonna destra */}
