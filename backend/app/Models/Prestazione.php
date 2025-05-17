@@ -31,7 +31,7 @@ class Prestazione extends Model
 
     public function tipoPrestazione()
     {
-        return $this->hasOne(TipoPrestazione::class, 'id_tipo_prestazione', 'id_tipo_prestazione');
+        return $this->belongsTo(TipoPrestazione::class, 'id_tipo_prestazione', 'id_tipo_prestazione');
     }
 
     public function valore()

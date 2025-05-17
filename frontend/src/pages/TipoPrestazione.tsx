@@ -25,32 +25,41 @@ const TipoPrestazione = () => {
   const [costo, setCosto] = useState<number>();
   const [descrizione, setDescrizione] = useState("");
 
+  useEffect(() => {
+    if (prestazione) {
+      setIsTipoPrestazioneSelected(prestazione.id_tipo_prestazione);
+    }
+  }, [prestazione]);
+
   // Carico i dati della prestazione
   const caricaTipoFunzione = useCallback(
-    (id_prestazione: string) => {
-      if (!id_prestazione) return;
+    (id_tipo_prestazione: string) => {
+      if (!id_tipo_prestazione) return;
 
       setLoadingDatiPrestazione(true);
       axios
-        .get(`http://localhost:8000/api/get_prestazioni/${id_prestazione}`, {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        })
+        .get(
+          `http://localhost:8000/api/get_tipo_prestazione_singola/${id_tipo_prestazione}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user?.token}`,
+            },
+          }
+        )
         .then((res) => {
-          console.log(res);
-          setPrestazione(res.data);
+          const dati = res.data;
+          setPrestazione(dati);
 
           // Inizializzo gli stati degli input
-          setTitolo(res.data.tipo_prestazione?.titolo || "");
-          setTipologia(res.data.tipo_prestazione?.tipologia || "");
-          setDescrizione(res.data.tipo_prestazione?.descrizione || "");
+          setTitolo(dati?.titolo);
+          setTipologia(dati?.tipologia);
+          setDescrizione(dati?.descrizione);
+        })
+        .catch((err) => {
+          console.error("Errore nel recupero del tipo di prestazione", err);
         })
         .finally(() => {
           setLoadingDatiPrestazione(false);
-        })
-        .catch((err) => {
-          console.error("Errore nel recupero prestazioni", err);
         });
     },
     [user?.token]
@@ -76,26 +85,6 @@ const TipoPrestazione = () => {
       });
   }, [currentPage, user?.token]);
 
-  useEffect(() => {
-    if (isTipoPrestazioneSelected) {
-      caricaTipoFunzione(isTipoPrestazioneSelected);
-
-      // setTimeout(() => {
-      //   (
-      //     document.getElementById("cerca_tipo_prestazione") as HTMLDialogElement
-      //   )?.showModal();
-      // }, 300);
-    }
-  }, [isTipoPrestazioneSelected, caricaTipoFunzione]);
-
-  useEffect(() => {
-    if (titolo && tipologia && descrizione) {
-      (
-        document.getElementById("cerca_tipo_prestazione") as HTMLDialogElement
-      )?.showModal();
-    }
-  }, [titolo, tipologia, descrizione]);
-
   // Funzione per aggiungere la prestazione una volta scelto il tipo
   const addPrestazione = async () => {
     if (!user?.token) return;
@@ -111,15 +100,15 @@ const TipoPrestazione = () => {
         }
       );
 
+      (
+        document.getElementById("cerca_tipo_prestazione") as HTMLDialogElement
+      )?.close();
+
       alert("Prestazione aggiunta con successo!");
 
       setTitolo("");
       setTipologia("");
-      setCosto(0);
       setDescrizione("");
-      (
-        document.getElementById("add_prestazione") as HTMLDialogElement
-      )?.close();
     } catch (error) {
       console.error("Errore durante la creazione della prestazione: ", error);
       alert("Errore durante l'aggiunta della prestazione!");
@@ -182,7 +171,7 @@ const TipoPrestazione = () => {
                     type="number"
                     min={0}
                     className="input input-bordered w-4/5"
-                    value={0}
+                    value={costo}
                     onChange={(e) => {
                       const valore = e.target.value.replace(",", ".");
                       const numero = parseFloat(valore);
@@ -198,10 +187,11 @@ const TipoPrestazione = () => {
                 <div className="form-control mb-4 w-full flex items-center justify-between">
                   <label className="label w-1/5">Descrizione</label>
                   <textarea
-                    className="input input-bordered w-4/5 h-32 resize-none whitespace-normal"
+                    className="input input-bordered w-4/5 h-60 resize-none whitespace-normal"
                     value={descrizione}
                     onChange={(e) => setDescrizione(e.target.value)}
                     required
+                    readOnly
                   />
                 </div>
               </div>
@@ -210,7 +200,15 @@ const TipoPrestazione = () => {
                 <button type="submit" className="btn btn-primary mr-2">
                   Salva
                 </button>
-                <button className="btn">Close</button>
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={() => {
+                    setIsTipoPrestazioneSelected("");
+                  }}
+                >
+                  Indietro
+                </button>
               </div>
             </form>
           </>
@@ -298,7 +296,7 @@ const TipoPrestazione = () => {
                     </div>
                     <button
                       onClick={() => {
-                        setIsTipoPrestazioneSelected(
+                        caricaTipoFunzione(
                           tipo_prestazione.id_tipo_prestazione
                         );
                       }}

@@ -193,21 +193,35 @@ const Prestazioni = () => {
             </div>
           </li>
         ))}
-        <div className="w-full h-full flex flex-row justify-center items-center">
-          <div className="join">
-            {[...Array(lastPage)].map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentPage(index + 1)}
-                className={`join-item btn ${
-                  currentPage === index + 1 ? "btn-active" : ""
-                }`}
-              >
-                {index + 1}
-              </button>
-            ))}
+        {prestazioni.length !== 0 ? (
+          <div className="w-full h-full flex flex-row justify-center items-center">
+            <div className="join">
+              {[...Array(lastPage)].map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentPage(index + 1)}
+                  className={`join-item btn ${
+                    currentPage === index + 1 ? "btn-active" : ""
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="w-full h-full flex flex-col justify-center items-center">
+            <div className="w-5/6 text-center">
+              Nessuna prestazione presente a database.
+            </div>
+            <br />
+            <div className="w-5/6 text-center">
+              Utilizza il pulsante di ricerca per trovare le prestazioni già
+              presenti nei nostri sistemi oppure aggiungila con il pulsante qua
+              sopra!
+            </div>
+          </div>
+        )}
       </ul>
       <ModificaPrestazione id_prestazione={selectedId} />
       <AggiungiPrestazione />

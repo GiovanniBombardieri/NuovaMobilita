@@ -138,4 +138,10 @@ class PrestazioneController extends Controller
         $tipo_prestazioni = TipoPrestazione::where('record_attivo', 1)->paginate(6);
         return response()->json($tipo_prestazioni);
     }
+
+    public function getTipoPrestazioneSingola($id_tipo_prestazione)
+    {
+        $tipo_prestazione = TipoPrestazione::where('id_tipo_prestazione', $id_tipo_prestazione)->first();
+        return response()->json($tipo_prestazione);
+    }
 }

@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
 	Route::post('/create_prestazione', [PrestazioneController::class, 'createPrestazione']);
 	Route::put('/delete_prestazione/{id_prestazione}', [PrestazioneController::class, 'deletePrestazione']);
 	Route::get('/get_tipo_prestazioni', [PrestazioneController::class, 'getTipoPrestazioni']);
+	Route::get('/get_tipo_prestazione_singola/{id_tipo_prestazione}', [PrestazioneController::class, 'getTipoPrestazioneSingola']);
 
 	// Strutture
 	Route::get('/get_strutture', [StrutturaController::class, 'getStrutture']);
