@@ -85,17 +85,8 @@ class AuthController extends Controller
 			$id_posizione = (string) Str::uuid();
 			$id_recapito = (string) Str::uuid();
 
-			// Salvo utente con email, password e ruolo
-			Log::info('Creazione utente', ['id_struttura' => $id_struttura]);
-			$user = User::create([
-				'email' => $request->email,
-				'password' => Hash::make($request->password),
-				'ruolo' => 'struttura',
-				'id_struttura' => $id_struttura,
-			]);
-
 			// Salvo la posizione
-			Log::info('Creazione posizione');
+			Log::info('Creazione posizione', ['id_posizione' => $id_posizione]);
 			$posizione = Posizione::create([
 				'id_posizione' => $id_posizione,
 				'comune' => $request->comune,
@@ -105,21 +96,34 @@ class AuthController extends Controller
 				'cap' => $request->cap,
 			]);
 
-			// Salvo il recapito
-			Log::info('Creazione recapito');
-			$recapito = Recapito::create([
-				'id_recapito' => $id_recapito,
-				'id_tipo_recapito' => '0000004a-0000-0000-0000-000000000001',
-				'email' => $request->email,
-			]);
-
 			// Salvo la struttura
 			Log::info('Creazione struttura');
 			$struttura = Struttura::create([
 				'id_struttura' => $id_struttura,
 				'id_posizione' => $id_posizione,
-				'id_recapito' => $id_recapito,
 				'ragione_sociale' => $request->ragione_sociale,
+			]);
+
+			// Salvo il recapito
+			Log::info('Creazione recapito', ['id_recapito' => $id_recapito]);
+			$recapito = Recapito::create([
+				'id_recapito' => $id_recapito,
+				'id_struttura' => $id_struttura,
+				'id_tipo_recapito' => '0000004a-0000-0000-0000-000000000001',
+				'email' => $request->email,
+			]);
+
+			// Aggiorna struttura con id_recapito
+			$struttura->id_recapito = $id_recapito;
+			$struttura->save();
+
+			// Salvo utente con email, password e ruolo
+			Log::info('Creazione utente', ['id_struttura' => $id_struttura]);
+			$user = User::create([
+				'email' => $request->email,
+				'password' => Hash::make($request->password),
+				'ruolo' => 'struttura',
+				'id_struttura' => $id_struttura,
 			]);
 
 			DB::commit();

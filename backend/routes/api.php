@@ -19,6 +19,7 @@ Route::middleware('auth:sanctum')->group(function () {
 	Route::put('/update_prestazione/{id_prestazione}', [PrestazioneController::class, 'updatePrestazione']);
 	Route::post('/create_prestazione', [PrestazioneController::class, 'createPrestazione']);
 	Route::put('/delete_prestazione/{id_prestazione}', [PrestazioneController::class, 'deletePrestazione']);
+	Route::get('/get_tipo_prestazioni', [PrestazioneController::class, 'getTipoPrestazioni']);
 
 	// Strutture
 	Route::get('/get_strutture', [StrutturaController::class, 'getStrutture']);

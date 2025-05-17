@@ -13,6 +13,7 @@ class Recapito extends Model
 
     protected $fillable = [
         'id_recapito',
+        'id_struttura',
         'id_tipo_recapito',
         'telefono',
         'email',

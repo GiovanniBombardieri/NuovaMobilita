@@ -81,6 +81,13 @@ export interface StrutturaDatiCompleti {
   };
 }
 
+export interface DatiTipoPrestazione {
+  id_tipo_prestazione: string;
+  tipologia: string;
+  titolo: string;
+  descrizione: string;
+}
+
 // Definizione del tipo per il contesto
 interface AuthContextType {
   user: User | Struttura | null;

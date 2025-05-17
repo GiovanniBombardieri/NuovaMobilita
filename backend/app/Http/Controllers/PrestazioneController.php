@@ -7,6 +7,7 @@ use App\Models\Struttura;
 use App\Models\Posizione;
 use App\Models\Prestazione;
 use App\Models\Recapito;
+use App\Models\TipoPrestazione;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -38,9 +39,10 @@ class PrestazioneController extends Controller
 
         $prestazione = $struttura
             ?->prestazioni()
+            ->where('id_prestazione', $id_prestazione)
             ->where('record_attivo', 1)
             ->with(['tipoPrestazione', 'valore'])
-            ->find($id_prestazione);
+            ->first();
 
         if (!$prestazione) {
             return response()->json(['message' => 'Prestazione non trovata'], 404);
@@ -122,12 +124,18 @@ class PrestazioneController extends Controller
         }
     }
 
-    function deletePrestazione($id_prestazione)
+    public function deletePrestazione($id_prestazione)
     {
         $prestazione = Prestazione::findOrFail($id_prestazione);
         $prestazione->record_attivo = 0;
         $prestazione->save();
 
         return response()->json(['message' => 'Prestazione eliminata con successo'], 201);
+    }
+
+    public function getTipoPrestazioni(Request $request)
+    {
+        $tipo_prestazioni = TipoPrestazione::where('record_attivo', 1)->paginate(6);
+        return response()->json($tipo_prestazioni);
     }
 }

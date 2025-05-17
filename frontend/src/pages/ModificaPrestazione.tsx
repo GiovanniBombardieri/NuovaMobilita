@@ -65,7 +65,6 @@ const ModificaPrestazione = ({
         },
       })
       .then((res) => {
-        console.log(res.data);
         setPrestazione(res.data);
       })
       .catch((err) => {

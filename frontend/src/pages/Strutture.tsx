@@ -20,7 +20,6 @@ const Strutture = () => {
         },
       })
       .then((res) => {
-        console.log(res);
         setStrutture(res.data.data);
         setLastPage(res.data.last_page);
       })
@@ -48,30 +47,57 @@ const Strutture = () => {
                   alt="Avatar"
                 />
               </div>
-              <div className="w-10/12 mr-5">
-                <div>
-                  <strong>{struttura.struttura?.ragione_sociale}</strong>
-                </div>
-                <p className="list-col-wrap text-xs mt-0">DESCRIZIONE</p>
+              <div className="w-10/12 mr-5 flex items-center text-lg">
+                <strong>{struttura.struttura?.ragione_sociale}</strong>
               </div>
-              <div className="w-1/12 text-end">
-                <button
-                  onClick={() => alert("Hai cliccato su bottone preferiti")}
-                  className="btn btn-square btn-ghost"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="size-[1.2em]"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="red"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+              <div className="w-1/12 flex flex-row text-end mr-8">
+                <div>
+                  <button
+                    onClick={() =>
+                      alert(
+                        "Hai cliccato sul pulsante per visualizzare le prestazioni della struttura"
+                      )
+                    }
+                    className="btn btn-square btn-ghost"
                   >
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" />
-                  </svg>
-                </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="size-[1.2em]"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                  </button>
+                </div>
+                <div>
+                  <button
+                    onClick={() =>
+                      alert(
+                        "Hai cliccato sul pulsante per inserire la struttura tra i tuoi preferiti"
+                      )
+                    }
+                    className="btn btn-square btn-ghost"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="size-[1.2em]"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="red"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
           </li>
