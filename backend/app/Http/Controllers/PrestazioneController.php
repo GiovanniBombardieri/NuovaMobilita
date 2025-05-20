@@ -128,7 +128,9 @@ class PrestazioneController extends Controller
     {
         $prestazione = Prestazione::findOrFail($id_prestazione);
         $prestazione->record_attivo = 0;
+        // $prestazione?->valore->record_attivo = 0;
         $prestazione->save();
+
 
         return response()->json(['message' => 'Prestazione eliminata con successo'], 201);
     }
