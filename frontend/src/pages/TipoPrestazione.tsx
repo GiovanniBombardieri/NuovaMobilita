@@ -20,6 +20,7 @@ const TipoPrestazione = () => {
   const [loadingDatiPrestazione, setLoadingDatiPrestazione] = useState(false);
 
   const [prestazione, setPrestazione] = useState<Prestazione | null>(null);
+  const [id_tipo_prestazione, setIdTipoPrestazione] = useState("");
   const [titolo, setTitolo] = useState("");
   const [tipologia, setTipologia] = useState("");
   const [costo, setCosto] = useState<number>();
@@ -54,6 +55,7 @@ const TipoPrestazione = () => {
           setTitolo(dati?.titolo);
           setTipologia(dati?.tipologia);
           setDescrizione(dati?.descrizione);
+          setIdTipoPrestazione(dati?.id_tipo_prestazione);
         })
         .catch((err) => {
           console.error("Errore nel recupero del tipo di prestazione", err);
@@ -88,11 +90,12 @@ const TipoPrestazione = () => {
   // Funzione per aggiungere la prestazione una volta scelto il tipo
   const addPrestazione = async () => {
     if (!user?.token) return;
+    console.log(tipologia);
 
     try {
       await axios.post(
         "http://localhost:8000/api/create_prestazione",
-        { titolo, tipologia, costo, descrizione },
+        { id_tipo_prestazione, titolo, tipologia, costo, descrizione },
         {
           headers: {
             Authorization: `Bearer ${user.token}`,
@@ -140,6 +143,7 @@ const TipoPrestazione = () => {
                     value={titolo}
                     onChange={(e) => setTitolo(e.target.value)}
                     required
+                    readOnly
                   />
                 </div>
               </div>
@@ -150,16 +154,12 @@ const TipoPrestazione = () => {
                   <label className="label w-1/5 text-wrap">
                     Tipologia prestazione
                   </label>
-                  <select
-                    className="select select-bordered w-4/5"
-                    value={tipologia}
-                    onChange={(e) => setTipologia(e.target.value)}
-                    required
-                  >
-                    <option value="">-- Seleziona --</option>
-                    <option value="P">Psicologica</option>
-                    <option value="M">Motoria</option>
-                  </select>
+                  <input
+                    type="text"
+                    className="input input-bordered w-4/5"
+                    value={tipologia === "P" ? "Psicologica" : "Motoria"}
+                    readOnly
+                  />
                 </div>
               </div>
 
@@ -191,7 +191,6 @@ const TipoPrestazione = () => {
                     value={descrizione}
                     onChange={(e) => setDescrizione(e.target.value)}
                     required
-                    readOnly
                   />
                 </div>
               </div>

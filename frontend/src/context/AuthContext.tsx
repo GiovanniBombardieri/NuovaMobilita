@@ -43,6 +43,7 @@ export interface Prestazione {
   id_struttura: string;
   id_tipo_prestazione: string;
   id_valore: string;
+  descrizione_personalizzata: string;
   time_modifica: Date;
   record_attivo: number;
   tipo_prestazione?: {

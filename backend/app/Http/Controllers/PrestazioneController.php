@@ -54,9 +54,10 @@ class PrestazioneController extends Controller
     public function updatePrestazione(Request $request, $id_prestazione)
     {
         $prestazione = Prestazione::findOrFail($id_prestazione);
+        $prestazione->descrizione_personalizzata = $request->input('descrizione');
+        $prestazione->save();
 
         $prestazione->tipoPrestazione->titolo = $request->input('titolo');
-        $prestazione->tipoPrestazione->descrizione = $request->input('descrizione');
         $prestazione->tipoPrestazione->tipologia = $request->input('tipologia') === 'Psicologica' ? 'P' : 'M';
         $prestazione->tipoPrestazione->time_modifica = now();
         $prestazione->tipoPrestazione->save();
@@ -77,12 +78,95 @@ class PrestazioneController extends Controller
             return response()->json(['message' => 'Struttura non trovata'], 404);
         }
 
-        $validated = $request->validate([
-            'titolo' => 'required|string|max:255',
-            'descrizione' => 'required|string',
-            'tipologia' => 'required|string|size:1|in:P,M',
-            'costo' => 'required|numeric|min:0',
-        ]);
+        $tipo_prestazione = TipoPrestazione::where('id_tipo_prestazione', $request->id_tipo_prestazione)->first();
+
+        if ($request->id_tipo_prestazione) {
+            $validated = $request->validate([
+                'titolo' => 'required|string|max:255',
+                'descrizione' => 'required|string',
+                'tipologia' => 'required|string|size:1|in:P,M',
+                'costo' => 'required|numeric|min:0',
+            ]);
+
+            try {
+                DB::beginTransaction();
+
+                $valore = new \App\Models\Valore();
+                $valore->id_valore = Str::uuid();
+                $valore->valore_numerico = $validated['costo'];
+                $valore->inizio_validita = now();
+                $valore->fine_validita = '2099-12-31 23:59:59';
+                $valore->time_modifica = now();
+                $valore->record_attivo = 1;
+                $valore->save();
+
+                $prestazione = new \App\Models\Prestazione();
+                $prestazione->id_prestazione = Str::uuid();
+                $prestazione->id_tipo_prestazione = $tipo_prestazione->id_tipo_prestazione;
+                $prestazione->id_struttura = $struttura->id_struttura;
+                $prestazione->id_valore = $valore->id_valore;
+                $validated['descrizione'] !== $tipo_prestazione->descrizione ? $prestazione->descrizione_personalizzata = $validated['descrizione'] : null;
+                $prestazione->time_modifica = now();
+                $prestazione->record_attivo = 1;
+                $prestazione->save();
+
+                DB::commit();
+
+                return response()->json(['message' => 'Prestazione creata con successo'], 201);
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error("Errore creazione prestazione: " . $e->getMessage());
+                return response()->json(['message' => 'Errore durante la creazione della prestazione'], 500);
+            }
+        } else {
+            $validated = $request->validate([
+                'titolo' => 'required|string|max:255',
+                'descrizione' => 'required|string',
+                'tipologia' => 'required|string|size:1|in:P,M',
+                'costo' => 'required|numeric|min:0',
+            ]);
+
+            try {
+                DB::beginTransaction();
+
+                $tipo = new \App\Models\TipoPrestazione();
+                $tipo->id_tipo_prestazione = Str::uuid();
+                $tipo->tipologia = $validated['tipologia'];
+                $tipo->titolo = $validated['titolo'];
+                $tipo->descrizione = $validated['descrizione'];
+                $tipo->time_modifica = now();
+                $tipo->record_attivo = 1;
+                $tipo->save();
+
+                $valore = new \App\Models\Valore();
+                $valore->id_valore = Str::uuid();
+                $valore->valore_numerico = $validated['costo'];
+                $valore->inizio_validita = now();
+                $valore->fine_validita = '2099-12-31 23:59:59';
+                $valore->time_modifica = now();
+                $valore->record_attivo = 1;
+                $valore->save();
+
+                $prestazione = new \App\Models\Prestazione();
+                $prestazione->id_prestazione = Str::uuid();
+                $prestazione->id_tipo_prestazione = $tipo->id_tipo_prestazione;
+                $prestazione->id_struttura = $struttura->id_struttura;
+                $prestazione->id_valore = $valore->id_valore;
+                $prestazione->descrizione_personalizzata = null;
+                $prestazione->time_modifica = now();
+                $prestazione->record_attivo = 1;
+                $prestazione->save();
+
+                DB::commit();
+
+                return response()->json(['message' => 'Prestazione creata con successo'], 201);
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error("Errore creazione prestazione: " . $e->getMessage());
+                return response()->json(['message' => 'Errore durante la creazione della prestazione'], 500);
+            }
+        }
+
 
         try {
             DB::beginTransaction();
@@ -91,7 +175,7 @@ class PrestazioneController extends Controller
             $tipo->id_tipo_prestazione = Str::uuid();
             $tipo->tipologia = $validated['tipologia'];
             $tipo->titolo = $validated['titolo'];
-            $tipo->descrizione = $validated['descrizione'];
+            $tipo->descrizione = $tipo_prestazione->descrizione;
             $tipo->time_modifica = now();
             $tipo->record_attivo = 1;
             $tipo->save();
@@ -110,6 +194,7 @@ class PrestazioneController extends Controller
             $prestazione->id_tipo_prestazione = $tipo->id_tipo_prestazione;
             $prestazione->id_struttura = $struttura->id_struttura;
             $prestazione->id_valore = $valore->id_valore;
+            $validated['descrizione'] !== $tipo_prestazione->descrizione ? $prestazione->descrizione_personalizzata = $validated['descrizione'] : null;
             $prestazione->time_modifica = now();
             $prestazione->record_attivo = 1;
             $prestazione->save();

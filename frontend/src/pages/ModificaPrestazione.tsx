@@ -50,7 +50,11 @@ const ModificaPrestazione = ({
   );
   useEffect(() => {
     if (prestazione?.tipo_prestazione?.descrizione) {
-      setDescrizione(prestazione.tipo_prestazione.descrizione);
+      if (prestazione?.descrizione_personalizzata) {
+        setDescrizione(prestazione.descrizione_personalizzata);
+      } else {
+        setDescrizione(prestazione.tipo_prestazione.descrizione);
+      }
     }
   }, [prestazione]);
 
@@ -125,6 +129,7 @@ const ModificaPrestazione = ({
                 className="input input-bordered w-4/5"
                 value={titolo}
                 onChange={(e) => setTitolo(e.target.value)}
+                readOnly
               />
             </div>
           </div>
@@ -140,6 +145,7 @@ const ModificaPrestazione = ({
                 className="input input-bordered w-4/5"
                 value={tipologia}
                 onChange={(e) => setTipologia(e.target.value)}
+                readOnly
               />
             </div>
           </div>

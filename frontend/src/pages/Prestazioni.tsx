@@ -133,13 +133,15 @@ const Prestazioni = () => {
                   <strong>{prestazione.tipo_prestazione?.titolo}</strong>
                 </div>
                 <p className="list-col-wrap text-xs mt-0">
-                  {prestazione.tipo_prestazione?.descrizione
-                    ? prestazione.tipo_prestazione?.descrizione.length > 150
-                      ? prestazione.tipo_prestazione?.descrizione.slice(
-                          0,
-                          150
-                        ) + "..."
-                      : prestazione.tipo_prestazione?.descrizione
+                  {prestazione.descrizione_personalizzata
+                    ? prestazione.descrizione_personalizzata.length > 150
+                      ? prestazione.descrizione_personalizzata.slice(0, 150) +
+                        "..."
+                      : prestazione.descrizione_personalizzata
+                    : prestazione.tipo_prestazione?.descrizione &&
+                      prestazione.tipo_prestazione?.descrizione.length > 150
+                    ? prestazione.tipo_prestazione?.descrizione.slice(0, 150) +
+                      "..."
                     : ""}
                 </p>
               </div>
