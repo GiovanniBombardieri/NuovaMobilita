@@ -14,11 +14,14 @@ const Strutture = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/get_strutture?page=${currentPage}`, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      })
+      .get(
+        `http://localhost:8000/api/get_strutture_paginate?page=${currentPage}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        }
+      )
       .then((res) => {
         setStrutture(res.data.data);
         setLastPage(res.data.last_page);

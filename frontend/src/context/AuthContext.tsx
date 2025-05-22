@@ -37,6 +37,24 @@ export interface Struttura {
   };
 }
 
+// Definizione del tipo per il ruolo Struttura utile per il Geocoding
+export interface StrutturaGeocoding {
+  id_struttura: string;
+  id_posizione: string;
+  id_recapito: string;
+  id_sito_web: string;
+  ragione_sociale: string;
+  time_modifica: string;
+  record_attivo: number;
+  posizione: {
+    comune: string;
+    provincia: string;
+    via: string;
+    numero_civico: string;
+    cap: string;
+  };
+}
+
 // Definizione del tipo per la prestazione
 export interface Prestazione {
   id_prestazione: string;

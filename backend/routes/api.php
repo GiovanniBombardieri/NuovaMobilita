@@ -23,5 +23,6 @@ Route::middleware('auth:sanctum')->group(function () {
 	Route::get('/get_tipo_prestazione_singola/{id_tipo_prestazione}', [PrestazioneController::class, 'getTipoPrestazioneSingola']);
 
 	// Strutture
+	Route::get('/get_strutture_paginate', [StrutturaController::class, 'getStrutturePaginate']);
 	Route::get('/get_strutture', [StrutturaController::class, 'getStrutture']);
 });

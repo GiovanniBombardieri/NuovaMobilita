@@ -17,12 +17,20 @@ use Illuminate\Support\Facades\Log;
 
 class StrutturaController extends Controller
 {
-    public function getStrutture(Request $request)
+    public function getStrutturePaginate(Request $request)
     {
         $strutture = User::whereNotNull('id_struttura')
             ->with(['struttura.posizione'])
             ->paginate(4);
 
         return response()->json($strutture);
+    }
+
+    public function getStrutture(Request $request)
+    {
+        $strutture = Struttura::where('record_attivo', 1)
+            ->with('posizione')
+            ->get();
+        return response()->json(['data' => $strutture]);
     }
 }

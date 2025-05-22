@@ -114,7 +114,7 @@ const Login = () => {
             email: data.user.email,
             telefono: data.user.telefono,
             token: data.access_token,
-            location,
+            location: location,
           });
         } catch (error) {
           const defaultLocation = {
