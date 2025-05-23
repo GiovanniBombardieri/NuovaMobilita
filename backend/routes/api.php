@@ -25,4 +25,6 @@ Route::middleware('auth:sanctum')->group(function () {
 	// Strutture
 	Route::get('/get_strutture_paginate', [StrutturaController::class, 'getStrutturePaginate']);
 	Route::get('/get_strutture', [StrutturaController::class, 'getStrutture']);
+	Route::get('/get_prestazioni_azienda/{id_struttura}', [StrutturaController::class, 'getPrestazioniStruttura']);
+	Route::get('/get_dettaglio_struttura/{id_struttura}', [StrutturaController::class, 'getDettaglioStruttura']);
 });

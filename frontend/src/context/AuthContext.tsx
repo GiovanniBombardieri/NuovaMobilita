@@ -55,6 +55,23 @@ export interface StrutturaGeocoding {
   };
 }
 
+export interface DettagliStruttura {
+  struttura: {
+    ragione_sociale: string;
+  };
+  posizione: {
+    cap: number;
+    comune: string;
+    numero_civico: string;
+    provincia: string;
+    via: string;
+  };
+  recapiti: {
+    email?: string;
+    telefono?: string;
+  }[];
+}
+
 // Definizione del tipo per la prestazione
 export interface Prestazione {
   id_prestazione: string;

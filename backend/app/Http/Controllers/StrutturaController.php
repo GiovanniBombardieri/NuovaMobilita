@@ -33,4 +33,47 @@ class StrutturaController extends Controller
             ->get();
         return response()->json(['data' => $strutture]);
     }
+
+    public function getPrestazioniStruttura($id_struttura)
+    {
+        $struttura = Struttura::with('prestazioni.tipoPrestazione', 'prestazioni.valore')->find($id_struttura);
+
+        if (!$struttura) {
+            return response()->json(['message' => 'Struttura non trovata'], 404);
+        }
+
+        return response()->json([
+            'struttura' => $struttura->ragione_sociale,
+            'prestazioni' => $struttura->prestazioni
+        ]);
+    }
+
+    public function getDettaglioStruttura($id_struttura)
+    {
+        $struttura = Struttura::with(['recapiti', 'posizione'])->find($id_struttura);
+
+        if (!$struttura) {
+            return response()->json(['message' => 'Struttura non trovata'], 404);
+        }
+
+        // return response()->json($struttura);
+        return response()->json([
+            'struttura' => [
+                'ragione_sociale' => $struttura->ragione_sociale,
+            ],
+            'posizione' => [
+                'cap' => $struttura->posizione->cap,
+                'comune' => $struttura->posizione->comune,
+                'numero_civico' => $struttura->posizione->numero_civico,
+                'provincia' => $struttura->posizione->provincia,
+                'via' => $struttura->posizione->via,
+            ],
+            'recapiti' => $struttura->recapiti->map(function ($recapito) {
+                return [
+                    'email' => $recapito->email,
+                    'telefono' => $recapito->telefono,
+                ];
+            }),
+        ]);
+    }
 }
