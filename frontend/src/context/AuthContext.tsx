@@ -57,6 +57,7 @@ export interface StrutturaGeocoding {
 
 export interface DettagliStruttura {
   struttura: {
+    id_struttura: string;
     ragione_sociale: string;
   };
   posizione: {

@@ -28,4 +28,6 @@ Route::middleware('auth:sanctum')->group(function () {
 	Route::get('/get_prestazioni_azienda/{id_struttura}', [StrutturaController::class, 'getPrestazioniStruttura']);
 	Route::get('/get_dettaglio_struttura/{id_struttura}', [StrutturaController::class, 'getDettaglioStruttura']);
 	Route::post('/add_struttura_preferita/{id_struttura}', [StrutturaController::class, 'addStrutturaPreferita']);
+	Route::get('/get_strutture_preferite', [StrutturaController::class, 'getStrutturePreferite']);
+	Route::put('/remove_struttura_preferita/{id_struttura}', [StrutturaController::class, 'removeStrutturaPreferita']);
 });

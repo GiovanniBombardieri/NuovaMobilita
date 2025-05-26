@@ -49,6 +49,7 @@ const Strutture = () => {
       );
 
       alert("Struttura aggiunta tra i propri preferiti!");
+      window.location.reload();
     } catch (error) {
       console.error(
         "Errore durante l'aggiunta della struttura tra i preferiti ",

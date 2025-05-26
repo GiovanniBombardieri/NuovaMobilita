@@ -57,9 +57,9 @@ class StrutturaController extends Controller
             return response()->json(['message' => 'Struttura non trovata'], 404);
         }
 
-        // return response()->json($struttura);
         return response()->json([
             'struttura' => [
+                'id_struttura' => $struttura->id_struttura,
                 'ragione_sociale' => $struttura->ragione_sociale,
             ],
             'posizione' => [
@@ -102,5 +102,65 @@ class StrutturaController extends Controller
             Log::error("Errore aggiunta struttura tra i preferiti: ", $e->getMessage());
             return response()->json(['message' => "Errore durante l'aggiunta della struttura tra i preferiti"], 500);
         }
+    }
+
+    public function getStrutturePreferite(Request $request)
+    {
+        $user = $request->user();
+        $id_utente = $user->id;
+
+        $strutturePreferite = StrutturaPreferita::where('record_attivo', 1)
+            ->where('id_utente', $id_utente)
+            ->with(['struttura.posizione', 'struttura.recapiti'])
+            ->get();
+
+        $result = $strutturePreferite->map(function ($item) {
+            $struttura = $item->struttura;
+
+            return [
+                'struttura' => [
+                    'id_struttura' => $struttura->id_struttura ?? null,
+                    'ragione_sociale' => $struttura->ragione_sociale ?? null,
+                ],
+                'posizione' => [
+                    'cap' => $struttura->posizione->cap ?? null,
+                    'comune' => $struttura->posizione->comune ?? null,
+                    'numero_civico' => $struttura->posizione->numero_civico ?? null,
+                    'provincia' => $struttura->posizione->provincia ?? null,
+                    'via' => $struttura->posizione->via ?? null,
+                ],
+                'recapiti' => $struttura->recapiti->map(function ($recapito) {
+                    return [
+                        'email' => $recapito->email,
+                        'telefono' => $recapito->telefono,
+                    ];
+                }),
+
+            ];
+        });
+
+        return response()->json([
+            'data' => $result
+        ]);
+    }
+
+    public function removeStrutturaPreferita(Request $request, $id_struttura)
+    {
+        $user = $request->user();
+        $id_utente = $user->id;
+
+
+        $struttura_preferita = StrutturaPreferita::where('id_struttura', $id_struttura)
+            ->where('id_utente', $id_utente)
+            ->first();
+
+        if (!$struttura_preferita) {
+            return response()->json(['message' => 'Struttura preferita non trovata'], 404);
+        }
+
+        $struttura_preferita->record_attivo = 0;
+        $struttura_preferita->save();
+
+        return response()->json(['message' => 'Struttura preferita rimossa con successo'], 201);
     }
 }

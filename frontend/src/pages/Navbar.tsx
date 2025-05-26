@@ -1,5 +1,6 @@
 import { useAuth, User, Struttura } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import StrutturePreferite from "./StrutturePreferite";
 
 import TipoPrestazione from "./TipoPrestazione";
 
@@ -103,7 +104,16 @@ const Navbar = () => {
             </button>
           ) : null}
           {isStruttura(user) ? null : (
-            <button className="btn btn-ghost btn-circle mx-1">
+            <button
+              className="btn btn-ghost btn-circle mx-1"
+              onClick={() =>
+                (
+                  document.getElementById(
+                    "strutture_preferite"
+                  ) as HTMLDialogElement
+                )?.showModal()
+              }
+            >
               <div className="indicator">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -145,6 +155,7 @@ const Navbar = () => {
       </div>
       {/** DIALOG */}
       <TipoPrestazione />
+      <StrutturePreferite />
     </div>
   );
 };
