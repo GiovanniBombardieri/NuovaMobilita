@@ -12,18 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posizione', function (Blueprint $table) {
-            $table->string('id_posizione', 36)->primary();
-            $table->string('comune', 100);
-            $table->char('provincia', 2);
-            $table->string('via', 100);
-            $table->string('numero_civico', 10);
-            $table->char('cap', 5);
+        Schema::create('strutture_preferite', function (Blueprint $table) {
+            $table->string('id_struttura_preferita', 36)->primary();
+            $table->string('id_struttura', 36);
+            $table->string('id_utente', 36);
             $table->dateTime('time_modifica')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
             $table->tinyInteger('record_attivo')->default(1);
-
-            $table->foreign('id_struttura')->references('id_struttura')->on('struttura')->onDelete('cascade');
-            $table->foreign('id_utente')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -32,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posizione');
+        Schema::dropIfExists('strutture_preferite');
     }
 };

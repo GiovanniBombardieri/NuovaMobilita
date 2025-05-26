@@ -64,4 +64,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Posizione::class, 'id_posizione', 'id_posizione');
     }
+
+    public function strutturaPreferita()
+    {
+        return $this->hasMany(StrutturaPreferita::class, 'id_utente');
+    }
 }

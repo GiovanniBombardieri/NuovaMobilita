@@ -49,4 +49,9 @@ class Struttura extends Model
     {
         return $this->hasMany(Prestazione::class, 'id_struttura', 'id_struttura');
     }
+
+    public function strutturaPreferita()
+    {
+        return $this->hasMany(StrutturaPreferita::class, 'id_struttura');
+    }
 }

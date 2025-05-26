@@ -36,6 +36,30 @@ const Strutture = () => {
       });
   }, [currentPage, user?.token]);
 
+  const addPreferredStructure = async (id_struttura: string) => {
+    try {
+      await axios.post(
+        `http://localhost:8000/api/add_struttura_preferita/${id_struttura}`,
+        { id_struttura },
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        }
+      );
+
+      alert("Struttura aggiunta tra i propri preferiti!");
+    } catch (error) {
+      console.error(
+        "Errore durante l'aggiunta della struttura tra i preferiti ",
+        error
+      );
+      alert(
+        "Si è verificato un errore durante l'aggiunta della struttura tra i propri preferiti"
+      );
+    }
+  };
+
   return (
     <div className="h-full w-auto overflow-auto">
       <ul className="list bg-base-100 rounded-box shadow-md h-full">
@@ -125,11 +149,9 @@ const Strutture = () => {
                   <div>
                     <div className="tooltip" data-tip="Preferito">
                       <button
-                        onClick={() =>
-                          alert(
-                            "Hai cliccato sul pulsante per inserire la struttura tra i tuoi preferiti"
-                          )
-                        }
+                        onClick={() => {
+                          addPreferredStructure(struttura.id_struttura);
+                        }}
                         className="btn btn-square btn-ghost"
                       >
                         <svg
