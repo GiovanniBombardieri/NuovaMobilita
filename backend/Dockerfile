@@ -10,6 +10,6 @@ WORKDIR /app
 
 COPY . /app
 
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --optimize-autoloader
 
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
