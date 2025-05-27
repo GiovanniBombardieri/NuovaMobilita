@@ -24,9 +24,9 @@ return new class extends Migration
       $table->tinyInteger('record_attivo')->default(1);
 
       // Foreign keys
-      $table->foreign('id_posizione')->references('id_posizione')->on('posizione')->onDelete('cascade');
-      $table->foreign('id_sito_web')->references('id_sito_web')->on('sito_web')->onDelete('cascade');
-      $table->foreign('id_recapito')->references('id_recapito')->on('recapito')->onDelete('cascade');
+      // $table->foreign('id_posizione')->references('id_posizione')->on('posizione')->onDelete('cascade');
+      // $table->foreign('id_sito_web')->references('id_sito_web')->on('sito_web')->onDelete('cascade');
+      // $table->foreign('id_recapito')->references('id_recapito')->on('recapito')->onDelete('cascade');
     });
   }
 

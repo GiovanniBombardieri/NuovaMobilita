@@ -22,8 +22,8 @@ return new class extends Migration
             $table->dateTime('time_modifica')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
             $table->tinyInteger('record_attivo')->default(1);
 
-            $table->foreign('id_struttura')->references('id_struttura')->on('struttura')->onDelete('cascade');
-            $table->foreign('id_utente')->references('id')->on('users')->onDelete('cascade');
+            // $table->foreign('id_struttura')->references('id_struttura')->on('struttura')->onDelete('cascade');
+            // $table->foreign('id_utente')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

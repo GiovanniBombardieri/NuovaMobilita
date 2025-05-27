@@ -22,9 +22,9 @@ return new class extends Migration
             $table->tinyInteger('record_attivo')->default(1);
 
             // Foreign keys
-            $table->foreign('id_tipo_prestazione')->references('id_tipo_prestazione')->on('tipo_prestazione')->onDelete('cascade');
-            $table->foreign('id_struttura')->references('id_struttura')->on('struttura')->onDelete('cascade');
-            $table->foreign('id_valore')->references('id_valore')->on('valore')->onDelete('cascade');
+            // $table->foreign('id_tipo_prestazione')->references('id_tipo_prestazione')->on('tipo_prestazione')->onDelete('cascade');
+            // $table->foreign('id_struttura')->references('id_struttura')->on('struttura')->onDelete('cascade');
+            // $table->foreign('id_valore')->references('id_valore')->on('valore')->onDelete('cascade');
         });
     }
 

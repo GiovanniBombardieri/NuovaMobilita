@@ -23,6 +23,7 @@ return new class extends Migration
 
             // Foreign keys
             $table->foreign('id_tipo_recapito')->references('id_tipo_recapito')->on('tipo_recapito')->onDelete('cascade');
+            $table->foreign('id_struttura')->references('id_struttura')->on('struttura')->onDelete('cascade');
         });
     }
 
