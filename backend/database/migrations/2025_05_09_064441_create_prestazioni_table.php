@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('id_tipo_prestazione', 36);
             $table->string('id_struttura', 36);
             $table->string('id_valore', 36);
+            $table->longText('descrizione_personalizzata')->nullable();
             $table->dateTime('time_modifica')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
             $table->tinyInteger('record_attivo')->default(1);
 

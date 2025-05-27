@@ -14,7 +14,9 @@ return new class extends Migration
     {
         Schema::create('tipo_prestazione', function (Blueprint $table) {
             $table->string('id_tipo_prestazione', 36)->primary();
-            $table->string('descrizione');
+            $table->string('tipologia', 1);
+            $table->string('titolo');
+            $table->text('descrizione');
             $table->dateTime('time_modifica')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
             $table->tinyInteger('record_attivo')->default(1);
         });

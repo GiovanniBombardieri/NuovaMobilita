@@ -14,11 +14,11 @@ return new class extends Migration
     {
         Schema::create('posizione', function (Blueprint $table) {
             $table->string('id_posizione', 36)->primary();
-            $table->string('comune', 100);
-            $table->char('provincia', 2);
-            $table->string('via', 100);
-            $table->string('numero_civico', 10);
-            $table->char('cap', 5);
+            $table->string('comune', 100)->nullable();
+            $table->char('provincia', 2)->nullable();
+            $table->string('via', 100)->nullable();
+            $table->string('numero_civico', 10)->nullable();
+            $table->char('cap', 5)->nullable();
             $table->dateTime('time_modifica')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
             $table->tinyInteger('record_attivo')->default(1);
 
