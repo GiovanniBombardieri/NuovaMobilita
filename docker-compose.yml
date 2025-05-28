@@ -36,3 +36,6 @@ services:
 
 volumes:
   db_data:
+
+env_file:
+  - .env
