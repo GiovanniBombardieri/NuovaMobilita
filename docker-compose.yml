@@ -9,7 +9,9 @@ services:
     depends_on:
       - db
     env_file:
-      - ./backend/.env
+      - .env
+    volumes:
+      - .env:/app/.env
 
   frontend:
     build:
@@ -35,6 +37,8 @@ services:
       MYSQL_PASSWORD: "${DB_PASSWORD:-password}"
     volumes:
       - db_data:/var/lib/mysql
+    env_file:
+      - .env
 
 volumes:
   db_data:
