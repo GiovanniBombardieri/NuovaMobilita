@@ -8,6 +8,8 @@ services:
       - "8000:8000"
     depends_on:
       - db
+    env_file:
+      - .env
 
   frontend:
     build:
@@ -20,8 +22,6 @@ services:
     depends_on:
       - backend
     command: npm run dev -- --host
-    env_file:
-      - .env
 
   db:
     image: mysql:8
