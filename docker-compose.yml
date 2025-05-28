@@ -9,7 +9,7 @@ services:
     depends_on:
       - db
     env_file:
-      - ./backend/env
+      - ./backend/.env
 
   frontend:
     build:
