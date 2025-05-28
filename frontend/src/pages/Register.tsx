@@ -51,8 +51,6 @@ const Register = () => {
         };
       }
 
-      console.log(JSON.stringify(bodyData));
-
       const response = await fetch("http://localhost:8000/api/register", {
         method: "POST",
         headers: {
