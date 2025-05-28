@@ -259,12 +259,13 @@ const ModificaProfilo = () => {
                 </div>
 
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-2/5">Provincia</label>
+                  <label className="label w-2/5">Provincia (sigla)</label>
                   <input
                     type="text"
                     className="input input-bordered w-3/5"
                     value={provinciaUtente}
                     onChange={(e) => setProvinciaUtente(e.target.value)}
+                    maxLength={2}
                   />
                 </div>
 
@@ -275,6 +276,7 @@ const ModificaProfilo = () => {
                     className="input input-bordered w-3/5"
                     value={capUtente}
                     onChange={(e) => setCapUtente(e.target.value)}
+                    maxLength={5}
                   />
                 </div>
 
