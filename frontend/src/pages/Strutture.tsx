@@ -62,7 +62,7 @@ const Strutture = () => {
   };
 
   return (
-    <div className="h-full w-auto overflow-auto">
+    <div className="h-full w-1/2 overflow-auto">
       <ul className="list bg-base-100 rounded-box shadow-md h-full">
         <div className="flex flex-row justify-between items-center">
           <li className="p-4 pb-2 text-2xl opacity-60 tracking-wide">
@@ -70,7 +70,7 @@ const Strutture = () => {
           </li>
         </div>
 
-        <div className="w-11/12 flex justify-center items-center">
+        <div className="flex justify-center items-center p-4">
           <label className="input w-full">
             <svg
               className="h-[1em] opacity-50"
