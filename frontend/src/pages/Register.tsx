@@ -71,11 +71,15 @@ const Register = () => {
         login({
           name: data.user.name,
           cognome: data.user.cognome,
-          indirizzo: data.user.indirizzo,
           telefono: data.user.telefono,
           ruolo: data.user.ruolo,
           email: data.user.email,
           token: data.token,
+          comune: data.user.comune,
+          provincia: data.user.provincia,
+          via: data.user.via,
+          numero_civico: data.user.numero_civico,
+          cap: data.user.cap,
         });
       } else if (ruolo === "struttura") {
         login({
@@ -87,6 +91,7 @@ const Register = () => {
           cap: data.user.cap,
           ruolo: data.user.ruolo,
           email: data.user.email,
+          telefono: data.user.telefono,
           token: data.token,
         });
       }
