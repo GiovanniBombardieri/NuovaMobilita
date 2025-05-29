@@ -11,24 +11,23 @@ services:
     env_file:
       - .env
     volumes:
-      - ../frontend/dist:/app/public
       - .env:/app/.env
     networks:
       - app-network
 
-  frontend:
-    build:
-      context: ./frontend
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    ports:
-      - "5173:5173"
-    depends_on:
-      - backend
-    command: npm run dev -- --host
-    networks:
-      - app-network
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
+  #   ports:
+  #     - "5173:5173"
+  #   depends_on:
+  #     - backend
+  #   command: npm run dev -- --host
+  #   networks:
+  #     - app-network
 
   db:
     image: mysql:8
