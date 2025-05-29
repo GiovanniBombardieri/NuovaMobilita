@@ -22,8 +22,6 @@ const Register = () => {
   const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
-    console.log(ruolo);
-
     e.preventDefault();
 
     try {
