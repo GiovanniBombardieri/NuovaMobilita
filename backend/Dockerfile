@@ -2,7 +2,7 @@
 FROM node:18 AS frontend
 
 WORKDIR /app
-COPY ../frontend /app
+COPY frontend /app
 RUN npm install && npm run build
 
 # STAGE 2: build backend
@@ -15,8 +15,7 @@ RUN apt-get update && apt-get install -y \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
-COPY . /app
-
+COPY backend /app
 RUN composer install --optimize-autoloader
 
 # Copy the built frontend from the first stage
