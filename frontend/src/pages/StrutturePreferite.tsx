@@ -16,7 +16,7 @@ const StrutturePreferite = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/get_strutture_preferite`, {
+      .get(`http://backend:8000/api/get_strutture_preferite`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
@@ -32,7 +32,7 @@ const StrutturePreferite = () => {
   const removePreferredStructure = async ($id_struttura: string) => {
     try {
       await axios.put(
-        `http://localhost:8000/api/remove_struttura_preferita/${$id_struttura}`,
+        `http://backend:8000/api/remove_struttura_preferita/${$id_struttura}`,
         { $id_struttura },
         {
           headers: {

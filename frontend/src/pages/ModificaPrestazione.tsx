@@ -63,7 +63,7 @@ const ModificaPrestazione = ({
     if (!id_prestazione) return;
 
     axios
-      .get(`http://localhost:8000/api/get_prestazioni/${id_prestazione}`, {
+      .get(`http://backend:8000/api/get_prestazioni/${id_prestazione}`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
@@ -81,7 +81,7 @@ const ModificaPrestazione = ({
 
     try {
       await axios.put(
-        `http://localhost:8000/api/update_prestazione/${id_prestazione}`,
+        `http://backend:8000/api/update_prestazione/${id_prestazione}`,
         {
           titolo,
           descrizione,

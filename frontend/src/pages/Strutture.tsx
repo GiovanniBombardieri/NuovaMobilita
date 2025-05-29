@@ -20,7 +20,7 @@ const Strutture = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:8000/api/get_strutture_paginate?page=${currentPage}`,
+        `http://backend:8000/api/get_strutture_paginate?page=${currentPage}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -39,7 +39,7 @@ const Strutture = () => {
   const addPreferredStructure = async (id_struttura: string) => {
     try {
       await axios.post(
-        `http://localhost:8000/api/add_struttura_preferita/${id_struttura}`,
+        `http://backend:8000/api/add_struttura_preferita/${id_struttura}`,
         { id_struttura },
         {
           headers: {
