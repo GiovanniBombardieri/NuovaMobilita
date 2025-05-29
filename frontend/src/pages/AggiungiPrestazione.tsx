@@ -15,7 +15,7 @@ const AggiungiPrestazione = () => {
 
     try {
       await axios.post(
-        "http://backend:8000/api/create_prestazione",
+        "http://localhost:8000/api/create_prestazione",
         { titolo, tipologia, costo, descrizione },
         {
           headers: {

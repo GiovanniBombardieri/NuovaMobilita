@@ -13,7 +13,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    fetch("http://backend:8000/api/logout", {
+    fetch("http://localhost:8000/api/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

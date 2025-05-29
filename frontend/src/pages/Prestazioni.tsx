@@ -27,7 +27,7 @@ const Prestazioni = () => {
 
   useEffect(() => {
     axios
-      .get(`http://backend:8000/api/get_prestazioni?page=${currentPage}`, {
+      .get(`http://localhost:8000/api/get_prestazioni?page=${currentPage}`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
@@ -51,7 +51,7 @@ const Prestazioni = () => {
 
     try {
       await axios.put(
-        `http://backend:8000/api/delete_prestazione/${id_prestazione}`,
+        `http://localhost:8000/api/delete_prestazione/${id_prestazione}`,
         {},
         {
           headers: {
@@ -61,7 +61,7 @@ const Prestazioni = () => {
       );
 
       const res = await axios.get(
-        `http://backend:8000/api/get_prestazioni?page=${currentPage}`,
+        `http://localhost:8000/api/get_prestazioni?page=${currentPage}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,

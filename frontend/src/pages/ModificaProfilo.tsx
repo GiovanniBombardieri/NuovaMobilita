@@ -92,7 +92,7 @@ const ModificaProfilo = () => {
         };
 
     try {
-      const response = await fetch("http://backend:8000/api/update-profile", {
+      const response = await fetch("http://localhost:8000/api/update-profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

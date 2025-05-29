@@ -40,7 +40,7 @@ const TipoPrestazione = () => {
       setLoadingDatiPrestazione(true);
       axios
         .get(
-          `http://backend:8000/api/get_tipo_prestazione_singola/${id_tipo_prestazione}`,
+          `http://localhost:8000/api/get_tipo_prestazione_singola/${id_tipo_prestazione}`,
           {
             headers: {
               Authorization: `Bearer ${user?.token}`,
@@ -70,11 +70,14 @@ const TipoPrestazione = () => {
   // Funzione per avere i tipi di prestazione presenti nel db
   useEffect(() => {
     axios
-      .get(`http://backend:8000/api/get_tipo_prestazioni?page=${currentPage}`, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      })
+      .get(
+        `http://localhost:8000/api/get_tipo_prestazioni?page=${currentPage}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        }
+      )
       .then((res) => {
         setTipoPrestazioni(res.data.data);
         setLastPage(res.data.last_page);
@@ -91,7 +94,7 @@ const TipoPrestazione = () => {
 
     try {
       await axios.post(
-        "http://backend:8000/api/create_prestazione",
+        "http://localhost:8000/api/create_prestazione",
         { id_tipo_prestazione, titolo, tipologia, costo, descrizione },
         {
           headers: {
