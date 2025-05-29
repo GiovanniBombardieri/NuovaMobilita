@@ -11,6 +11,7 @@ services:
     env_file:
       - .env
     volumes:
+      - ../frontend/dist:/app/public
       - .env:/app/.env
     networks:
       - app-network
