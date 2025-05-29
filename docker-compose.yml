@@ -12,6 +12,8 @@ services:
       - .env
     volumes:
       - .env:/app/.env
+    networks:
+      - app-network
 
   frontend:
     build:
@@ -24,6 +26,8 @@ services:
     depends_on:
       - backend
     command: npm run dev -- --host
+    networks:
+      - app-network
 
   db:
     image: mysql:8
@@ -39,6 +43,12 @@ services:
       - db_data:/var/lib/mysql
     env_file:
       - .env
+    networks:
+      - app-network
 
 volumes:
   db_data:
+
+networks:
+  app-network:
+    driver: bridge
