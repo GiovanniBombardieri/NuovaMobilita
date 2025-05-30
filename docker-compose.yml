@@ -15,6 +15,7 @@ services:
       - .env:/app/.env
     networks:
       - app-network
+    #command: sh -c "php artisan migrate --seed && php-fpm"
 
   # frontend:
   #   build:
