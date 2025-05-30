@@ -37,7 +37,6 @@ const TipoPrestazione = () => {
     (id_tipo_prestazione: string) => {
       if (!id_tipo_prestazione) return;
 
-      console.log(user?.token);
       setLoadingDatiPrestazione(true);
       axios
         .get(
