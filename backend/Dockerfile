@@ -2,8 +2,10 @@
 FROM node:18 AS frontend
 
 WORKDIR /app
-COPY frontend /app
-RUN npm install && npm run build
+COPY frontend/package.json frontend/package-lock.json* ./
+RUN npm install
+COPY frontend/ ./
+RUN npm run build
 
 # STAGE 2: build backend
 FROM php:8.2-cli
