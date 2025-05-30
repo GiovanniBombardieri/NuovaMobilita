@@ -97,7 +97,7 @@ class AuthController extends Controller
 			]);
 
 			// Salvo la struttura
-			Log::info('Creazione struttura');
+			Log::info('Creazione struttura', ['id_struttura' => $id_struttura]);
 			$struttura = Struttura::create([
 				'id_struttura' => $id_struttura,
 				'id_posizione' => $id_posizione,
@@ -110,7 +110,7 @@ class AuthController extends Controller
 				'id_recapito' => $id_recapito,
 				'id_struttura' => $id_struttura,
 				'id_tipo_recapito' => '0000004a-0000-0000-0000-000000000001',
-				'email' => $request->email,
+				'mail' => $request->email,
 			]);
 
 			// Aggiorna struttura con id_recapito
