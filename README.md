@@ -10,81 +10,88 @@
 
   <br />
 
-  Nuova Mobilità è una piattaforma web dedicata al supporto delle persone che affrontano un percorso di recupero post-amputazione. Permette di mettere in contatto utenti e strutture sanitarie qualificate, facilitando la ricerca di servizi, la gestione delle prestazioni e la comunicazione tra pazienti e centri specializzati.
+Nuova Mobilità is a web platform dedicated to supporting people who are undergoing a post-amputation recovery journey. It connects users and qualified healthcare facilities, making it easier to find services, manage treatments, and facilitate communication between patients and specialized centers.
+
 </div>
 
-## Funzionalità principali
+## Main Features
 
-- **Registrazione e Login** per utenti e strutture sanitarie
-- **Gestione del profilo** personale o della struttura
-- **Ricerca strutture** sanitarie per nome e posizione
-- **Visualizzazione dettagli struttura** e recapiti
-- **Gestione delle prestazioni** offerte dalle strutture
-- **Aggiunta e rimozione di strutture preferite**
-- **Mappa delle strutture** (per utenti)
-- **Gestione avanzata delle prestazioni** (per strutture)
-- **Sistema di paginazione** per la consultazione di strutture e prestazioni
+- **Registration and Login** for users and healthcare facilities
+- **Profile management** for individuals or facilities
+- **Search for healthcare facilities** by name and location
+- **View facility details** and contacts
+- **Manage services** offered by facilities
+- **Add and remove favorite facilities**
+- **Facilities map** (for users)
+- **Advanced service management** (for facilities)
+- **Pagination system** for browsing facilities and services
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/9e847153-6e20-42bb-ba2c-bf35fe07e28d" alt="nuova-mobilita" width="1000"/>
 </div>
 
-
 ## Technologies used
+
 ### Frontend
+
 - ![React](https://img.shields.io/badge/-React-333333?style=flat&logo=react)
 - ![Typescript](https://img.shields.io/badge/-Typescript-333333?style=flat&logo=typescript)
 - ![Tailwind CSS](https://img.shields.io/badge/-TailwindCSS-333333?style=flat&logo=tailwindcss)
 
-
 ### Backend Laravel (PHP)
+
 - ![Laravel](https://img.shields.io/badge/-Laravel-333333?style=flat&logo=laravel)
 - ![PHP](https://img.shields.io/badge/-PHP-333333?style=flat&logo=php)
 
-
 ### Database
+
 - ![MySQL](https://img.shields.io/badge/-MySQL-333333?style=flat&logo=mysql)
 
-### Containerizzazione
+### Containerization
+
 - ![Docker](https://img.shields.io/badge/-Docker-333333?style=flat&logo=docker)
 
-### Autenticazione
+### Authentication
+
 - Laravel Sanctum
+
 ### Geocoding
+
 - OpenStreetMap Nominatim API
 
-## Requisiti
+## Requirements
 
 - Docker
 
-Se si vuole usare l'app in locale:
+If you want to use the app locally:
+
 - Node.js (>=18)
 - PHP (>=8.1)
 - Composer
 - MySQL
 
-## Installazione
+## Installation
 
-### 1. Clona il repository
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/GiovanniBombardieri/NuovaMobilita.git
 cd nuova-mobilita
 ```
 
-### 2. Configura il file .env
+### 2. Configure the .env file
 
 ```bash
 cp .env.example .env
 ```
 
-### 3. Avvio con Docker
+### 3. Start with Docker
 
 ```bash
 docker-compose up --build -d
 ```
 
-### 4. Lancia le migrazioni e i seeder
+### 4. Run migrations and seeders
 
 ```bash
 cd backend
@@ -93,20 +100,20 @@ php artisan db:seed
 php artisan key:generate
 ```
 
-### 5. Prova l'applicazione
+### 5. Try the application
 
 ```url
 http://localhost:8000
 ```
 
-## Utilizzo
+## Usage
 
-- Registrati e accedi come utente o struttura sanitaria.
-- Gli utenti possono cercare strutture, visualizzare dettagli, aggiungere preferiti e consultare le prestazioni offerte.
-- Le strutture possono gestire le proprie prestazioni e modificare il profilo.
-- Tutte le operazioni sono protette da autenticazione.
+- Register and log in as a user or healthcare facility.
+- Users can search for facilities, view details, add favorites, and browse available services.
+- Facilities can manage their services and edit their profile.
+- All operations are protected by authentication.
 
-## Struttura del progetto
+## Project structure
 
 ```
 nuova-mobilita/
@@ -116,18 +123,18 @@ nuova-mobilita/
 └── docker-compose.yml
 ```
 
-## Contribuire
+## Contributing
 
-1. Fai un fork del progetto
-2. Crea un branch per la tua feature (`git checkout -b feature/NomeFeature`)
-3. Fai commit delle tue modifiche
-4. Fai push del branch
-5. Apri una Pull Request
+1. Fork the project
+2. Create a branch for your feature (`git checkout -b feature/FeatureName`)
+3. Commit your changes
+4. Push the branch
+5. Open a Pull Request
 
-## Licenza
+## License
 
-Questo progetto è distribuito sotto licenza MIT.
+This project is licensed under the MIT License.
 
 ---
 
-**Per qualsiasi domanda o segnalazione, apri una issue su GitHub!**
+**For any questions or issues, open an issue on GitHub!**
