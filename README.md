@@ -68,7 +68,7 @@ Se si vuole usare l'app in locale:
 ### 1. Clona il repository
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/GiovanniBombardieri/NuovaMobilita.git
 cd nuova-mobilita
 ```
 
