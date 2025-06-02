@@ -96,6 +96,7 @@ const ModificaProfilo = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",
           Authorization: `Bearer ${user?.token}`,
         },
         body: JSON.stringify(updateData),
