@@ -48,7 +48,7 @@ FROM php:8.2-fpm
 
 # Install dependencies e estensioni PHP
 RUN apt-get update && apt-get install -y \
-    unzip zip git curl libzip-dev libonig-dev libxml2-dev libpq-dev postgresql-client nginx \
+    unzip zip git curl libzip-dev libonig-dev libxml2-dev libpq-dev postgresql-client nginx gettext \
     && docker-php-ext-install pdo pdo_pgsql pgsql zip
 
 # Copia composer
@@ -64,5 +64,7 @@ COPY ./nginx.conf /etc/nginx/nginx.conf
 
 # Esponi la porta 80 per nginx
 EXPOSE 80
+
+RUN chmod +x ./start.sh
 
 CMD ["./start.sh"]
