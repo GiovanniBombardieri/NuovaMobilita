@@ -134,7 +134,7 @@ const ModificaProfilo = () => {
             location: location,
           });
 
-          window.location.reload();
+          //window.location.reload();
         } else if (updateUser.ruolo === "struttura") {
           login({
             ragione_sociale: updateUser.ragione_sociale,
@@ -150,7 +150,7 @@ const ModificaProfilo = () => {
             location: location,
           });
 
-          window.location.reload();
+          //window.location.reload();
         }
       } catch (error) {
         console.log(error);
@@ -174,7 +174,7 @@ const ModificaProfilo = () => {
             location: defaultLocation,
           });
 
-          window.location.reload();
+          //window.location.reload();
         } else if (updateUser.ruolo === "struttura") {
           login({
             ragione_sociale: updateUser.ragione_sociale,
@@ -190,7 +190,7 @@ const ModificaProfilo = () => {
             location: defaultLocation,
           });
 
-          window.location.reload();
+          //window.location.reload();
         }
       }
     } catch (err) {
