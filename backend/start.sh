@@ -18,6 +18,5 @@ else
   echo "Seed già eseguito: saltiamo php artisan db:seed (count = $RECAPITO_COUNT)"
 fi
 
-# Avvia php-fpm in foreground
-php-fpm
-nginx -g 'daemon off;'
+php-fpm -D  # avvia php-fpm in background (daemon mode)
+nginx -g 'daemon off;'  # nginx in foreground
