@@ -32,9 +32,8 @@ FROM php:8.2-cli
 #     && docker-php-ext-install pdo_pgsql pgsql zip
 
 RUN apt-get update && apt-get install -y \
-    postgresql-client \
-    unzip zip git curl libzip-dev libonig-dev libxml2-dev libpq-dev
-
+    unzip zip git curl libzip-dev libonig-dev libxml2-dev libpq-dev postgresql-client \
+    && docker-php-ext-install pdo pdo_pgsql pgsql zip
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
