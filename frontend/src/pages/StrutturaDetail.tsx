@@ -18,7 +18,9 @@ const StrutturaDetail = ({ id_struttura }: { id_struttura: string | null }) => {
     if (id_struttura !== null) {
       axios
         .get(
-          `http://localhost:8000/api/get_prestazioni_azienda/${id_struttura}`,
+          `${
+            import.meta.env.VITE_API_URL
+          }/get_prestazioni_azienda/${id_struttura}`,
           {
             headers: {
               Authorization: `Bearer ${user?.token}`,
@@ -41,7 +43,9 @@ const StrutturaDetail = ({ id_struttura }: { id_struttura: string | null }) => {
     if (id_struttura !== null) {
       axios
         .get(
-          `http://localhost:8000/api/get_dettaglio_struttura/${id_struttura}`,
+          `${
+            import.meta.env.VITE_API_URL
+          }/get_dettaglio_struttura/${id_struttura}`,
           {
             headers: {
               Authorization: `Bearer ${user?.token}`,

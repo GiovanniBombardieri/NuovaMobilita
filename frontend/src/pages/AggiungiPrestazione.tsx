@@ -15,7 +15,7 @@ const AggiungiPrestazione = () => {
 
     try {
       await axios.post(
-        "http://localhost:8000/api/create_prestazione",
+        `${import.meta.env.VITE_API_URL}/create_prestazione`,
         { titolo, tipologia, costo, descrizione },
         {
           headers: {

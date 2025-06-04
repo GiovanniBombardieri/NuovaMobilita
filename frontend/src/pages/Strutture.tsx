@@ -20,7 +20,9 @@ const Strutture = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:8000/api/get_strutture_paginate?page=${currentPage}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/get_strutture_paginate?page=${currentPage}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -39,7 +41,9 @@ const Strutture = () => {
   const addPreferredStructure = async (id_struttura: string) => {
     try {
       await axios.post(
-        `http://localhost:8000/api/add_struttura_preferita/${id_struttura}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/add_struttura_preferita/${id_struttura}`,
         { id_struttura },
         {
           headers: {

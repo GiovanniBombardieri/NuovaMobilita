@@ -40,7 +40,9 @@ const TipoPrestazione = () => {
       setLoadingDatiPrestazione(true);
       axios
         .get(
-          `http://localhost:8000/api/get_tipo_prestazione_singola/${id_tipo_prestazione}`,
+          `${
+            import.meta.env.VITE_API_URL
+          }/get_tipo_prestazione_singola/${id_tipo_prestazione}`,
           {
             headers: {
               Authorization: `Bearer ${user?.token}`,
@@ -71,7 +73,9 @@ const TipoPrestazione = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:8000/api/get_tipo_prestazioni?page=${currentPage}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/get_tipo_prestazioni?page=${currentPage}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -94,7 +98,7 @@ const TipoPrestazione = () => {
 
     try {
       await axios.post(
-        "http://localhost:8000/api/create_prestazione",
+        `${import.meta.env.VITE_API_URL}/create_prestazione`,
         { id_tipo_prestazione, titolo, tipologia, costo, descrizione },
         {
           headers: {

@@ -46,11 +46,14 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchStruttureConGeocode = async () => {
       try {
-        const res = await axios.get(`http://localhost:8000/api/get_strutture`, {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        });
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/get_strutture`,
+          {
+            headers: {
+              Authorization: `Bearer ${user?.token}`,
+            },
+          }
+        );
 
         const struttureConCoordinate = await Promise.all(
           res.data.data.map(async (struttura: StrutturaGeocoding) => {

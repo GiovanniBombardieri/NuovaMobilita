@@ -27,11 +27,14 @@ const Prestazioni = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/get_prestazioni?page=${currentPage}`, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      })
+      .get(
+        `${import.meta.env.VITE_API_URL}/get_prestazioni?page=${currentPage}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        }
+      )
       .then((res) => {
         setPrestazioni(res.data.data);
         setLastPage(res.data.last_page);
@@ -51,7 +54,7 @@ const Prestazioni = () => {
 
     try {
       await axios.put(
-        `http://localhost:8000/api/delete_prestazione/${id_prestazione}`,
+        `${import.meta.env.VITE_API_URL}/delete_prestazione/${id_prestazione}`,
         {},
         {
           headers: {
@@ -61,7 +64,7 @@ const Prestazioni = () => {
       );
 
       const res = await axios.get(
-        `http://localhost:8000/api/get_prestazioni?page=${currentPage}`,
+        `${import.meta.env.VITE_API_URL}/get_prestazioni?page=${currentPage}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,

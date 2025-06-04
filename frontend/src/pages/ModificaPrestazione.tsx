@@ -63,11 +63,14 @@ const ModificaPrestazione = ({
     if (!id_prestazione) return;
 
     axios
-      .get(`http://localhost:8000/api/get_prestazioni/${id_prestazione}`, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      })
+      .get(
+        `${import.meta.env.VITE_API_URL}/get_prestazioni/${id_prestazione}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        }
+      )
       .then((res) => {
         setPrestazione(res.data);
       })
@@ -81,7 +84,7 @@ const ModificaPrestazione = ({
 
     try {
       await axios.put(
-        `http://localhost:8000/api/update_prestazione/${id_prestazione}`,
+        `${import.meta.env.VITE_API_URL}/update_prestazione/${id_prestazione}`,
         {
           titolo,
           descrizione,
