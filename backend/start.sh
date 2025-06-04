@@ -18,5 +18,10 @@ else
   echo "Seed già eseguito: saltiamo php artisan db:seed (count = $RECAPITO_COUNT)"
 fi
 
-php-fpm -D  # avvia php-fpm in background (daemon mode)
-nginx -g 'daemon off;'  # nginx in foreground
+php-fpm -D
+
+# Sostituiamo ${PORT} nel file nginx.conf
+envsubst '$PORT' < /etc/nginx/nginx.conf > /etc/nginx/nginx-resolved.conf
+
+# Avviamo nginx con il file aggiornato
+nginx -c /etc/nginx/nginx-resolved.conf -g 'daemon off;'
