@@ -20,3 +20,5 @@ fi
 
 php-fpm -D  # avvia php-fpm in background (daemon mode)
 nginx -g 'daemon off;'  # nginx in foreground
+
+tail -f storage/logs/laravel.log
