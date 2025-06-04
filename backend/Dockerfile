@@ -27,9 +27,14 @@
 
 FROM php:8.2-cli
 
+# RUN apt-get update && apt-get install -y \
+#     unzip zip git curl libzip-dev libonig-dev libxml2-dev libpq-dev \
+#     && docker-php-ext-install pdo_pgsql pgsql zip
+
 RUN apt-get update && apt-get install -y \
-    unzip zip git curl libzip-dev libonig-dev libxml2-dev libpq-dev \
-    && docker-php-ext-install pdo_pgsql pgsql zip
+    postgresql-client \
+    unzip zip git curl libzip-dev libonig-dev libxml2-dev libpq-dev
+
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -39,6 +44,6 @@ COPY . /app
 RUN composer install --optimize-autoloader
 
 # Laravel key generation (optional: can be done manually)
-# RUN php artisan key:generate
+RUN php artisan key:generate
 
 CMD ["./start.sh"]
