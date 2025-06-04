@@ -20,3 +20,4 @@ fi
 
 # Avvia php-fpm in foreground
 php-fpm
+nginx -g 'daemon off;'
