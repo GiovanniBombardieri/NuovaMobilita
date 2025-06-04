@@ -18,4 +18,5 @@ else
   echo "Seed già eseguito: saltiamo php artisan db:seed (count = $RECAPITO_COUNT)"
 fi
 
-php artisan serve --host=0.0.0.0 --port=8000
+# Avvia php-fpm in foreground
+php-fpm
