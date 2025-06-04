@@ -44,6 +44,6 @@ COPY . /app
 RUN composer install --optimize-autoloader
 
 # Laravel key generation (optional: can be done manually)
-RUN php artisan key:generate
+# RUN php artisan key:generate
 
 CMD ["./start.sh"]
