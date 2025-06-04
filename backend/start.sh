@@ -5,7 +5,7 @@ php artisan migrate --force
 php artisan config:cache
 
 echo "Utente corrente: $(whoami)"
-chown -R www-data:www-data storage bootstrap/cache
+chown -R root:root storage bootstrap/cache
 chmod -R 775 storage bootstrap/cache
 
 echo "Variabili DB: DB_HOST=$DB_HOST DB_DATABASE=$DB_DATABASE DB_USERNAME=$DB_USERNAME DB_PASSWORD=${#DB_PASSWORD} chars"
