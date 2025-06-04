@@ -92,15 +92,18 @@ const ModificaProfilo = () => {
         };
 
     try {
-      const response = await fetch("http://localhost:8000/api/update-profile", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${user?.token}`,
-        },
-        body: JSON.stringify(updateData),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/update-profile`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${user?.token}`,
+          },
+          body: JSON.stringify(updateData),
+        }
+      );
 
       if (!response.ok)
         throw new Error(

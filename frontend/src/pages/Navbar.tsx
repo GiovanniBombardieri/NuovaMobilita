@@ -13,7 +13,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    fetch("http://localhost:8000/api/logout", {
+    fetch(`${import.meta.env.VITE_API_URL}/logout`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
