@@ -30,7 +30,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8000/api/login", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -153,6 +153,8 @@ const Login = () => {
       setLoginFailed(true);
     }
   };
+
+  console.log(`${import.meta.env.VITE_API_URL}`);
 
   return (
     <div className="flex flex-col items-center justify-center w-screen h-screen">
