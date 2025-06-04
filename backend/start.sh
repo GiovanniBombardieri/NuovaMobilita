@@ -13,7 +13,7 @@ echo "RECAPITO_COUNT = '$RECAPITO_COUNT'"
 
 if [ "$RECAPITO_COUNT" = "0" ]; then
   echo "Seed non ancora eseguito: avvio php artisan db:seed"
-  php artisan db:seed
+  php artisan db:seed --force
 else
   echo "Seed già eseguito: saltiamo php artisan db:seed (count = $RECAPITO_COUNT)"
 fi
