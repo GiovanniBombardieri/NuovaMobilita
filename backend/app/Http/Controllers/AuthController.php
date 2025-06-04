@@ -159,38 +159,22 @@ class AuthController extends Controller
 		]);
 
 		if (!Auth::attempt($request->only('email', 'password'))) {
-			throw ValidationException::withMessages([
-				'email' => ['Le credenziali fornite non sono corrette.'],
-			]);
+			return response()->json([
+				'message' => 'Credenziali non valide.'
+			], 401);
 		}
 
 		$user = Auth::user();
 		Log::info('Utente loggato', ['email' => $user->email, 'ruolo' => $user->ruolo]);
-		if ($user && $user instanceof \App\Models\User) {
-			$token = $user->createToken('auth_token')->plainTextToken;
-		} else {
+
+		if (!$user || !($user instanceof \App\Models\User)) {
 			return response()->json(['error' => 'Utente non autenticato'], 401);
 		}
 
+		$token = $user->createToken('auth_token')->plainTextToken;
+
 		if ($user->ruolo === "utente") {
 			$posizione = $user->posizione_utente;
-
-			$risposta = response()->json([
-				'user' => [
-					'name' => $user->name,
-					'cognome' => $user->cognome,
-					'ruolo' => $user->ruolo,
-					'email' => $user->email,
-					'telefono' => $user->telefono,
-					'comune' => $posizione->comune,
-					'provincia' => $posizione->provincia,
-					'via' => $posizione->via,
-					'numero_civico' => $posizione->numero_civico,
-					'cap' => $posizione->cap,
-				],
-				'access_token' => $token,
-				'token_type' => 'Bearer',
-			]);
 
 			return response()->json([
 				'user' => [
@@ -200,23 +184,25 @@ class AuthController extends Controller
 					'email' => $user->email,
 					'telefono' => $user->telefono,
 					'user_position' => [
-						'comune' => $posizione->comune,
-						'provincia' => $posizione->provincia,
-						'via' => $posizione->via,
-						'numero_civico' => $posizione->numero_civico,
-						'cap' => $posizione->cap,
+						'comune' => $posizione->comune ?? null,
+						'provincia' => $posizione->provincia ?? null,
+						'via' => $posizione->via ?? null,
+						'numero_civico' => $posizione->numero_civico ?? null,
+						'cap' => $posizione->cap ?? null,
 					],
 				],
 				'access_token' => $token,
 				'token_type' => 'Bearer',
 			]);
-		} else if ($user->ruolo === "struttura") {
+		}
+
+		if ($user->ruolo === "struttura") {
 			$struttura = $user->struttura;
 			$posizione = $struttura?->posizione;
 
-			$recapiti = $struttura?->recapiti;
-			$recapitoConTelefono = $recapiti?->first(function ($r) {
-				return (!empty($r->telefono) && $r->record_attivo === 1);
+			$recapiti = $struttura?->recapiti ?? collect();
+			$recapitoConTelefono = $recapiti->first(function ($r) {
+				return !empty($r->telefono) && $r->record_attivo === 1;
 			});
 
 			return response()->json([
@@ -224,17 +210,21 @@ class AuthController extends Controller
 					'ruolo' => $user->ruolo,
 					'email' => $user->email,
 					'telefono' => $recapitoConTelefono->telefono ?? null,
-					'ragione_sociale' => $struttura->ragione_sociale,
-					'comune' => $posizione->comune,
-					'provincia' => $posizione->provincia,
-					'via' => $posizione->via,
-					'numero_civico' => $posizione->numero_civico,
-					'cap' => $posizione->cap,
+					'ragione_sociale' => $struttura->ragione_sociale ?? null,
+					'comune' => $posizione->comune ?? null,
+					'provincia' => $posizione->provincia ?? null,
+					'via' => $posizione->via ?? null,
+					'numero_civico' => $posizione->numero_civico ?? null,
+					'cap' => $posizione->cap ?? null,
 				],
 				'access_token' => $token,
 				'token_type' => 'Bearer',
 			]);
 		}
+
+		return response()->json([
+			'error' => 'Ruolo non riconosciuto.'
+		], 422);
 	}
 
 	public function logout(Request $request)
