@@ -153,6 +153,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const login = (userData: User | Struttura) => {
+    console.log("login() chiamato con:", userData);
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
   };
