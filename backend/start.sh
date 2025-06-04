@@ -25,3 +25,5 @@ envsubst '$PORT' < /etc/nginx/nginx.conf > /etc/nginx/nginx-resolved.conf
 
 # Avviamo nginx con il file aggiornato
 nginx -c /etc/nginx/nginx-resolved.conf -g 'daemon off;'
+
+tail -f storage/logs/laravel.log
