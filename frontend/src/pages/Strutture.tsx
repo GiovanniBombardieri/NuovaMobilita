@@ -19,6 +19,7 @@ const Strutture = () => {
 
   useEffect(() => {
     console.log(user?.token);
+    console.log(user);
 
     axios
       .get(
