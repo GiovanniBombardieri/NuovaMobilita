@@ -85,7 +85,7 @@ const Prestazioni = () => {
       className={`rounded-box ${
         isStruttura(user)
           ? "h-full w-auto overflow-auto"
-          : "h-[583px] w-1/2 mx-5 mb-5"
+          : "h-[583px] w-full lg:w-1/2 mx-5 mb-5"
       }`}
     >
       <ul className="list bg-base-100 rounded-box shadow-md h-full">
