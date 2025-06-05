@@ -121,7 +121,7 @@ const Dashboard = () => {
             <div className="flex-1 overflow-auto pt-4 pl-4 pb-2 pr-2">
               <ServiceOverview />
             </div>
-            <div className="flex-1 flex flex-row justify-between overflow-hidden pl-4 pb-4 pt-2 pr-2 gap-4">
+            <div className="flex-1 flex flex-col lg:flex-row justify-between overflow-hidden pl-4 pb-4 pt-2 pr-2 gap-4">
               <UserDetails />
               {isLoading ? (
                 <StructureMaps
@@ -144,7 +144,7 @@ const Dashboard = () => {
             <div className="flex-1 overflow-auto pt-4 pl-4 pb-2 pr-2">
               <ServiceOverview />
             </div>
-            <div className="flex-1 flex flex-row justify-between overflow-hidden pl-4 pb-4 pt-2 pr-2 gap-4">
+            <div className="flex-1 flex flex-col lg:flex-row justify-between overflow-hidden pl-4 pb-4 pt-2 pr-2 gap-4">
               <UserDetails />
               {isStruttura(user) ? <Prestazioni /> : <Strutture />}
             </div>
