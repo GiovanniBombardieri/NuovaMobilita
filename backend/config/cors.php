@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://nuova-mobilita.netlify.app'],
+    'allowed_origins' => ['https://nuova-mobilita.netlify.app', 'http://localhost:5173'],
 
     'allowed_origins_patterns' => [],
 

@@ -25,8 +25,8 @@ const UserDetails = () => {
   }, []);
 
   return (
-    <div className="w-full lg:w-1/2 h-auto lg:h-full overflow-auto">
-      <div className="card bg-base-100 shadow-xl w-2/2 h-full">
+    <div className="w-full lg:w-1/2 h-auto lg:h-full lg:overflow-auto">
+      <div className="card bg-base-100 shadow-xl w-2/2 h-full p-5">
         <div className="flex flex-row justify-start items-center h-1/3 mx-10">
           <figure className="mr-5">
             <div className="w-24 h-24 rounded-full bg-primary text-white flex items-center justify-center text-5xl font-bold">

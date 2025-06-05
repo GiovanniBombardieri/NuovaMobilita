@@ -154,8 +154,6 @@ const Login = () => {
     }
   };
 
-  console.log(`${import.meta.env.VITE_API_URL}`);
-
   return (
     <div className="flex flex-col items-center justify-center w-screen h-screen">
       <form

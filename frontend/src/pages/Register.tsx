@@ -268,6 +268,7 @@ const Register = () => {
                       value={provincia}
                       onChange={(e) => setProvincia(e.target.value)}
                       required
+                      maxLength={2}
                     />
 
                     <input
@@ -277,6 +278,7 @@ const Register = () => {
                       value={cap}
                       onChange={(e) => setCap(e.target.value)}
                       required
+                      maxLength={5}
                     />
                   </div>
 

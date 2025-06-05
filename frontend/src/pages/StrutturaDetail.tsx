@@ -53,8 +53,6 @@ const StrutturaDetail = ({ id_struttura }: { id_struttura: string | null }) => {
           }
         )
         .then((res) => {
-          console.log(res);
-
           setDettaglioStruttura(res.data);
         })
         .catch((err) => {

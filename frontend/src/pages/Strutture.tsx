@@ -18,9 +18,6 @@ const Strutture = () => {
   );
 
   useEffect(() => {
-    console.log(user?.token);
-    console.log(user);
-
     axios
       .get(
         `${
@@ -69,7 +66,7 @@ const Strutture = () => {
   };
 
   return (
-    <div className="h-auto lg:h-full w-full lg:w-1/2 overflow-auto">
+    <div className="h-auto lg:h-full w-full lg:w-1/2 lg:overflow-auto">
       <ul className="list bg-base-100 rounded-box shadow-md h-full">
         <div className="flex flex-row justify-between items-center">
           <li className="p-4 pb-2 text-2xl opacity-60 tracking-wide">

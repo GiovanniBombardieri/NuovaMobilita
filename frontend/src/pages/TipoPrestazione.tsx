@@ -94,7 +94,6 @@ const TipoPrestazione = () => {
   // Funzione per aggiungere la prestazione una volta scelto il tipo
   const addPrestazione = async () => {
     if (!user?.token) return;
-    console.log(tipologia);
 
     try {
       await axios.post(
