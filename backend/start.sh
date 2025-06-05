@@ -6,7 +6,7 @@ php artisan config:cache
 
 echo "Utente corrente: $(whoami)"
 chown -R root:root storage bootstrap/cache
-chmod -R 775 storage bootstrap/cache
+chmod -R ug+rwX storage bootstrap/cache
 
 echo "Variabili DB: DB_HOST=$DB_HOST DB_DATABASE=$DB_DATABASE DB_USERNAME=$DB_USERNAME DB_PASSWORD=${#DB_PASSWORD} chars"
 
@@ -21,6 +21,11 @@ if [ "$RECAPITO_COUNT" = "0" ]; then
 else
   echo "Seed già eseguito: saltiamo php artisan db:seed (count = $RECAPITO_COUNT)"
 fi
+
+echo "PHP-FPM running as user: $(ps aux | grep php-fpm | grep -v grep)"
+ls -l storage
+ls -l storage/framework
+ls -l storage/framework/views
 
 php-fpm -D
 
