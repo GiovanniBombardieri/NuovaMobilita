@@ -117,7 +117,7 @@ const Dashboard = () => {
         // Layout per STRUTTURA
         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
           {/** Colonna sinistra */}
-          <div className="flex flex-col w-2/3 h-full">
+          <div className="flex flex-col w-full lg:w-2/3 h-full">
             <div className="flex-1 overflow-auto pt-4 pl-4 pb-2 pr-2">
               <ServiceOverview />
             </div>
@@ -132,7 +132,7 @@ const Dashboard = () => {
             </div>
           </div>
           {/** Colonna destra */}
-          <div className="h-full w-1/3 pl-2 py-4 pr-4 overflow-auto">
+          <div className="h-full  w-full lg:w-1/3 pl-2 py-4 pr-4 overflow-auto">
             {isStruttura(user) ? <Prestazioni /> : null}
           </div>
         </div>
@@ -140,7 +140,7 @@ const Dashboard = () => {
         // Layout per UTENTE
         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
           {/** Colonna sinistra */}
-          <div className="flex flex-col w-2/3 h-full">
+          <div className="flex flex-col w-full lg:w-2/3 h-full">
             <div className="flex-1 overflow-auto pt-4 pl-4 pb-2 pr-2">
               <ServiceOverview />
             </div>
@@ -150,7 +150,7 @@ const Dashboard = () => {
             </div>
           </div>
           {/** Colonna destra */}
-          <div className="h-full w-1/3 pl-2 py-4 pr-4 overflow-auto">
+          <div className="h-full  w-full lg:w-1/3 pl-2 py-4 pr-4 overflow-auto">
             {isLoading ? (
               <StructureMaps
                 structures={struttureMappate}
