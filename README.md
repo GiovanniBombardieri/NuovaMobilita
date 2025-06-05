@@ -123,6 +123,28 @@ nuova-mobilita/
 └── docker-compose.yml
 ```
 
+## Deployment & Hosting
+
+- **Frontend**: l'applicazione React è deployata su [Netlify](https://nuova-mobilita.netlify.app/login).  
+  Le chiamate API dal frontend puntano all'endpoint definito nella variabile `VITE_API_URL` del file `.env.production` in `frontend/`.
+
+  > **Nota:** Per lo sviluppo locale, assicurati di modificare la variabile `VITE_API_URL` nel file `.env` o `.env.local` per puntare a `http://localhost:8000` (o la porta usata dal backend).
+
+- **Backend**: l'API Laravel è containerizzata tramite Docker (vedi [`backend/Dockerfile`](backend/Dockerfile)) e deployata su [Render.com](https://render.com/).  
+  Il deploy esegue lo script [`backend/start.sh`](backend/start.sh) che:
+
+  - imposta i permessi e le variabili d'ambiente,
+  - esegue le migrazioni (`php artisan migrate --force`),
+  - lancia i seed solo se necessario,
+  - avvia PHP-FPM e Nginx.
+
+- **Database**: anche il database (ad esempio PostgreSQL o MySQL) è hostato su Render.com e accessibile dal backend tramite le variabili d'ambiente.
+
+### Sviluppo locale
+
+- Per testare il frontend in locale, assicurati che la variabile `VITE_API_URL` punti al backend locale.
+- Per avviare il backend in locale, puoi usare Docker Compose seguendo le istruzioni già presenti nel README.
+
 ## Contributing
 
 1. Fork the project
