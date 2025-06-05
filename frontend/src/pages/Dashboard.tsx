@@ -115,7 +115,7 @@ const Dashboard = () => {
 
       {isStruttura(user) ? (
         // Layout per STRUTTURA
-        <div className="flex-1 flex flex-row overflow-hidden">
+        <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
           {/** Colonna sinistra */}
           <div className="flex flex-col w-2/3 h-full">
             <div className="flex-1 overflow-auto pt-4 pl-4 pb-2 pr-2">
@@ -138,7 +138,7 @@ const Dashboard = () => {
         </div>
       ) : isUser(user) ? (
         // Layout per UTENTE
-        <div className="flex-1 flex flex-row overflow-hidden">
+        <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
           {/** Colonna sinistra */}
           <div className="flex flex-col w-2/3 h-full">
             <div className="flex-1 overflow-auto pt-4 pl-4 pb-2 pr-2">
