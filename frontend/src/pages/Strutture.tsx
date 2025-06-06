@@ -67,14 +67,14 @@ const Strutture = () => {
 
   return (
     <div className="h-auto lg:h-full w-full lg:w-1/2 lg:overflow-auto">
-      <ul className="list bg-base-100 rounded-box shadow-md h-full">
+      <ul className="list bg-base-100 rounded-box shadow-md h-full w-full items-center">
         <div className="flex flex-row justify-between items-center">
           <li className="p-4 pb-2 text-2xl opacity-60 tracking-wide">
             Strutture
           </li>
         </div>
 
-        <div className="flex justify-center items-center py-4 px-8">
+        <div className="w-full flex justify-center items-center py-4 px-8">
           <label className="input w-full">
             <svg
               className="h-[1em] opacity-50"
@@ -109,8 +109,11 @@ const Strutture = () => {
               .includes(searchTerm.toLowerCase())
           )
           .map((struttura: StrutturaDatiCompleti) => (
-            <li className="list-row" key={struttura.id_struttura}>
-              <div className="w-[490px] flex flex-row">
+            <li
+              className="w-[95%] py-2 px-4 border-b-2"
+              key={struttura.id_struttura}
+            >
+              <div className="flex flex-row w-full">
                 <div className="w-1/12 flex justify-center items-center mr-4">
                   <img
                     className="size-8 rounded-box"
@@ -118,64 +121,67 @@ const Strutture = () => {
                     alt="Avatar"
                   />
                 </div>
-                <div className="w-10/12 flex items-center text-lg">
-                  <strong>{struttura.struttura?.ragione_sociale}</strong>
-                </div>
-                <div className="w-1/12 flex flex-row">
-                  <div className="tooltip" data-tip="Dettaglio">
-                    <button
-                      onClick={() => {
-                        setSelectedStrutturaId(struttura.id_struttura);
-                        (
-                          document.getElementById(
-                            "struttura_detail"
-                          ) as HTMLDialogElement
-                        )?.showModal();
-                      }}
-                      className="btn btn-square btn-ghost"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="size-[1.2em]"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                        <circle cx="12" cy="12" r="3" />
-                      </svg>
-                    </button>
+                <div className="w-11/12 flex items-center justify-between text-lg">
+                  <div>
+                    <strong>{struttura.struttura?.ragione_sociale}</strong>
                   </div>
-
-                  <div className="tooltip" data-tip="Preferito">
-                    <button
-                      onClick={() => {
-                        addPreferredStructure(struttura.id_struttura);
-                      }}
-                      className="btn btn-square btn-ghost"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="size-[1.2em]"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="red"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                  <div>
+                    <div className="tooltip" data-tip="Dettaglio">
+                      <button
+                        onClick={() => {
+                          setSelectedStrutturaId(struttura.id_struttura);
+                          (
+                            document.getElementById(
+                              "struttura_detail"
+                            ) as HTMLDialogElement
+                          )?.showModal();
+                        }}
+                        className="btn btn-square btn-ghost"
                       >
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" />
-                      </svg>
-                    </button>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="size-[1.2em]"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                          <circle cx="12" cy="12" r="3" />
+                        </svg>
+                      </button>
+                    </div>
+
+                    <div className="tooltip" data-tip="Preferito">
+                      <button
+                        onClick={() => {
+                          addPreferredStructure(struttura.id_struttura);
+                        }}
+                        className="btn btn-square btn-ghost"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="size-[1.2em]"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="red"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </li>
           ))}
-        <div className="w-full h-full flex flex-row justify-center items-center">
+
+        <div className="w-full h-full flex flex-row justify-center items-center my-5">
           <div className="join">
             {[...Array(lastPage)].map((_, index) => (
               <button
