@@ -39,7 +39,7 @@ const StructureMaps = ({ structures, userLocation }: Props) => {
       zoom={10}
       scrollWheelZoom={true}
       className={`${
-        isStruttura(user) ? "w-1/2 h-full overflow-auto" : "w-full h-full"
+        isStruttura(user) ? "w-1/2 h-full lg:overflow-auto" : "w-full h-full"
       } rounded-lg shadow`}
     >
       <TileLayer

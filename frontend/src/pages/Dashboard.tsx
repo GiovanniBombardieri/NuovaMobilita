@@ -110,18 +110,18 @@ const Dashboard = () => {
   if (!user) return null;
 
   return (
-    <div className="h-screen w-screen flex flex-col">
+    <div className="lg:h-screen lg:w-screen flex flex-col">
       <Navbar />
 
       {isStruttura(user) ? (
         // Layout per STRUTTURA
-        <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+        <div className="flex-1 flex flex-col lg:flex-row lg:overflow-hidden">
           {/** Colonna sinistra */}
           <div className="flex flex-col w-full lg:w-2/3 h-full">
-            <div className="flex-1 overflow-auto pt-4 pl-4 pb-2 pr-2">
+            <div className="flex-1 lg:overflow-auto pt-4 pl-4 pb-2 pr-2">
               <ServiceOverview />
             </div>
-            <div className="flex-1 flex flex-col lg:flex-row justify-between overflow-hidden pl-4 pb-4 pt-2 pr-2 gap-4">
+            <div className="flex-1 flex flex-col lg:flex-row justify-between lg:overflow-hidden pl-4 pb-4 pt-2 pr-2 gap-4">
               <UserDetails />
               {isLoading ? (
                 <StructureMaps
@@ -138,19 +138,19 @@ const Dashboard = () => {
         </div>
       ) : isUser(user) ? (
         // Layout per UTENTE
-        <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+        <div className="flex-1 flex flex-col lg:flex-row lg:overflow-hidden">
           {/** Colonna sinistra */}
           <div className="flex flex-col w-full lg:w-2/3 h-full">
-            <div className="flex-1 overflow-auto pt-4 pl-4 pb-2 pr-2">
+            <div className="flex-1 lg:overflow-auto pt-4 pl-4 pb-2 pr-2">
               <ServiceOverview />
             </div>
-            <div className="flex-1 flex flex-col lg:flex-row justify-between overflow-hidden pl-4 pb-4 pt-2 pr-2 gap-4">
+            <div className="flex-1 flex flex-col lg:flex-row justify-between lg:overflow-hidden pl-4 pb-4 pt-2 pr-2 gap-4">
               <UserDetails />
               {isStruttura(user) ? <Prestazioni /> : <Strutture />}
             </div>
           </div>
           {/** Colonna destra */}
-          <div className="h-full  w-full lg:w-1/3 pl-2 py-4 pr-4 overflow-auto">
+          <div className="h-full  w-full lg:w-1/3 pl-2 py-4 pr-4 lg:overflow-auto">
             {isLoading ? (
               <StructureMaps
                 structures={struttureMappate}
