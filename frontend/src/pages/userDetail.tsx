@@ -78,11 +78,11 @@ const UserDetails = () => {
         <div className="card-body flex flex-col p-0">
           <div className="h-2/3 px-10">
             {/** RUOLO */}
-            <div className="flex flex-row items-center text-center mb-5">
-              <div className="flex w-1/3 justify-start">
+            <div className="flex flex-col md:flex-row items-center text-center w-full mb-5">
+              <div className="flex md:w-1/3 w-full justify-center">
                 <h3 className="card-title">Ruolo:</h3>
               </div>
-              <div className="flex w-2/3 justify-center">
+              <div className="flex md:w-2/3 w-full justify-center">
                 <p>
                   {user?.ruolo
                     ? user.ruolo.charAt(0).toUpperCase() + user.ruolo.slice(1)
@@ -92,46 +92,46 @@ const UserDetails = () => {
             </div>
 
             {/** EMAIL */}
-            <div className="flex flex-row items-center text-center w-full mb-5">
-              <div className="flex w-1/3 justify-start">
+            <div className="flex flex-col md:flex-row items-center text-center w-full mb-5">
+              <div className="flex md:w-1/3 w-full justify-center">
                 <h3 className="card-title">E-mail:</h3>
               </div>
-              <div className="flex w-2/3 justify-center">
+              <div className="flex md:w-2/3 w-full justify-center">
                 <p>{user?.email}</p>
               </div>
             </div>
 
             {/** TELEFONO */}
-            <div className="flex flex-row items-center text-center w-full mb-5">
-              <div className="flex w-1/3 justify-start">
+            <div className="flex flex-col md:flex-row items-center text-center w-full mb-5">
+              <div className="flex md:w-1/3 w-full justify-center">
                 <h3 className="card-title">Telefono:</h3>
               </div>
               {isUser(user) ? (
                 user.telefono ? (
-                  <div className="flex w-2/3 justify-center">
+                  <div className="flex md:w-2/3 w-full justify-center">
                     <p>{user.telefono}</p>
                   </div>
                 ) : (
-                  <div className="flex w-2/3 justify-center">
+                  <div className="flex md:w-2/3 w-full justify-center">
                     <p className="text-red-600 text-xs">
                       Telefono non inserito
                     </p>
                   </div>
                 )
               ) : isStruttura(user) && user?.telefono ? (
-                <div className="flex w-2/3 justify-center">
+                <div className="flex md:w-2/3 w-full justify-center">
                   <p>{user.telefono}</p>
                 </div>
               ) : (
-                <div className="flex w-2/3 justify-center">
+                <div className="flex md:w-2/3 w-full justify-center">
                   <p className="text-red-600 text-xs">Telefono non inserito</p>
                 </div>
               )}
             </div>
 
             {/** INDIRIZZO */}
-            <div className="flex flex-row items-center text-center w-full">
-              <div className="flex w-1/3 justify-start">
+            <div className="flex flex-col md:flex-row items-center text-center w-full mb-5">
+              <div className="flex md:w-1/3 w-full justify-center">
                 <h3 className="card-title">Indirizzo:</h3>
               </div>
               {isUser(user) ? (
@@ -140,14 +140,14 @@ const UserDetails = () => {
                 user?.numero_civico &&
                 user?.cap &&
                 user?.provincia ? (
-                  <div className="flex w-2/3 justify-center">
+                  <div className="flex md:w-2/3 w-full justify-center">
                     <p>
                       {user.via} {user.numero_civico}, {user.cap} {user.comune},{" "}
                       {user.provincia}
                     </p>
                   </div>
                 ) : (
-                  <div className="flex flex-col w-2/3 text-xs items-center">
+                  <div className="flex flex-col md:w-2/3 w-full justify-center text-xs items-center">
                     <p className="text-red-600">Indirizzo non corretto</p>
                     <p className="text-red-600">
                       Inserire tutti i dati richiesti
@@ -160,14 +160,14 @@ const UserDetails = () => {
                 user?.numero_civico &&
                 user?.cap &&
                 user?.provincia ? (
-                <div className="flex w-2/3 justify-center">
+                <div className="flex md:w-2/3 w-full justify-center">
                   <p>
                     {user.via} {user.numero_civico}, {user.comune} {user.cap} (
                     {user.provincia})
                   </p>
                 </div>
               ) : (
-                <div className="flex flex-col w-2/3 text-xs items-center">
+                <div className="flex flex-col md:w-2/3 w-full justify-center text-xs items-center">
                   <p className="text-red-600">Indirizzo non corretto</p>
                   <p className="text-red-600">
                     Inserire tutti i dati richiesti
@@ -177,7 +177,7 @@ const UserDetails = () => {
             </div>
           </div>
 
-          <div className="w-full h-1/3 px-10">
+          <div className="w-full h-1/3 px-10 py-5 md:py-2">
             {/** PULSANTE MODIFICA PROFILO */}
             <button
               onClick={() =>
