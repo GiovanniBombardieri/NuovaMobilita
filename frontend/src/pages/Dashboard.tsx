@@ -110,7 +110,7 @@ const Dashboard = () => {
   if (!user) return null;
 
   return (
-    <div className="lg:h-screen lg:w-screen flex flex-col">
+    <div className="min-h-screen w-screen flex flex-col">
       <Navbar />
 
       {isStruttura(user) ? (
@@ -150,7 +150,7 @@ const Dashboard = () => {
             </div>
           </div>
           {/** Colonna destra */}
-          <div className="h-full  w-full lg:w-1/3 pl-2 py-4 pr-4 lg:overflow-auto">
+          <div className="h-full w-full lg:w-1/3 pl-2 py-4 pr-4 lg:overflow-auto">
             {isLoading ? (
               <StructureMaps
                 structures={struttureMappate}

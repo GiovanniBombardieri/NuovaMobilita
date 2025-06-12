@@ -39,8 +39,10 @@ const StructureMaps = ({ structures, userLocation }: Props) => {
       zoom={10}
       scrollWheelZoom={true}
       className={`${
-        isStruttura(user) ? "w-1/2 h-full lg:overflow-auto" : "w-full h-full"
-      } rounded-lg shadow`}
+        isStruttura(user)
+          ? "w-1/2 h-full lg:overflow-auto"
+          : "w-full lg:h-full h-[500px]"
+      } rounded-lg shadow overflow-scroll`}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
