@@ -197,7 +197,10 @@ const Strutture = () => {
           </div>
         </div>
       </ul>
-      <StrutturaDetail id_struttura={selectedStrutturaId} />
+      <StrutturaDetail
+        key={selectedStrutturaId}
+        id_struttura={selectedStrutturaId}
+      />
     </div>
   );
 };
