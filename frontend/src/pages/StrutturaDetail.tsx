@@ -1,18 +1,42 @@
-import { DettagliStruttura, useAuth } from "../context/AuthContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useRef } from "react";
+
+import { DettagliStruttura, useAuth } from "../context/AuthContext";
 import { Prestazione } from "../context/AuthContext";
 
 const StrutturaDetail = ({ id_struttura }: { id_struttura: string | null }) => {
   const { user } = useAuth();
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
   const [prestazioniAzienda, setPrestazioniAzienda] = useState<Prestazione[]>(
     []
   );
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [dettaglioStruttura, setDettaglioStruttura] =
-    useState<DettagliStruttura | null>();
+    useState<DettagliStruttura | null>(null);
   const [dettagliPrestazioniSelected, setDettagliPrestazioniSelected] =
     useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading && dettaglioStruttura) {
+      setIsOpen(true);
+      setTimeout(() => {
+        dialogRef.current?.showModal();
+      }, 0);
+    }
+  }, [isLoading, dettaglioStruttura]);
+
+  const handleClose = () => {
+    dialogRef.current?.close();
+    (document.getElementById("struttura_detail") as HTMLDialogElement)?.close();
+    setIsOpen(false);
+    setDettaglioStruttura(null);
+    setIsLoading(true);
+  };
 
   useEffect(() => {
     if (id_struttura !== null) {
@@ -54,24 +78,32 @@ const StrutturaDetail = ({ id_struttura }: { id_struttura: string | null }) => {
         )
         .then((res) => {
           setDettaglioStruttura(res.data);
+          setIsLoading(false);
         })
         .catch((err) => {
           console.error(
             "Errore nel recupero dei dettagli della struttura selezionata",
             err
           );
+          setIsLoading(false);
         });
     }
   }, [user?.token, id_struttura]);
 
   return (
-    <>
-      {dettaglioStruttura ? (
-        <dialog
-          id="struttura_detail"
-          className="modal modal-bottom sm:modal-middle"
-        >
-          <div className="modal-box">
+    <dialog
+      ref={dialogRef}
+      id="struttura_detail"
+      className="modal modal-bottom sm:modal-middle"
+      open={isOpen ? true : false}
+    >
+      <div className="modal-box">
+        {isLoading ? (
+          <div className="flex justify-center">
+            <span className="loading loading-ring loading-xl"></span>
+          </div>
+        ) : (
+          <>
             {dettagliPrestazioniSelected ? (
               <>
                 <div className="flex justify-between items-center">
@@ -81,13 +113,7 @@ const StrutturaDetail = ({ id_struttura }: { id_struttura: string | null }) => {
                   <button
                     type="button"
                     className="btn bg-red-500 btn-circle"
-                    onClick={() =>
-                      (
-                        document.getElementById(
-                          "struttura_detail"
-                        ) as HTMLDialogElement
-                      )?.close()
-                    }
+                    onClick={handleClose}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -259,10 +285,10 @@ const StrutturaDetail = ({ id_struttura }: { id_struttura: string | null }) => {
                 )}
               </>
             )}
-          </div>
-        </dialog>
-      ) : null}
-    </>
+          </>
+        )}
+      </div>
+    </dialog>
   );
 };
 
