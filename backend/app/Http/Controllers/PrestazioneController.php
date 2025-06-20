@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Struttura;
-use App\Models\Posizione;
-use App\Models\Prestazione;
+use App\Models\Position;
+use App\Models\Performance;
 use App\Models\Recapito;
 use App\Models\TipoPrestazione;
 use Illuminate\Http\Request;
@@ -45,7 +45,7 @@ class PrestazioneController extends Controller
             ->first();
 
         if (!$prestazione) {
-            return response()->json(['message' => 'Prestazione non trovata'], 404);
+            return response()->json(['message' => 'Performance non trovata'], 404);
         }
 
         return response()->json($prestazione);
@@ -53,7 +53,7 @@ class PrestazioneController extends Controller
 
     public function updatePrestazione(Request $request, $id_prestazione)
     {
-        $prestazione = Prestazione::findOrFail($id_prestazione);
+        $prestazione = Performance::findOrFail($id_prestazione);
         $prestazione->descrizione_personalizzata = $request->input('descrizione');
         $prestazione->save();
 
@@ -66,7 +66,7 @@ class PrestazioneController extends Controller
         $prestazione->valore->time_modifica = now();
         $prestazione->valore->save();
 
-        return response()->json(['message' => 'Prestazione aggiornata con successo']);
+        return response()->json(['message' => 'Performance aggiornata con successo']);
     }
 
     public function createPrestazione(Request $request)
@@ -100,7 +100,7 @@ class PrestazioneController extends Controller
                 $valore->record_attivo = 1;
                 $valore->save();
 
-                $prestazione = new \App\Models\Prestazione();
+                $prestazione = new \App\Models\Performance();
                 $prestazione->id_prestazione = Str::uuid();
                 $prestazione->id_tipo_prestazione = $tipo_prestazione->id_tipo_prestazione;
                 $prestazione->id_struttura = $struttura->id_struttura;
@@ -112,7 +112,7 @@ class PrestazioneController extends Controller
 
                 DB::commit();
 
-                return response()->json(['message' => 'Prestazione creata con successo'], 201);
+                return response()->json(['message' => 'Performance creata con successo'], 201);
             } catch (\Exception $e) {
                 DB::rollBack();
                 Log::error("Errore creazione prestazione: " . $e->getMessage());
@@ -147,7 +147,7 @@ class PrestazioneController extends Controller
                 $valore->record_attivo = 1;
                 $valore->save();
 
-                $prestazione = new \App\Models\Prestazione();
+                $prestazione = new \App\Models\Performance();
                 $prestazione->id_prestazione = Str::uuid();
                 $prestazione->id_tipo_prestazione = $tipo->id_tipo_prestazione;
                 $prestazione->id_struttura = $struttura->id_struttura;
@@ -159,7 +159,7 @@ class PrestazioneController extends Controller
 
                 DB::commit();
 
-                return response()->json(['message' => 'Prestazione creata con successo'], 201);
+                return response()->json(['message' => 'Performance creata con successo'], 201);
             } catch (\Exception $e) {
                 DB::rollBack();
                 Log::error("Errore creazione prestazione: " . $e->getMessage());
@@ -189,7 +189,7 @@ class PrestazioneController extends Controller
             $valore->record_attivo = 1;
             $valore->save();
 
-            $prestazione = new \App\Models\Prestazione();
+            $prestazione = new \App\Models\Performance();
             $prestazione->id_prestazione = Str::uuid();
             $prestazione->id_tipo_prestazione = $tipo->id_tipo_prestazione;
             $prestazione->id_struttura = $struttura->id_struttura;
@@ -201,7 +201,7 @@ class PrestazioneController extends Controller
 
             DB::commit();
 
-            return response()->json(['message' => 'Prestazione creata con successo'], 201);
+            return response()->json(['message' => 'Performance creata con successo'], 201);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Errore creazione prestazione: " . $e->getMessage());
@@ -211,13 +211,13 @@ class PrestazioneController extends Controller
 
     public function deletePrestazione($id_prestazione)
     {
-        $prestazione = Prestazione::findOrFail($id_prestazione);
+        $prestazione = Performance::findOrFail($id_prestazione);
         $prestazione->record_attivo = 0;
         // $prestazione?->valore->record_attivo = 0;
         $prestazione->save();
 
 
-        return response()->json(['message' => 'Prestazione eliminata con successo'], 201);
+        return response()->json(['message' => 'Performance eliminata con successo'], 201);
     }
 
     public function getTipoPrestazioni(Request $request)

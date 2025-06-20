@@ -62,7 +62,7 @@ class User extends Authenticatable
 
     public function posizione_utente()
     {
-        return $this->hasOne(Posizione::class, 'id_posizione', 'id_posizione');
+        return $this->hasOne(Position::class, 'id_posizione', 'id_posizione');
     }
 
     public function strutturaPreferita()

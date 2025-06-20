@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StrutturaPreferita extends Model
+class PreferredStructure extends Model
 {
     protected $table = 'strutture_preferite';
     protected $primaryKey = 'id_struttura_preferita';

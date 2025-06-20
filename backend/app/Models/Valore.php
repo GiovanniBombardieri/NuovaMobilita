@@ -26,6 +26,6 @@ class Valore extends Model
 
     public function prestazione()
     {
-        return $this->hasOne(Prestazione::class, 'id_valore', 'id_valore');
+        return $this->hasOne(Performance::class, 'id_valore', 'id_valore');
     }
 }

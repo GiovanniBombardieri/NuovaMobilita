@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Struttura;
-use App\Models\Posizione;
-use App\Models\Prestazione;
+use App\Models\Position;
+use App\Models\Performance;
 use App\Models\Recapito;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,7 +44,7 @@ class AuthController extends Controller
 		]);
 
 		// Salvo la posizione dell'utente
-		$posizione = Posizione::create([
+		$posizione = Position::create([
 			'id_posizione' => $id_posizione,
 			'comune' => null,
 			'provincia' => null,
@@ -87,7 +87,7 @@ class AuthController extends Controller
 
 			// Salvo la posizione
 			Log::info('Creazione posizione', ['id_posizione' => $id_posizione]);
-			$posizione = Posizione::create([
+			$posizione = Position::create([
 				'id_posizione' => $id_posizione,
 				'comune' => $request->comune,
 				'provincia' => $request->provincia,

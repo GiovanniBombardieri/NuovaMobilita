@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Struttura extends Model
+class Structure extends Model
 {
     protected $table = 'struttura';
     protected $primaryKey = 'id_struttura';
@@ -32,7 +32,7 @@ class Struttura extends Model
 
     public function posizione()
     {
-        return $this->belongsTo(Posizione::class, 'id_posizione', 'id_posizione');
+        return $this->belongsTo(Position::class, 'id_posizione', 'id_posizione');
     }
 
     public function sitoWeb()
@@ -47,7 +47,7 @@ class Struttura extends Model
 
     public function prestazioni()
     {
-        return $this->hasMany(Prestazione::class, 'id_struttura', 'id_struttura');
+        return $this->hasMany(Performance::class, 'id_struttura', 'id_struttura');
     }
 
     public function strutturaPreferita()
