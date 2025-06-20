@@ -109,7 +109,7 @@ const Navbar = () => {
               onClick={() =>
                 (
                   document.getElementById(
-                    "favorite_structures"
+                    "preferred_structures"
                   ) as HTMLDialogElement
                 )?.showModal()
               }

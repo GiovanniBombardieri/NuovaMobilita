@@ -32,10 +32,7 @@ const FavoriteStructures = () => {
   const removePreferredStructure = async ($structure_id: string) => {
     try {
       await axios.delete(
-        `${
-          import.meta.env.VITE_API_URL
-        }/preferred_structure/${$structure_id}`,
-        { $structure_id },
+        `${import.meta.env.VITE_API_URL}/preferred_structure/${$structure_id}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -58,7 +55,7 @@ const FavoriteStructures = () => {
 
   return (
     <dialog
-      id="favorite_structures"
+      id="preferred_structures"
       className="modal modal-bottom sm:modal-middle"
     >
       <div className="modal-box">
@@ -174,7 +171,7 @@ const FavoriteStructures = () => {
             </li>
           ))}
 
-        <div className="flex justify-end">
+        <div className="flex justify-end mt-3">
           <button
             className="btn"
             onClick={() =>

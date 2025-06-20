@@ -41,9 +41,7 @@ const Structures = () => {
   const addPreferredStructure = async (structure_id: string) => {
     try {
       await axios.post(
-        `${
-          import.meta.env.VITE_API_URL
-        }/preferred_structure/${structure_id}`,
+        `${import.meta.env.VITE_API_URL}/preferred_structure/${structure_id}`,
         { structure_id },
         {
           headers: {

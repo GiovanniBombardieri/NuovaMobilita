@@ -22,14 +22,11 @@ const Performances = () => {
 
   useEffect(() => {
     axios
-      .get(
-        `${import.meta.env.VITE_API_URL}/performance?page=${currentPage}`,
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        }
-      )
+      .get(`${import.meta.env.VITE_API_URL}/performance?page=${currentPage}`, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      })
       .then((res) => {
         setPerfomances(res.data.data);
         setLastPage(res.data.last_page);
@@ -39,8 +36,8 @@ const Performances = () => {
       });
   }, [currentPage, user?.token]);
 
-  const deletePerformance = async (perfomance_id: string) => {
-    if (!perfomance_id || !user?.token) return;
+  const deletePerformance = async (performance_id: string) => {
+    if (!performance_id || !user?.token) return;
 
     const confirm_variable = confirm(
       "You are sure you want to eliminate this performance?"
@@ -49,8 +46,7 @@ const Performances = () => {
 
     try {
       await axios.delete(
-        `${import.meta.env.VITE_API_URL}/performance/${perfomance_id}`,
-        {},
+        `${import.meta.env.VITE_API_URL}/performance/${performance_id}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -114,8 +110,8 @@ const Performances = () => {
 
         {perfomances.map((perfomance: Performance) => (
           <li className="list-row">
-            <div className="w-[490px] flex flex-row justify-stretch">
-              <div className="w-1/12 flex justify-center mr-4">
+            <div className="lg:w-[490px] flex flex-row justify-stretch">
+              <div className="lg:w-1/12 flex justify-center mr-4">
                 <img
                   className="size-8 rounded-box"
                   src={

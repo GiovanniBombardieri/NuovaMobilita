@@ -18,7 +18,7 @@ class PerformanceController extends Controller
         $structure = $user->structure;
 
         $perfomances = $structure
-            ?->perfomances()
+            ?->performance()
             ->where('active_record', 1)
             ->with(['performanceType', 'value'])
             ->paginate($user->role === 'structure' ? 7 : 4);
@@ -26,14 +26,14 @@ class PerformanceController extends Controller
         return response()->json($perfomances);
     }
 
-    public function SinglePerformance(Request $request, $perfomance_id)
+    public function SinglePerformance(Request $request, $performance_id)
     {
         $user = $request->user();
         $structure = $user->structure;
 
         $perfomance = $structure
-            ?->perfomances()
-            ->where('perfomance_id', $perfomance_id)
+            ?->performance()
+            ->where('performance_id', $performance_id)
             ->where('active_record', 1)
             ->with(['performanceType', 'value'])
             ->first();
@@ -45,9 +45,9 @@ class PerformanceController extends Controller
         return response()->json($perfomance);
     }
 
-    public function updatePerformance(Request $request, $perfomance_id)
+    public function updatePerformance(Request $request, $performance_id)
     {
-        $perfomance = Performance::findOrFail($perfomance_id);
+        $perfomance = Performance::findOrFail($performance_id);
         $perfomance->personalized_description = $request->input('description');
         $perfomance->save();
 
@@ -88,14 +88,14 @@ class PerformanceController extends Controller
                 $value = new \App\Models\Value();
                 $value->value_id = Str::uuid();
                 $value->numerical_value = $validated['price'];
-                $value->start_validity = now();
-                $value->end_validity = '2099-12-31 23:59:59';
+                $value->validity_start = now();
+                $value->validity_end = '2099-12-31 23:59:59';
                 $value->change_time = now();
                 $value->active_record = 1;
                 $value->save();
 
                 $perfomance = new \App\Models\Performance();
-                $perfomance->perfomance_id = Str::uuid();
+                $perfomance->performance_id = Str::uuid();
                 $perfomance->performance_type_id = $performance_type->performance_type_id;
                 $perfomance->structure_id = $structure->structure_id;
                 $perfomance->value_id = $value->value_id;
@@ -135,14 +135,14 @@ class PerformanceController extends Controller
                 $value = new \App\Models\Value();
                 $value->value_id = Str::uuid();
                 $value->numerical_value = $validated['price'];
-                $value->start_validity = now();
-                $value->end_validity = '2099-12-31 23:59:59';
+                $value->validity_start = now();
+                $value->validity_end = '2099-12-31 23:59:59';
                 $value->change_time = now();
                 $value->active_record = 1;
                 $value->save();
 
                 $perfomance = new \App\Models\Performance();
-                $perfomance->perfomance_id = Str::uuid();
+                $perfomance->performance_id = Str::uuid();
                 $perfomance->performance_type_id = $type->performance_type_id;
                 $perfomance->structure_id = $structure->structure_id;
                 $perfomance->value_id = $value->value_id;
@@ -177,14 +177,14 @@ class PerformanceController extends Controller
             $value = new \App\Models\Value();
             $value->value_id = Str::uuid();
             $value->numerical_value = $validated['price'];
-            $value->start_validity = now();
-            $value->end_validity = '2099-12-31 23:59:59';
+            $value->validity_start = now();
+            $value->validity_end = '2099-12-31 23:59:59';
             $value->change_time = now();
             $value->active_record = 1;
             $value->save();
 
             $perfomance = new \App\Models\Performance();
-            $perfomance->perfomance_id = Str::uuid();
+            $perfomance->performance_id = Str::uuid();
             $perfomance->performance_type_id = $type->performance_type_id;
             $perfomance->structure_id = $structure->structure_id;
             $perfomance->value_id = $value->value_id;
@@ -203,22 +203,22 @@ class PerformanceController extends Controller
         }
     }
 
-    public function deletePerformance($perfomance_id)
+    public function deletePerformance($performance_id)
     {
-        $perfomance = Performance::findOrFail($perfomance_id);
+        $perfomance = Performance::findOrFail($performance_id);
         $perfomance->active_record = 0;
         $perfomance->save();
 
         return response()->json(['message' => 'Performance successfully eliminated'], 201);
     }
 
-    public function getPerformanceType (Request $request)
+    public function getPerformanceType(Request $request)
     {
         $performance_type = PerformanceType::where('active_record', 1)->paginate(6);
         return response()->json($performance_type);
     }
 
-    public function getSinglePerformanceType ($performance_type_id)
+    public function getSinglePerformanceType($performance_type_id)
     {
         $performance_type = PerformanceType::where('performance_type_id', $performance_type_id)->first();
         return response()->json($performance_type);

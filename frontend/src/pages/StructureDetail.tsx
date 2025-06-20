@@ -55,7 +55,7 @@ const StructureDetails = ({
           }
         )
         .then((res) => {
-          setPerfomanceCompany(res.data.perfomance);
+          setPerfomanceCompany(res.data.performance);
         })
         .catch((err) => {
           console.error(
@@ -70,9 +70,7 @@ const StructureDetails = ({
     if (structure_id !== null) {
       axios
         .get(
-          `${
-            import.meta.env.VITE_API_URL
-          }/structure_detail/${structure_id}`,
+          `${import.meta.env.VITE_API_URL}/structure_detail/${structure_id}`,
           {
             headers: {
               Authorization: `Bearer ${user?.token}`,

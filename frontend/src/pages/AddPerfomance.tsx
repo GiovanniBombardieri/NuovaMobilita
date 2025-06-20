@@ -121,7 +121,7 @@ const AddPerformance = () => {
               onClick={() =>
                 (
                   document.getElementById(
-                    "add_prestazione"
+                    "add_performance"
                   ) as HTMLDialogElement
                 )?.close()
               }
