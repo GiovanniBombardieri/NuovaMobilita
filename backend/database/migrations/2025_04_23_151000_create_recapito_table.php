@@ -23,7 +23,7 @@ return new class extends Migration
 
             // Foreign keys
             $table->foreign('contact_type_id')->references('contact_type_id')->on('contact_type')->onDelete('cascade');
-            $table->foreign('structure_id')->references('structure_id')->on('struttura')->onDelete('cascade');
+            $table->foreign('structure_id')->references('structure_id')->on('structure')->onDelete('cascade');
         });
     }
 

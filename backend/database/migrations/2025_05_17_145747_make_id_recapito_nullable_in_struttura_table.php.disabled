@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('struttura', function (Blueprint $table) {
+        Schema::table('structure', function (Blueprint $table) {
             // $table->dropForeign(['contact_id']);
             $table->uuid('contact_id')->nullable()->change();
             $table->foreign('contact_id')->references('contact_id')->on('contact')->onDelete('cascade');
@@ -23,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('struttura', function (Blueprint $table) {
+        Schema::table('structure', function (Blueprint $table) {
             $table->dropForeign(['contact_id']);
             $table->uuid('contact_id')->nullable(false)->change();
             $table->foreign('contact_id')->references('contact_id')->on('contact')->onDelete('cascade');

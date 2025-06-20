@@ -12,7 +12,7 @@ return new class extends Migration
    */
   public function up(): void
   {
-    Schema::create('struttura', function (Blueprint $table) {
+    Schema::create('structure', function (Blueprint $table) {
       $table->string('structure_id', 36)->primary();
 
       $table->string('position_id', 36);

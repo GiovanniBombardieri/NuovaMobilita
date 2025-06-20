@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('structure_id', 36)->nullable()->after('id');
 
             // Foreign keys
-            // $table->foreign('structure_id')->references('structure_id')->on('struttura')->onDelete('cascade');
+            // $table->foreign('structure_id')->references('structure_id')->on('structure')->onDelete('cascade');
         });
     }
 

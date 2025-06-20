@@ -22,7 +22,7 @@ return new class extends Migration
             $table->dateTime('change_time')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
             $table->tinyInteger('active_record')->default(1);
 
-            // $table->foreign('structure_id')->references('structure_id')->on('struttura')->onDelete('cascade');
+            // $table->foreign('structure_id')->references('structure_id')->on('structure')->onDelete('cascade');
             // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

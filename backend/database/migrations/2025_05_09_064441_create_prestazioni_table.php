@@ -23,7 +23,7 @@ return new class extends Migration
 
             // Foreign keys
             // $table->foreign('performance_type_id')->references('performance_type_id')->on('performance_type')->onDelete('cascade');
-            // $table->foreign('structure_id')->references('structure_id')->on('struttura')->onDelete('cascade');
+            // $table->foreign('structure_id')->references('structure_id')->on('structure')->onDelete('cascade');
             // $table->foreign('value_id')->references('value_id')->on('value')->onDelete('cascade');
         });
     }

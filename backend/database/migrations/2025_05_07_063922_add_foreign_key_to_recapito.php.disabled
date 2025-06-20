@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('contact', function (Blueprint $table) {
             $table->foreign('structure_id')
                 ->references('structure_id')
-                ->on('struttura')
+                ->on('structure')
                 ->onDelete('cascade');
         });
     }
