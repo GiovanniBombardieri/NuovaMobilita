@@ -14,7 +14,7 @@ Route::middleware('auth:sanctum')->group(function () {
 	Route::put('/update-profile', [AuthController::class, 'updateProfile']);
 
 	// Prestazioni
-	Route::get('/get_prestazioni/{id_prestazione}', [PrestazioneController::class, 'getPrestazioniSingola']);
+	Route::get('/get_prestazioni/{id_prestazione}', [PrestazioneController::class, 'SinglePerformance']);
 	Route::get('/get_prestazioni', [PrestazioneController::class, 'getPrestazioni']);
 	Route::put('/update_prestazione/{id_prestazione}', [PrestazioneController::class, 'updatePrestazione']);
 	Route::post('/create_prestazione', [PrestazioneController::class, 'createPrestazione']);
