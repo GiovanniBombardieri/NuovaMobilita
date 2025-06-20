@@ -6,8 +6,8 @@ use App\Models\User;
 use App\Models\Struttura;
 use App\Models\Position;
 use App\Models\Performance;
-use App\Models\Recapito;
-use App\Models\TipoPrestazione;
+use App\Models\Contact;
+use App\Models\PerformanceType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -78,7 +78,7 @@ class PrestazioneController extends Controller
             return response()->json(['message' => 'Struttura non trovata'], 404);
         }
 
-        $tipo_prestazione = TipoPrestazione::where('id_tipo_prestazione', $request->id_tipo_prestazione)->first();
+        $tipo_prestazione = PerformanceType::where('id_tipo_prestazione', $request->id_tipo_prestazione)->first();
 
         if ($request->id_tipo_prestazione) {
             $validated = $request->validate([
@@ -91,7 +91,7 @@ class PrestazioneController extends Controller
             try {
                 DB::beginTransaction();
 
-                $valore = new \App\Models\Valore();
+                $valore = new \App\Models\Value();
                 $valore->id_valore = Str::uuid();
                 $valore->valore_numerico = $validated['costo'];
                 $valore->inizio_validita = now();
@@ -129,7 +129,7 @@ class PrestazioneController extends Controller
             try {
                 DB::beginTransaction();
 
-                $tipo = new \App\Models\TipoPrestazione();
+                $tipo = new \App\Models\PerformanceType();
                 $tipo->id_tipo_prestazione = Str::uuid();
                 $tipo->tipologia = $validated['tipologia'];
                 $tipo->titolo = $validated['titolo'];
@@ -138,7 +138,7 @@ class PrestazioneController extends Controller
                 $tipo->record_attivo = 1;
                 $tipo->save();
 
-                $valore = new \App\Models\Valore();
+                $valore = new \App\Models\Value();
                 $valore->id_valore = Str::uuid();
                 $valore->valore_numerico = $validated['costo'];
                 $valore->inizio_validita = now();
@@ -171,7 +171,7 @@ class PrestazioneController extends Controller
         try {
             DB::beginTransaction();
 
-            $tipo = new \App\Models\TipoPrestazione();
+            $tipo = new \App\Models\PerformanceType();
             $tipo->id_tipo_prestazione = Str::uuid();
             $tipo->tipologia = $validated['tipologia'];
             $tipo->titolo = $validated['titolo'];
@@ -180,7 +180,7 @@ class PrestazioneController extends Controller
             $tipo->record_attivo = 1;
             $tipo->save();
 
-            $valore = new \App\Models\Valore();
+            $valore = new \App\Models\Value();
             $valore->id_valore = Str::uuid();
             $valore->valore_numerico = $validated['costo'];
             $valore->inizio_validita = now();
@@ -222,13 +222,13 @@ class PrestazioneController extends Controller
 
     public function getTipoPrestazioni(Request $request)
     {
-        $tipo_prestazioni = TipoPrestazione::where('record_attivo', 1)->paginate(6);
+        $tipo_prestazioni = PerformanceType::where('record_attivo', 1)->paginate(6);
         return response()->json($tipo_prestazioni);
     }
 
     public function getTipoPrestazioneSingola($id_tipo_prestazione)
     {
-        $tipo_prestazione = TipoPrestazione::where('id_tipo_prestazione', $id_tipo_prestazione)->first();
+        $tipo_prestazione = PerformanceType::where('id_tipo_prestazione', $id_tipo_prestazione)->first();
         return response()->json($tipo_prestazione);
     }
 }

@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Models\Struttura;
 use App\Models\Position;
 use App\Models\Performance;
-use App\Models\Recapito;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -106,7 +106,7 @@ class AuthController extends Controller
 
 			// Salvo il recapito
 			Log::info('Creazione recapito', ['id_recapito' => $id_recapito]);
-			$recapito = Recapito::create([
+			$recapito = Contact::create([
 				'id_recapito' => $id_recapito,
 				'id_struttura' => $id_struttura,
 				'id_tipo_recapito' => '0000004a-0000-0000-0000-000000000001',
@@ -303,7 +303,7 @@ class AuthController extends Controller
 					$recapitoConTelefonoAttivo->telefono = $request->telefonoStruttura;
 					$recapitoConTelefonoAttivo->save();
 				} else {
-					$nuovoRecapito = new Recapito();
+					$nuovoRecapito = new Contact();
 					$nuovoRecapito->id_recapito = (string) \Illuminate\Support\Str::uuid();
 					$nuovoRecapito->id_struttura = $struttura->id_struttura;
 					$nuovoRecapito->telefono = $request->telefonoStruttura;
