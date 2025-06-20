@@ -9,12 +9,12 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-	// User
+	// Utente
 	Route::post('/logout', [AuthController::class, 'logout']);
 	Route::put('/update-profile', [AuthController::class, 'updateProfile']);
 
-	// Performance
-	Route::get('/prestazioni/{id_prestazione}', [PrestazioneController::class, 'SinglePerformance']);
+	// Prestazioni
+	Route::get('/get_prestazioni/{id_prestazione}', [PrestazioneController::class, 'getPrestazioniSingola']);
 	Route::get('/get_prestazioni', [PrestazioneController::class, 'getPrestazioni']);
 	Route::put('/update_prestazione/{id_prestazione}', [PrestazioneController::class, 'updatePrestazione']);
 	Route::post('/create_prestazione', [PrestazioneController::class, 'createPrestazione']);
@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
 	Route::get('/get_tipo_prestazioni', [PrestazioneController::class, 'getTipoPrestazioni']);
 	Route::get('/get_tipo_prestazione_singola/{id_tipo_prestazione}', [PrestazioneController::class, 'getTipoPrestazioneSingola']);
 
-	// Structure
+	// Strutture
 	Route::get('/get_strutture_paginate', [StrutturaController::class, 'getStrutturePaginate']);
 	Route::get('/get_strutture', [StrutturaController::class, 'getStrutture']);
 	Route::get('/get_prestazioni_azienda/{id_struttura}', [StrutturaController::class, 'getPrestazioniStruttura']);

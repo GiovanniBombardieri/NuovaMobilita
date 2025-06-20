@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Structure;
-use App\Models\PreferredStructure;
-
+use App\Models\Struttura;
+use App\Models\Posizione;
+use App\Models\Prestazione;
+use App\Models\Recapito;
+use App\Models\StrutturaPreferita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,119 +20,119 @@ class StrutturaController extends Controller
 {
     public function getStrutturePaginate(Request $request)
     {
-        $structure = User::whereNotNull('structure_id')
-            ->with(['structure.position'])
+        $strutture = User::whereNotNull('id_struttura')
+            ->with(['struttura.posizione'])
             ->paginate(4);
 
-        return response()->json($structure);
+        return response()->json($strutture);
     }
 
     public function getStrutture(Request $request)
     {
-        $structure = Structure::where('active_record', 1)
-            ->with('position')
+        $strutture = Struttura::where('record_attivo', 1)
+            ->with('posizione')
             ->get();
-        return response()->json(['data' => $structure]);
+        return response()->json(['data' => $strutture]);
     }
 
-    public function getPrestazioniStruttura($structure_id)
+    public function getPrestazioniStruttura($id_struttura)
     {
-        $structure = Structure::with('performance.performanceType', 'performance.value')->find($structure_id);
+        $struttura = Struttura::with('prestazioni.tipoPrestazione', 'prestazioni.valore')->find($id_struttura);
 
-        if (!$structure) {
-            return response()->json(['message' => 'Structure not found'], 404);
+        if (!$struttura) {
+            return response()->json(['message' => 'Struttura non trovata'], 404);
         }
 
         return response()->json([
-            'structure' => $structure->corporate,
-            'performance' => $structure->performance
+            'struttura' => $struttura->ragione_sociale,
+            'prestazioni' => $struttura->prestazioni
         ]);
     }
 
-    public function getDettaglioStruttura($structure_id)
+    public function getDettaglioStruttura($id_struttura)
     {
-        $structure = Structure::with(['contact', 'position'])->find($structure_id);
+        $struttura = Struttura::with(['recapiti', 'posizione'])->find($id_struttura);
 
-        if (!$structure) {
-            return response()->json(['message' => 'Structure not found'], 404);
+        if (!$struttura) {
+            return response()->json(['message' => 'Struttura non trovata'], 404);
         }
 
         return response()->json([
-            'structure' => [
-                'structure_id' => $structure->structure_id,
-                'corporate' => $structure->corporate,
+            'struttura' => [
+                'id_struttura' => $struttura->id_struttura,
+                'ragione_sociale' => $struttura->ragione_sociale,
             ],
-            'position' => [
-                'cap' => $structure->position->cap,
-                'city' => $structure->position->city,
-                'civic_number' => $structure->position->civic_number,
-                'province' => $structure->position->province,
-                'street' => $structure->position->street,
+            'posizione' => [
+                'cap' => $struttura->posizione->cap,
+                'comune' => $struttura->posizione->comune,
+                'numero_civico' => $struttura->posizione->numero_civico,
+                'provincia' => $struttura->posizione->provincia,
+                'via' => $struttura->posizione->via,
             ],
-            'contact' => $structure->contact->map(function ($contact) {
+            'recapiti' => $struttura->recapiti->map(function ($recapito) {
                 return [
-                    'email' => $contact->email,
-                    'phone' => $contact->phone,
+                    'email' => $recapito->email,
+                    'telefono' => $recapito->telefono,
                 ];
             }),
         ]);
     }
 
-    public function addStrutturaPreferita(Request $request, $structure_id)
+    public function addStrutturaPreferita(Request $request, $id_struttura)
     {
         $user = $request->user();
-        $user_id = $user->id;
+        $id_utente = $user->id;
 
         try {
             DB::beginTransaction();
 
-            $preferred_structure = new PreferredStructure();
-            $preferred_structure->preferred_structure_id = Str::uuid();
-            $preferred_structure->structure_id = $structure_id;
-            $preferred_structure->user_id = $user_id;
-            $preferred_structure->change_time = now();
-            $preferred_structure->active_record = 1;
-            $preferred_structure->save();
+            $struttura_preferita = new \App\Models\StrutturaPreferita();
+            $struttura_preferita->id_struttura_preferita = Str::uuid();
+            $struttura_preferita->id_struttura = $id_struttura;
+            $struttura_preferita->id_utente = $id_utente;
+            $struttura_preferita->time_modifica = now();
+            $struttura_preferita->record_attivo = 1;
+            $struttura_preferita->save();
 
             DB::commit();
 
-            return response()->json(['message' => 'Structures added among favorites'], 201);
+            return response()->json(['message' => 'Struttura aggiunta tra i preferiti'], 201);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error("Error added structure among your favorites: ", $e->getMessage());
-            return response()->json(['message' => "Error during the addition of the structure among the favorites"], 500);
+            Log::error("Errore aggiunta struttura tra i preferiti: ", $e->getMessage());
+            return response()->json(['message' => "Errore durante l'aggiunta della struttura tra i preferiti"], 500);
         }
     }
 
     public function getStrutturePreferite(Request $request)
     {
         $user = $request->user();
-        $user_id = $user->id;
+        $id_utente = $user->id;
 
-        $preferredStructures = PreferredStructure::where('active_record', 1)
-            ->where('user_id', $user_id)
-            ->with(['structure.position', 'structure.contact'])
+        $strutturePreferite = StrutturaPreferita::where('record_attivo', 1)
+            ->where('id_utente', $id_utente)
+            ->with(['struttura.posizione', 'struttura.recapiti'])
             ->get();
 
-        $result = $preferredStructures->map(function ($item) {
-            $structure = $item->structure;
+        $result = $strutturePreferite->map(function ($item) {
+            $struttura = $item->struttura;
 
             return [
-                'structure' => [
-                    'structure_id' => $structure->structure_id ?? null,
-                    'corporate' => $structure->corporate ?? null,
+                'struttura' => [
+                    'id_struttura' => $struttura->id_struttura ?? null,
+                    'ragione_sociale' => $struttura->ragione_sociale ?? null,
                 ],
-                'position' => [
-                    'cap' => $structure->position->cap ?? null,
-                    'city' => $structure->position->city ?? null,
-                    'civic_number' => $structure->position->civic_number ?? null,
-                    'province' => $structure->position->province ?? null,
-                    'street' => $structure->position->street ?? null,
+                'posizione' => [
+                    'cap' => $struttura->posizione->cap ?? null,
+                    'comune' => $struttura->posizione->comune ?? null,
+                    'numero_civico' => $struttura->posizione->numero_civico ?? null,
+                    'provincia' => $struttura->posizione->provincia ?? null,
+                    'via' => $struttura->posizione->via ?? null,
                 ],
-                'contact' => $structure->contact->map(function ($contact) {
+                'recapiti' => $struttura->recapiti->map(function ($recapito) {
                     return [
-                        'email' => $contact->email,
-                        'phone' => $contact->phone,
+                        'email' => $recapito->email,
+                        'telefono' => $recapito->telefono,
                     ];
                 }),
 
@@ -142,22 +144,23 @@ class StrutturaController extends Controller
         ]);
     }
 
-    public function removeStrutturaPreferita(Request $request, $structure_id)
+    public function removeStrutturaPreferita(Request $request, $id_struttura)
     {
         $user = $request->user();
-        $user_id = $user->id;
+        $id_utente = $user->id;
 
-        $preferred_structure = PreferredStructure::where('structure_id', $structure_id)
-            ->where('user_id', $user_id)
+
+        $struttura_preferita = StrutturaPreferita::where('id_struttura', $id_struttura)
+            ->where('id_utente', $id_utente)
             ->first();
 
-        if (!$preferred_structure) {
-            return response()->json(['message' => 'Favorite structure not found'], 404);
+        if (!$struttura_preferita) {
+            return response()->json(['message' => 'Struttura preferita non trovata'], 404);
         }
 
-        $preferred_structure->active_record = 0;
-        $preferred_structure->save();
+        $struttura_preferita->record_attivo = 0;
+        $struttura_preferita->save();
 
-        return response()->json(['message' => 'Favorite structure successfully removed'], 201);
+        return response()->json(['message' => 'Struttura preferita rimossa con successo'], 201);
     }
 }
