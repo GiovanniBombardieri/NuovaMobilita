@@ -3,53 +3,50 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Struttura;
-use App\Models\Posizione;
-use App\Models\Prestazione;
-use App\Models\Recapito;
+use App\Models\Structure;
+use App\Models\Position;
+use App\Models\Contact;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
 	public function register(Request $request)
 	{
-		if ($request->ruolo === 'struttura') {
+		if ($request->ruolo === 'structure') {
 			return $this->registerStruttura($request);
 		}
 
 		$request->validate([
-			'ruolo' => 'required|string|max:50',
+			'role' => 'required|string|max:50',
 			'name' => 'required|string|max:255',
-			'cognome' => 'required|string|max:255',
+			'surname' => 'required|string|max:255',
 			'email' => 'required|string|email|max:255|unique:users',
 			'password' => 'required|string|min:8',
 		]);
 
-		$id_posizione = (string) Str::uuid();
+		$position_id = (string) Str::uuid();
 
 		$user = User::create([
-			'id_posizione' => $id_posizione,
+			'position_id' => $position_id,
 			'name' => $request->name,
-			'cognome' => $request->cognome,
-			'ruolo' => $request->ruolo,
+			'surname' => $request->surname,
+			'role' => $request->role,
 			'email' => $request->email,
 			'password' => Hash::make($request->password),
-			'record_attivo' => 1,
+			'active_record' => 1,
 		]);
 
-		// Salvo la posizione dell'utente
-		$posizione = Posizione::create([
-			'id_posizione' => $id_posizione,
-			'comune' => null,
-			'provincia' => null,
-			'via' => null,
-			'numero_civico' => null,
+		$position = Position::create([
+			'position_id' => $position_id,
+			'city' => null,
+			'province' => null,
+			'street' => null,
+			'civic_number' => null,
 			'cap' => null,
 		]);
 
@@ -58,16 +55,16 @@ class AuthController extends Controller
 		return response()->json([
 			'user' => [
 				'name' => $user->name,
-				'cognome' => $user->cognome,
-				'ruolo' => $user->ruolo,
+				'surname' => $user->surname,
+				'role' => $user->role,
 				'email' => $user->email,
 			],
 			'user_position' => [
-				'comune' => $posizione->comune,
-				'provincia' => $posizione->provincia,
-				'via' => $posizione->via,
-				'numero_civico' => $posizione->numero_civico,
-				'cap' => $posizione->cap,
+				'city' => $position->city,
+				'province' => $position->province,
+				'street' => $position->street,
+				'civic_number' => $position->civic_number,
+				'cap' => $position->cap,
 			],
 			'access_token' => $token,
 			'token_type' => 'Bearer',
@@ -78,76 +75,70 @@ class AuthController extends Controller
 	{
 		DB::beginTransaction();
 		try {
-			Log::info('Inizio registrazione struttura');
+			// Create structure_id, position_id, contact_id
+			$structure_id = (string) Str::uuid();
+			$position_id = (string) Str::uuid();
+			$contact_id = (string) Str::uuid();
 
-			// Creo id_struttura, id_posizione, id_recapito
-			$id_struttura = (string) Str::uuid();
-			$id_posizione = (string) Str::uuid();
-			$id_recapito = (string) Str::uuid();
-
-			// Salvo la posizione
-			Log::info('Creazione posizione', ['id_posizione' => $id_posizione]);
-			$posizione = Posizione::create([
-				'id_posizione' => $id_posizione,
-				'comune' => $request->comune,
-				'provincia' => $request->provincia,
-				'via' => $request->via,
-				'numero_civico' => $request->numero_civico,
+			// Save position
+			$position = Position::create([
+				'position_id' => $position_id,
+				'city' => $request->city,
+				'province' => $request->province,
+				'street' => $request->street,
+				'civic_number' => $request->civic_number,
 				'cap' => $request->cap,
 			]);
 
-			// Salvo la struttura
-			Log::info('Creazione struttura', ['id_struttura' => $id_struttura]);
-			$struttura = Struttura::create([
-				'id_struttura' => $id_struttura,
-				'id_posizione' => $id_posizione,
-				'ragione_sociale' => $request->ragione_sociale,
+			// Save structure
+			$structure = Structure::create([
+				'structure_id' => $structure_id,
+				'position_id' => $position_id,
+				'corporate' => $request->corporate,
 			]);
 
-			// Salvo il recapito
-			Log::info('Creazione recapito', ['id_recapito' => $id_recapito]);
-			$recapito = Recapito::create([
-				'id_recapito' => $id_recapito,
-				'id_struttura' => $id_struttura,
-				'id_tipo_recapito' => '0000004a-0000-0000-0000-000000000001',
+			// Save contact
+			$contact = Contact::create([
+				'contact_id' => $contact_id,
+				'structure_id' => $structure_id,
+				'contact_type_id' => '0000004a-0000-0000-0000-000000000001',
 				'mail' => $request->email,
 			]);
 
-			// Aggiorna struttura con id_recapito
-			$struttura->id_recapito = $id_recapito;
-			$struttura->save();
+			// Update structure contact_id
+			$structure->contact_id = $contact_id;
+			$structure->save();
 
-			// Salvo utente con email, password e ruolo
-			Log::info('Creazione utente', ['id_struttura' => $id_struttura]);
+			// Save user with mail, password and role
 			$user = User::create([
 				'email' => $request->email,
 				'password' => Hash::make($request->password),
-				'ruolo' => 'struttura',
-				'id_struttura' => $id_struttura,
+				'role' => 'structure',
+				'structure_id' => $structure_id,
 			]);
 
 			DB::commit();
 
-			// Genero il token
+			// Create token
 			$token = $user->createToken('auth_token')->plainTextToken;
 
 			return response()->json([
 				'user' => [
-					'ruolo' => $user->ruolo,
+					'role' => $user->role,
 					'email' => $user->email,
-					'ragione_sociale' => $struttura->ragione_sociale,
-					'comune' => $posizione->comune,
-					'provincia' => $posizione->provincia,
-					'via' => $posizione->via,
-					'numero_civico' => $posizione->numero_civico,
-					'cap' => $posizione->cap,
+					'corporate' => $structure->corporate,
+					'city' => $position->city,
+					'province' => $position->province,
+					'street' => $position->street,
+					'civic_number' => $position->civic_number,
+					'cap' => $position->cap,
 				],
 				'access_token' => $token,
 				'token_type' => 'Bearer',
 			]);
 		} catch (\Exception $e) {
 			DB::rollBack();
-			return response()->json(['error' => 'Errore nella registrazione della struttura', 'details' => $e->getMessage()], 500);
+			return response()->json(['error' => 'Error in recording the structure', 'details' => $e->getMessage()], 500);
 		}
 	}
 
@@ -160,34 +151,32 @@ class AuthController extends Controller
 
 		if (!Auth::attempt($request->only('email', 'password'))) {
 			return response()->json([
-				'message' => 'Credenziali non valide.'
+				'message' => 'Not valid credentials.'
 			], 401);
 		}
 
 		$user = Auth::user();
-		Log::info('Utente loggato', ['email' => $user->email, 'ruolo' => $user->ruolo]);
-
 		if (!$user || !($user instanceof \App\Models\User)) {
-			return response()->json(['error' => 'Utente non autenticato'], 401);
+			return response()->json(['error' => 'User not authenticated'], 401);
 		}
 
 		$token = $user->createToken('auth_token')->plainTextToken;
 
-		if ($user->ruolo === "utente") {
-			$posizione = $user->posizione_utente;
+		if ($user->role === "user") {
+			$position = $user->user_position;
 
 			return response()->json([
 				'user' => [
 					'name' => $user->name,
-					'cognome' => $user->cognome,
-					'ruolo' => $user->ruolo,
+					'surname' => $user->surname,
+					'role' => $user->role,
 					'email' => $user->email,
-					'telefono' => $user->telefono,
+					'phone' => $user->phone,
 					'user_position' => [
-						'comune' => $posizione->comune ?? null,
-						'provincia' => $posizione->provincia ?? null,
-						'via' => $posizione->via ?? null,
-						'numero_civico' => $posizione->numero_civico ?? null,
+						'city' => $posizione->city ?? null,
+						'province' => $posizione->province ?? null,
+						'street' => $posizione->street ?? null,
+						'civic_number' => $posizione->civic_number ?? null,
 						'cap' => $posizione->cap ?? null,
 					],
 				],
@@ -196,26 +185,26 @@ class AuthController extends Controller
 			]);
 		}
 
-		if ($user->ruolo === "struttura") {
-			$struttura = $user->struttura;
-			$posizione = $struttura?->posizione;
+		if ($user->role === "structure") {
+			$structure = $user->structure;
+			$position = $structure?->position;
 
-			$recapiti = $struttura?->recapiti ?? collect();
-			$recapitoConTelefono = $recapiti->first(function ($r) {
-				return !empty($r->telefono) && $r->record_attivo === 1;
+			$contact = $structure?->contact ?? collect();
+			$contactWithPhone = $contact->first(function ($r) {
+				return !empty($r->phone) && $r->active_record === 1;
 			});
 
 			return response()->json([
 				'user' => [
-					'ruolo' => $user->ruolo,
+					'role' => $user->role,
 					'email' => $user->email,
-					'telefono' => $recapitoConTelefono->telefono ?? null,
-					'ragione_sociale' => $struttura->ragione_sociale ?? null,
-					'comune' => $posizione->comune ?? null,
-					'provincia' => $posizione->provincia ?? null,
-					'via' => $posizione->via ?? null,
-					'numero_civico' => $posizione->numero_civico ?? null,
-					'cap' => $posizione->cap ?? null,
+					'phone' => $contactWithPhone->phone ?? null,
+					'corporate' => $structure->corporate ?? null,
+					'city' => $position->city ?? null,
+					'province' => $position->province ?? null,
+					'street' => $position->street ?? null,
+					'civic_number' => $position->civic_number ?? null,
+					'cap' => $position->cap ?? null,
 				],
 				'access_token' => $token,
 				'token_type' => 'Bearer',
@@ -223,7 +212,7 @@ class AuthController extends Controller
 		}
 
 		return response()->json([
-			'error' => 'Ruolo non riconosciuto.'
+			'error' => 'Not recognized role.'
 		], 422);
 	}
 
@@ -232,7 +221,7 @@ class AuthController extends Controller
 		$request->user()->tokens()->delete();
 
 		return response()->json([
-			'message' => 'Logout effettuato con successo.',
+			'message' => 'Successful logout.',
 		]);
 	}
 
@@ -240,115 +229,115 @@ class AuthController extends Controller
 	{
 		$user = $request->user();
 
-		if ($user->ruolo === "utente") {
-			$posizione = $user->posizione_utente;
+		if ($user->role === "user") {
+			$position = $user->user_position;
 
 			$request->validate([
 				'name' => 'nullable|string|max:255',
-				'cognome' => 'nullable|string|max:255',
+				'surname' => 'nullable|string|max:255',
 				'email' => 'nullable|string|max:255',
-				'telefono' => 'nullable|string|max:20',
-				'indirizzo' => 'nullable|string|max:255',
-				'comune' => 'nullable|string|max:100',
-				'provincia' => 'nullable|char|max:2',
+				'phone' => 'nullable|string|max:20',
+				'address' => 'nullable|string|max:255',
+				'city' => 'nullable|string|max:100',
+				'province' => 'nullable|char|max:2',
 				'cap' => 'nullable|char|max:5',
-				'via' => 'nullable|string|max:100',
-				'numero_civico' => 'nullable|string|max:10',
+				'street' => 'nullable|string|max:100',
+				'civic_number' => 'nullable|string|max:10',
 			]);
 
 			$user->name = $request->name;
-			$user->cognome = $request->cognome;
+			$user->surname = $request->surname;
 			$user->email = $request->email;
-			$user->telefono = $request->telefono;
-			$posizione->comune = $request->comuneUtente;
-			$posizione->provincia = $request->provinciaUtente;
-			$posizione->cap = $request->capUtente;
-			$posizione->via = $request->viaUtente;
-			$posizione->numero_civico = $request->numero_civicoUtente;
+			$user->phone = $request->phone;
+			$position->city = $request->userCity;
+			$position->province = $request->userProvince;
+			$position->cap = $request->userCap;
+			$position->street = $request->userStreet;
+			$position->civic_number = $request->userCivicNumber;
 
 			$user->save();
-			$posizione->save();
+			$position->save();
 
 			return response()->json([
 				'name' => $user->name,
-				'cognome' => $user->cognome,
+				'surname' => $user->surname,
 				'email' => $user->email,
-				'telefono' => $user->telefono,
-				'ruolo' => $user->ruolo,
+				'phone' => $user->phone,
+				'role' => $user->role,
 				'access_token' => $request->bearerToken(),
-				'comune' => $posizione->comune,
-				'provincia' => $posizione->provincia,
-				'via' => $posizione->via,
-				'numero_civico' => $posizione->numero_civico,
-				'cap' => $posizione->cap,
+				'city' => $position->city,
+				'province' => $position->province,
+				'street' => $position->street,
+				'civic_number' => $position->civic_number,
+				'cap' => $position->cap,
 			]);
-		} else if ($user->ruolo === "struttura") {
-			$struttura = $user->struttura;
-			$posizione = $struttura?->posizione;
-			$recapiti = $struttura?->recapiti;
+		} else if ($user->role === "structure") {
+			$structure = $user->structure;
+			$position = $structure?->position;
+			$contact = $structure?->contact;
 
-			$struttura->ragione_sociale = $request->ragione_sociale;
+			$structure->corporate = $request->corporate;
 			$user->email = $request->email;
-			$posizione->comune = $request->comune;
-			$posizione->provincia = $request->provincia;
-			$posizione->via = $request->via;
-			$posizione->numero_civico = $request->numero_civico;
-			$posizione->cap = $request->cap;
+			$position->city = $request->city;
+			$position->province = $request->province;
+			$position->street = $request->street;
+			$position->civic_number = $request->civic_number;
+			$position->cap = $request->cap;
 
-			if ($request->telefonoStruttura) {
-				$recapitoConTelefonoAttivo = $recapiti?->first(function ($r) {
-					return (!empty($r->telefono) && $r->record_attivo === 1);
+			if ($request->structurePhone) {
+				$contactWithActivePhone = $contact?->first(function ($r) {
+					return (!empty($r->phone) && $r->active_record === 1);
 				});
-				if ($recapitoConTelefonoAttivo) {
-					$recapitoConTelefonoAttivo->telefono = $request->telefonoStruttura;
-					$recapitoConTelefonoAttivo->save();
+				if ($contactWithActivePhone) {
+					$contactWithActivePhone->phone = $request->structurePhone;
+					$contactWithActivePhone->save();
 				} else {
-					$nuovoRecapito = new Recapito();
-					$nuovoRecapito->id_recapito = (string) \Illuminate\Support\Str::uuid();
-					$nuovoRecapito->id_struttura = $struttura->id_struttura;
-					$nuovoRecapito->telefono = $request->telefonoStruttura;
-					$nuovoRecapito->id_tipo_recapito = '0000004e-0000-0000-0000-000000000002';
-					$nuovoRecapito->time_modifica = now();
-					$nuovoRecapito->record_attivo = 1;
+					$newContact = new Contact();
+					$newContact->contact_id = (string) \Illuminate\Support\Str::uuid();
+					$newContact->structure_id = $structure->structure_id;
+					$newContact->phone = $request->structurePhone;
+					$newContact->contact_type_id = '0000004e-0000-0000-0000-000000000002';
+					$newContact->change_time = now();
+					$newContact->active_record = 1;
 
-					$nuovoRecapito->save();
+					$newContact->save();
 				}
-			} else if ($request->telefonoStruttura === NULL) {
-				$recapitoConTelefono = $recapiti?->first(function ($r) {
-					return !empty($r->telefono);
+			} else if ($request->structurePhone === NULL) {
+				$contactWithPhone = $contact?->first(function ($r) {
+					return !empty($r->phone);
 				});
 
-				if ($recapitoConTelefono) {
-					$recapitoConTelefono->record_attivo = 0;
-					$recapitoConTelefono->save();
+				if ($contactWithPhone) {
+					$contactWithPhone->active_record = 0;
+					$contactWithPhone->save();
 				}
 			}
 
 			if ($request->email) {
-				$recapitoConEmail = $recapiti?->first(function ($r) {
+				$contactWithEmail = $contact?->first(function ($r) {
 					return !empty($r->email);
 				});
 
-				if ($recapitoConEmail) {
-					$recapitoConEmail->email = $request->email;
-					$recapitoConEmail->save();
+				if ($contactWithEmail) {
+					$contactWithEmail->email = $request->email;
+					$contactWithEmail->save();
 				}
 			}
 
 			$user->save();
-			$struttura->save();
-			$posizione->save();
+			$structure->save();
+			$position->save();
 
 			return response()->json([
-				'ruolo' => $user->ruolo,
-				'email' => ($user->email === $recapitoConEmail->email) ? $user->email : null,
-				'telefono' => (isset($nuovoRecapito) ? $nuovoRecapito->telefono : (isset($recapitoConTelefonoAttivo) ? $recapitoConTelefonoAttivo->telefono : null)),
-				'ragione_sociale' => $struttura->ragione_sociale,
-				'comune' => $posizione->comune,
-				'provincia' => $posizione->provincia,
-				'via' => $posizione->via,
-				'numero_civico' => $posizione->numero_civico,
-				'cap' => $posizione->cap,
+				'role' => $user->role,
+				'email' => ($user->email === $contactWithEmail->email) ? $user->email : null,
+				'phone' => (isset($newContact) ? $newContact->phone : (isset($contactWithActivePhone) ? $contactWithActivePhone->phone : null)),
+				'corporate' => $structure->corporate,
+				'city' => $position->city,
+				'province' => $position->province,
+				'street' => $position->street,
+				'civic_number' => $position->civic_number,
+				'cap' => $position->cap,
 				'access_token' => $request->bearerToken(),
 			]);
 		}

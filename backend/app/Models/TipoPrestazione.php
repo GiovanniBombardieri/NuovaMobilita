@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TipoPrestazione extends Model
+class PerformanceType extends Model
 {
     protected $table = 'tipo_prestazione';
     protected $primaryKey = 'id_tipo_prestazione';

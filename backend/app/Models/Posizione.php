@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Posizione extends Model
+class Position extends Model
 {
     protected $table = 'posizione';
     protected $primaryKey = 'id_posizione';
@@ -26,7 +26,7 @@ class Posizione extends Model
 
     public function struttura()
     {
-        return $this->hasOne(Struttura::class, 'id_posizione', 'id_posizione');
+        return $this->hasOne(Structure::class, 'id_posizione', 'id_posizione');
     }
 
     public function user()
