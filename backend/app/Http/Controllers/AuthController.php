@@ -3,10 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+<<<<<<< HEAD
 use App\Models\Structure;
 use App\Models\Position;
 use App\Models\Contact;
 
+=======
+use App\Models\Struttura;
+use App\Models\Position;
+use App\Models\Performance;
+use App\Models\Contact;
+>>>>>>> 93cec5caf6c48e42fcdb783c5529e51e438ccf62
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -41,12 +48,22 @@ class AuthController extends Controller
 			'active_record' => 1,
 		]);
 
+<<<<<<< HEAD
 		$position = Position::create([
 			'position_id' => $position_id,
 			'city' => null,
 			'province' => null,
 			'street' => null,
 			'civic_number' => null,
+=======
+		// Salvo la posizione dell'utente
+		$posizione = Position::create([
+			'id_posizione' => $id_posizione,
+			'comune' => null,
+			'provincia' => null,
+			'via' => null,
+			'numero_civico' => null,
+>>>>>>> 93cec5caf6c48e42fcdb783c5529e51e438ccf62
 			'cap' => null,
 		]);
 
@@ -80,6 +97,7 @@ class AuthController extends Controller
 			$position_id = (string) Str::uuid();
 			$contact_id = (string) Str::uuid();
 
+<<<<<<< HEAD
 			// Save position
 			$position = Position::create([
 				'position_id' => $position_id,
@@ -87,6 +105,21 @@ class AuthController extends Controller
 				'province' => $request->province,
 				'street' => $request->street,
 				'civic_number' => $request->civic_number,
+=======
+			// Creo id_struttura, id_posizione, id_recapito
+			$id_struttura = (string) Str::uuid();
+			$id_posizione = (string) Str::uuid();
+			$id_recapito = (string) Str::uuid();
+
+			// Salvo la posizione
+			Log::info('Creazione posizione', ['id_posizione' => $id_posizione]);
+			$posizione = Position::create([
+				'id_posizione' => $id_posizione,
+				'comune' => $request->comune,
+				'provincia' => $request->provincia,
+				'via' => $request->via,
+				'numero_civico' => $request->numero_civico,
+>>>>>>> 93cec5caf6c48e42fcdb783c5529e51e438ccf62
 				'cap' => $request->cap,
 			]);
 
@@ -97,11 +130,20 @@ class AuthController extends Controller
 				'corporate' => $request->corporate,
 			]);
 
+<<<<<<< HEAD
 			// Save contact
 			$contact = Contact::create([
 				'contact_id' => $contact_id,
 				'structure_id' => $structure_id,
 				'contact_type_id' => '0000004a-0000-0000-0000-000000000001',
+=======
+			// Salvo il recapito
+			Log::info('Creazione recapito', ['id_recapito' => $id_recapito]);
+			$recapito = Contact::create([
+				'id_recapito' => $id_recapito,
+				'id_struttura' => $id_struttura,
+				'id_tipo_recapito' => '0000004a-0000-0000-0000-000000000001',
+>>>>>>> 93cec5caf6c48e42fcdb783c5529e51e438ccf62
 				'mail' => $request->email,
 			]);
 
@@ -292,6 +334,7 @@ class AuthController extends Controller
 					$contactWithActivePhone->phone = $request->structurePhone;
 					$contactWithActivePhone->save();
 				} else {
+<<<<<<< HEAD
 					$newContact = new Contact();
 					$newContact->contact_id = (string) \Illuminate\Support\Str::uuid();
 					$newContact->structure_id = $structure->structure_id;
@@ -299,6 +342,15 @@ class AuthController extends Controller
 					$newContact->contact_type_id = '0000004e-0000-0000-0000-000000000002';
 					$newContact->change_time = now();
 					$newContact->active_record = 1;
+=======
+					$nuovoRecapito = new Contact();
+					$nuovoRecapito->id_recapito = (string) \Illuminate\Support\Str::uuid();
+					$nuovoRecapito->id_struttura = $struttura->id_struttura;
+					$nuovoRecapito->telefono = $request->telefonoStruttura;
+					$nuovoRecapito->id_tipo_recapito = '0000004e-0000-0000-0000-000000000002';
+					$nuovoRecapito->time_modifica = now();
+					$nuovoRecapito->record_attivo = 1;
+>>>>>>> 93cec5caf6c48e42fcdb783c5529e51e438ccf62
 
 					$newContact->save();
 				}

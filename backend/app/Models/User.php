@@ -20,15 +20,15 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'cognome',
+        'surname',
         'email',
         'password',
-        'indirizzo',
-        'telefono',
-        'ruolo',
-        'record_attivo',
-        'id_struttura',
-        'id_posizione',
+        'address',
+        'phone',
+        'role',
+        'active_record',
+        'structure_id',
+        'position_id',
     ];
 
     /**
@@ -49,24 +49,24 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'id_struttura' => 'string',
+            'structure_id' => 'string',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
 
-    public function struttura()
+    public function structure()
     {
-        return $this->hasOne(Struttura::class, 'id_struttura', 'id_struttura');
+        return $this->hasOne(Structure::class, 'structure_id', 'structure_id');
     }
 
-    public function posizione_utente()
+    public function user_position()
     {
-        return $this->hasOne(Posizione::class, 'id_posizione', 'id_posizione');
+        return $this->hasOne(Position::class, 'position_id', 'position_id');
     }
 
-    public function strutturaPreferita()
+    public function preferredStructure()
     {
-        return $this->hasMany(StrutturaPreferita::class, 'id_utente');
+        return $this->hasMany(PreferredStructure::class, 'user_id', 'user_id');
     }
 }
