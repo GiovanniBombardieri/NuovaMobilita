@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import { useAuth, StrutturaDatiCompleti } from "../context/AuthContext";
+import { useAuth, StructureCompleteData } from "../context/AuthContext";
 
 import img_struttura_sanitaria from "../../public/struttura-sanitaria.png";
-import StrutturaDetail from "./StrutturaDetail";
+import StructureDetails from "./StructureDetail";
 
-const Strutture = () => {
+const Structures = () => {
   const { user } = useAuth();
 
-  const [strutture, setStrutture] = useState<StrutturaDatiCompleti[]>([]);
+  const [structures, setStructures] = useState<StructureCompleteData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedStrutturaId, setSelectedStrutturaId] = useState<string | null>(
+  const [selectedStructureId, setSelectedStructureId] = useState<string | null>(
     null
   );
 
@@ -30,21 +30,21 @@ const Strutture = () => {
         }
       )
       .then((res) => {
-        setStrutture(res.data.data);
+        setStructures(res.data.data);
         setLastPage(res.data.last_page);
       })
       .catch((err) => {
-        console.error("Errore nel recupero delle strutture", err);
+        console.error("Error in the recovery of the structures", err);
       });
   }, [currentPage, user?.token]);
 
-  const addPreferredStructure = async (id_struttura: string) => {
+  const addPreferredStructure = async (structure_id: string) => {
     try {
       await axios.post(
         `${
           import.meta.env.VITE_API_URL
-        }/add_struttura_preferita/${id_struttura}`,
-        { id_struttura },
+        }/add_struttura_preferita/${structure_id}`,
+        { structure_id },
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -52,15 +52,15 @@ const Strutture = () => {
         }
       );
 
-      alert("Struttura aggiunta tra i propri preferiti!");
+      alert("Structure added among its favorites!");
       window.location.reload();
     } catch (error) {
       console.error(
-        "Errore durante l'aggiunta della struttura tra i preferiti ",
+        "Error during the addition of the structure among the favorites",
         error
       );
       alert(
-        "Si è verificato un errore durante l'aggiunta della struttura tra i propri preferiti"
+        "A mistake has occurred during the addition of the structure among your favorites"
       );
     }
   };
@@ -70,7 +70,7 @@ const Strutture = () => {
       <ul className="list bg-base-100 rounded-box shadow-md h-full w-full items-center">
         <div className="flex flex-row justify-between items-center">
           <li className="p-4 pb-2 text-2xl opacity-60 tracking-wide">
-            Strutture
+            Structures
           </li>
         </div>
 
@@ -95,23 +95,23 @@ const Strutture = () => {
             <input
               type="search"
               required
-              placeholder="Cerca per titolo"
+              placeholder="Search for title"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </label>
         </div>
 
-        {strutture
-          .filter((struttura) =>
-            struttura.struttura?.ragione_sociale
+        {structures
+          .filter((structure) =>
+            structure.structure?.corporate
               .toLowerCase()
               .includes(searchTerm.toLowerCase())
           )
-          .map((struttura: StrutturaDatiCompleti) => (
+          .map((structure: StructureCompleteData) => (
             <li
               className="w-[95%] py-2 px-4 border-b-2"
-              key={struttura.id_struttura}
+              key={structure.structure_id}
             >
               <div className="flex flex-row w-full">
                 <div className="w-1/12 flex justify-center items-center mr-4">
@@ -123,13 +123,13 @@ const Strutture = () => {
                 </div>
                 <div className="w-11/12 flex items-center justify-between text-lg">
                   <div>
-                    <strong>{struttura.struttura?.ragione_sociale}</strong>
+                    <strong>{structure.structure?.corporate}</strong>
                   </div>
                   <div>
-                    <div className="tooltip" data-tip="Dettaglio">
+                    <div className="tooltip" data-tip="Detail">
                       <button
                         onClick={() => {
-                          setSelectedStrutturaId(struttura.id_struttura);
+                          setSelectedStructureId(structure.structure_id);
                           (
                             document.getElementById(
                               "struttura_detail"
@@ -157,7 +157,7 @@ const Strutture = () => {
                     <div className="tooltip" data-tip="Preferito">
                       <button
                         onClick={() => {
-                          addPreferredStructure(struttura.id_struttura);
+                          addPreferredStructure(structure.structure_id);
                         }}
                         className="btn btn-square btn-ghost"
                       >
@@ -197,9 +197,9 @@ const Strutture = () => {
           </div>
         </div>
       </ul>
-      <StrutturaDetail id_struttura={selectedStrutturaId} />
+      <StructureDetails structure_id={selectedStructureId} />
     </div>
   );
 };
 
-export default Strutture;
+export default Structures;

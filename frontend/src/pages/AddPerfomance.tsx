@@ -2,21 +2,21 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 
-const AggiungiPrestazione = () => {
+const AddPerformance = () => {
   const { user } = useAuth();
 
-  const [titolo, setTitolo] = useState("");
-  const [tipologia, setTipologia] = useState("");
-  const [costo, setCosto] = useState<number>();
-  const [descrizione, setDescrizione] = useState("");
+  const [title, setTitle] = useState("");
+  const [type, setType] = useState("");
+  const [price, setPrice] = useState<number>();
+  const [description, setDescription] = useState("");
 
-  const addPrestazione = async () => {
+  const addPerformance = async () => {
     if (!user?.token) return;
 
     try {
       await axios.post(
         `${import.meta.env.VITE_API_URL}/create_prestazione`,
-        { titolo, tipologia, costo, descrizione },
+        { title, type, price, description },
         {
           headers: {
             Authorization: `Bearer ${user.token}`,
@@ -24,91 +24,89 @@ const AggiungiPrestazione = () => {
         }
       );
 
-      alert("Prestazione aggiunta con successo!");
+      alert("Successful performance successfully!");
 
-      setTitolo("");
-      setTipologia("");
-      setCosto(0);
-      setDescrizione("");
+      setTitle("");
+      setType("");
+      setPrice(0);
+      setDescription("");
       (
-        document.getElementById("add_prestazione") as HTMLDialogElement
+        document.getElementById("add_performance") as HTMLDialogElement
       )?.close();
     } catch (error) {
-      console.error("Errore durante la creazione della prestazione: ", error);
-      alert("Errore durante l'aggiunta della prestazione!");
+      console.error("Error when creating the performance: ", error);
+      alert("Error during the addition of the performance!");
     }
   };
 
   return (
-    <dialog id="add_prestazione" className="modal modal-bottom sm:modal-middle">
+    <dialog id="add_performance" className="modal modal-bottom sm:modal-middle">
       <div className="modal-box">
-        <h3 className="font-bold text-lg mb-4">Aggiungi prestazione</h3>
+        <h3 className="font-bold text-lg mb-4">Add Performance</h3>
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            addPrestazione();
+            addPerformance();
           }}
         >
-          {/** CAMPO TITOLO */}
+          {/** TITLE */}
           <div>
             <div className="form-control mb-4 w-full flex items-center justify-between">
-              <label className="label w-1/5">Titolo</label>
+              <label className="label w-1/5">Title</label>
               <input
                 type="text"
                 className="input input-bordered w-4/5"
-                value={titolo}
-                onChange={(e) => setTitolo(e.target.value)}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 required
               />
             </div>
           </div>
 
-          {/** CAMPO TIPOLOGIA */}
+          {/** TYPE */}
           <div>
             <div className="form-control mb-4 w-full flex items-center justify-between">
-              <label className="label w-1/5 text-wrap">
-                Tipologia prestazione
-              </label>
+              <label className="label w-1/5 text-wrap">Performance Type</label>
               <select
                 className="select select-bordered w-4/5"
-                value={tipologia}
-                onChange={(e) => setTipologia(e.target.value)}
+                value={type}
+                onChange={(e) => setType(e.target.value)}
                 required
               >
-                <option value="">-- Seleziona --</option>
-                <option value="P">Psicologica</option>
-                <option value="M">Motoria</option>
+                <option value="">-- Select --</option>
+                <option value="P">Psychological</option>
+                <option value="M">Motor</option>
               </select>
             </div>
           </div>
 
-          {/** CAMPO COSTO */}
+          {/** PRICE */}
           <div>
             <div className="form-control mb-4 w-full flex items-center justify-between">
-              <label className="label w-1/5">Costo (€)</label>
+              <label className="label w-1/5">Price (€)</label>
               <input
                 type="number"
                 min={0}
                 className="input input-bordered w-4/5"
-                value={costo}
+                value={price}
                 onChange={(e) => {
-                  const valore = e.target.value.replace(",", ".");
-                  const numero = parseFloat(valore);
-                  setCosto(isNaN(numero) ? 0 : numero);
+                  const value = e.target.value.replace(",", ".");
+                  const number = parseFloat(value);
+                  setPrice(isNaN(number) ? 0 : number);
                 }}
                 required
               />
             </div>
           </div>
 
-          {/** CAMPO DESCRIZIONE */}
+          {/** DESCRIPTION */}
           <div>
             <div className="form-control mb-4 w-full flex items-center justify-between">
-              <label className="label w-1/5">Descrizione</label>
+              <label className="label w-1/5">Description</label>
               <textarea
                 className="input input-bordered w-4/5 h-32 resize-none whitespace-normal"
-                value={descrizione}
-                onChange={(e) => setDescrizione(e.target.value)}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 required
               />
             </div>
@@ -116,7 +114,7 @@ const AggiungiPrestazione = () => {
 
           <div className="modal-action">
             <button type="submit" className="btn btn-primary mr-2">
-              Salva
+              Save
             </button>
             <button
               className="btn"
@@ -137,4 +135,4 @@ const AggiungiPrestazione = () => {
   );
 };
 
-export default AggiungiPrestazione;
+export default AddPerformance;

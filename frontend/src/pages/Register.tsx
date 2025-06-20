@@ -3,20 +3,20 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 
 const Register = () => {
-  // Dati Comuni
-  const [ruolo, setRuolo] = useState("");
+  // Data of both
+  const [role, setRole] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // Dati UTENTE
-  const [name, setNameUtente] = useState("");
-  const [cognome, setCognomeUtente] = useState("");
-  // Dati STRUTTURA
-  const [ragioneSociale, setRagioneSociale] = useState("");
-  const [comune, setComune] = useState("");
-  const [provincia, setProvincia] = useState("");
+  // User data
+  const [name, setUserName] = useState("");
+  const [surname, setUserSurname] = useState("");
+  // Structure data
+  const [corporate, setCorporate] = useState("");
+  const [city, setCity] = useState("");
+  const [province, setProvince] = useState("");
   const [cap, setCap] = useState("");
-  const [via, setVia] = useState("");
-  const [numeroCivico, setNumeroCivico] = useState("");
+  const [street, setStreet] = useState("");
+  const [civicNumber, setCivicNumber] = useState("");
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -27,23 +27,25 @@ const Register = () => {
     try {
       let bodyData;
 
-      if (ruolo === "utente") {
+      if (role === "user") {
         bodyData = {
-          ruolo,
+          role,
           name,
-          cognome,
+          surname,
           email,
           password,
         };
-      } else if (ruolo === "struttura") {
+      } else if (role === "structure") {
         bodyData = {
-          ruolo,
-          ragione_sociale: ragioneSociale,
-          comune,
-          provincia,
+          role,
+          //ragione_sociale: ragioneSociale,
+          corporate,
+          city,
+          province,
           cap,
-          via,
-          numero_civico: numeroCivico,
+          street,
+          //numero_civico: numeroCivico,
+          civicNumber,
           email,
           password,
         };
@@ -59,44 +61,44 @@ const Register = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Registrazione fallita");
+        throw new Error("Failed Register");
       }
 
       const data = await response.json();
 
       // Differenzio i dati di login in base al ruolo selezionato
-      if (ruolo === "utente") {
+      if (role === "user") {
         login({
           name: data.user.name,
-          cognome: data.user.cognome,
-          telefono: data.user.telefono,
-          ruolo: data.user.ruolo,
+          surname: data.user.surname,
+          phone: data.user.phone,
+          role: data.user.role,
           email: data.user.email,
           token: data.token,
-          comune: data.user.comune,
-          provincia: data.user.provincia,
-          via: data.user.via,
-          numero_civico: data.user.numero_civico,
+          city: data.user.city,
+          province: data.user.province,
+          street: data.user.street,
+          civic_number: data.user.civic_number,
           cap: data.user.cap,
         });
-      } else if (ruolo === "struttura") {
+      } else if (role === "structure") {
         login({
-          ragione_sociale: data.user.ragione_sociale,
-          comune: data.user.comune,
-          provincia: data.user.provincia,
-          via: data.user.via,
-          numero_civico: data.user.numero_civico,
+          corporate: data.user.corporate,
+          city: data.user.city,
+          province: data.user.province,
+          street: data.user.street,
+          civic_number: data.user.civic_number,
           cap: data.user.cap,
-          ruolo: data.user.ruolo,
+          role: data.user.role,
           email: data.user.email,
-          telefono: data.user.telefono,
+          phone: data.user.phone,
           token: data.token,
         });
       }
 
       navigate("/dashboard");
     } catch (error) {
-      console.error("Errore nella registrazione:", error);
+      console.error("Error in registration:", error);
     }
   };
 
@@ -107,64 +109,63 @@ const Register = () => {
         className="w-full flex flex-col items-center justify-center"
       >
         <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 w-1/4 flex flex-col items-center">
-          <legend className="fieldset-legend">Registrazione</legend>
+          <legend className="fieldset-legend">Registration</legend>
 
-          {/* RADIO SELECT PER IL RUOLO CHE SI VUOLE REGISTRARE */}
           <div className="flex flex-row gap-4">
-            <label className="label">Ruolo</label>
+            <label className="label">Role</label>
             <label className="flex items-center gap-2">
               <input
                 type="radio"
-                name="Ruolo"
-                value="utente"
-                checked={ruolo === "utente"}
-                onChange={(e) => setRuolo(e.target.value)}
+                name="Role"
+                value="user"
+                checked={role === "user"}
+                onChange={(e) => setRole(e.target.value)}
                 className="radio radio-primary"
                 required
               />
-              Utente
+              User
             </label>
             <label className="flex items-center gap-2">
               <input
                 type="radio"
-                name="Ruolo"
-                value="struttura"
-                checked={ruolo === "struttura"}
-                onChange={(e) => setRuolo(e.target.value)}
+                name="Role"
+                value="structure"
+                checked={role === "structure"}
+                onChange={(e) => setRole(e.target.value)}
                 className="radio radio-primary"
                 required
               />
-              Struttura
+              Structure
             </label>
           </div>
 
-          {/* CAMPI MOSTRATI IN BASE AL RUOLO SCELTO */}
-          {/* UTENTE */}
-          {ruolo && (
+          {/* Fields shown on the basis of the role chosen */}
+          {/* User */}
+          {role && (
             <>
-              {ruolo === "utente" && (
+              {role === "user" && (
                 <>
                   <input
                     type="text"
                     className="input text-center w-3/4 mt-5"
-                    placeholder="Nome"
+                    placeholder="Name"
                     value={name}
-                    onChange={(e) => setNameUtente(e.target.value)}
+                    onChange={(e) => setUserName(e.target.value)}
                     required
                   />
 
                   <input
                     type="text"
                     className="input text-center w-3/4"
-                    placeholder="Cognome"
-                    value={cognome}
-                    onChange={(e) => setCognomeUtente(e.target.value)}
+                    placeholder="Surname"
+                    value={surname}
+                    onChange={(e) => setUserSurname(e.target.value)}
                     required
                   />
 
                   <div className="divider"></div>
 
-                  {/** CAMPO EMAIL */}
+                  {/** EMAIL */}
                   <label className="input validator w-3/4">
                     <svg
                       className="h-[1em] opacity-50"
@@ -195,7 +196,7 @@ const Register = () => {
                     Enter valid email address
                   </div>
 
-                  {/** CAMPO PASSWORD */}
+                  {/** PASSWORD */}
                   <label className="input validator w-3/4">
                     <svg
                       className="h-[1em] opacity-50"
@@ -239,24 +240,24 @@ const Register = () => {
                 </>
               )}
 
-              {/* STRUTTURA */}
-              {ruolo === "struttura" && (
+              {/* STRUCTURE */}
+              {role === "structure" && (
                 <>
                   <input
                     type="text"
                     className="input text-center w-3/4 mt-5"
-                    placeholder="Ragione Sociale"
-                    value={ragioneSociale}
-                    onChange={(e) => setRagioneSociale(e.target.value)}
+                    placeholder="Corporate"
+                    value={corporate}
+                    onChange={(e) => setCorporate(e.target.value)}
                     required
                   />
 
                   <input
                     type="text"
                     className="input text-center w-3/4"
-                    placeholder="Comune"
-                    value={comune}
-                    onChange={(e) => setComune(e.target.value)}
+                    placeholder="City"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
                     required
                   />
 
@@ -264,9 +265,9 @@ const Register = () => {
                     <input
                       type="text"
                       className="input text-center w-3/5 mr-1"
-                      placeholder="Provincia (sigla)"
-                      value={provincia}
-                      onChange={(e) => setProvincia(e.target.value)}
+                      placeholder="Province (acronym)"
+                      value={province}
+                      onChange={(e) => setProvince(e.target.value)}
                       required
                       maxLength={2}
                     />
@@ -286,9 +287,9 @@ const Register = () => {
                     <input
                       type="text"
                       className="input text-center w-3/4 mr-1"
-                      placeholder="Via"
-                      value={via}
-                      onChange={(e) => setVia(e.target.value)}
+                      placeholder="Street"
+                      value={street}
+                      onChange={(e) => setStreet(e.target.value)}
                       required
                     />
 
@@ -296,15 +297,15 @@ const Register = () => {
                       type="text"
                       className="input text-center w-1/4"
                       placeholder="N°"
-                      value={numeroCivico}
-                      onChange={(e) => setNumeroCivico(e.target.value)}
+                      value={civicNumber}
+                      onChange={(e) => setCivicNumber(e.target.value)}
                       required
                     />
                   </div>
 
                   <div className="divider"></div>
 
-                  {/** CAMPO EMAIL */}
+                  {/** EMAIL */}
                   <label className="input validator w-3/4">
                     <svg
                       className="h-[1em] opacity-50"
@@ -381,9 +382,9 @@ const Register = () => {
             </>
           )}
 
-          {ruolo && (
+          {role && (
             <button type="submit" className="btn btn-neutral my-4 w-3/4">
-              Registrati
+              Register
             </button>
           )}
         </fieldset>
@@ -392,9 +393,9 @@ const Register = () => {
       <hr className="my-8"></hr>
 
       <div className="flex flex-row items-center justify-center m-3">
-        <p className="mr-3">Hai già l'account?</p>
+        <p className="mr-3">Do you already have the account?</p>
         <Link to="/login" className="btn btn-outline btn-primary">
-          Torna al login
+          Back to login
         </Link>
       </div>
     </div>

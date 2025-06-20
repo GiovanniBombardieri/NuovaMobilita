@@ -1,11 +1,10 @@
-import { useAuth, User, Struttura } from "../context/AuthContext";
+import { useAuth, User, Structure } from "../context/AuthContext";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
-// Funzioni di type guard
-function isStruttura(user: User | Struttura | null): user is Struttura {
-  return (user as Struttura)?.ruolo === "struttura";
+function isStructure(user: User | Structure | null): user is Structure {
+  return (user as Structure)?.role === "structure";
 }
 
 const userIcon = new L.Icon({
@@ -17,7 +16,7 @@ const userIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-type Structure = {
+type StructureMap = {
   id: number;
   name: string;
   lat: number;
@@ -25,7 +24,7 @@ type Structure = {
 };
 
 type Props = {
-  structures: Structure[];
+  structures: StructureMap[];
   userLocation?: { lat: number; lng: number };
 };
 
@@ -39,7 +38,7 @@ const StructureMaps = ({ structures, userLocation }: Props) => {
       zoom={10}
       scrollWheelZoom={true}
       className={`${
-        isStruttura(user)
+        isStructure(user)
           ? "w-1/2 h-full lg:overflow-auto"
           : "w-full lg:h-full h-[500px]"
       } rounded-lg shadow overflow-scroll`}
@@ -51,7 +50,7 @@ const StructureMaps = ({ structures, userLocation }: Props) => {
 
       {userLocation && (
         <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon}>
-          <Popup>Tu sei qui</Popup>
+          <Popup>You are here</Popup>
         </Marker>
       )}
 

@@ -15,7 +15,7 @@ const geocodeAddress = async (address: string) => {
       lng: parseFloat(data[0].lon),
     };
   }
-  throw new Error("Geocoding fallito.");
+  throw new Error("Geocoding failed.");
 };
 
 const Login = () => {
@@ -23,7 +23,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [erroreLogin, setErroreLogin] = useState("");
+  const [loginError, setLoginError] = useState("");
   const [loginFailed, setLoginFailed] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -47,31 +47,31 @@ const Login = () => {
 
       if (!response.ok) {
         const errorMessage =
-          data?.errors?.email[0] || data?.message || "Errore durante il login.";
+          data?.errors?.email[0] || data?.message || "Error during login.";
         throw new Error(errorMessage);
       }
 
       if (!data.user || !data.access_token) {
-        throw new Error("Dati mancanti nella risposta");
+        throw new Error("Missing data in the answer.");
       }
 
-      // Differenzio i dati di login in base al ruolo selezionato
-      if (data.user.ruolo === "utente") {
-        const fullAddress = `${data.user.user_position.via} ${data.user.user_position.numero_civico}, ${data.user.user_position.cap} ${data.user.user_position.comune}, ${data.user.user_position.provincia}`;
+      // Differences Login data based on the selected role
+      if (data.user.ruolo === "user") {
+        const fullAddress = `${data.user.user_position.street} ${data.user.user_position.civic_number}, ${data.user.user_position.cap} ${data.user.user_position.city}, ${data.user.user_position.province}`;
         try {
           const location = await geocodeAddress(fullAddress);
 
           login({
             name: data.user.name,
-            cognome: data.user.cognome,
-            telefono: data.user.telefono,
-            ruolo: data.user.ruolo,
+            surname: data.user.surname,
+            phone: data.user.phone,
+            role: data.user.role,
             email: data.user.email,
             token: data.access_token,
-            comune: data.user.user_position.comune,
-            provincia: data.user.user_position.provincia,
-            via: data.user.user_position.via,
-            numero_civico: data.user.user_position.numero_civico,
+            city: data.user.user_position.city,
+            province: data.user.user_position.province,
+            street: data.user.user_position.street,
+            civic_number: data.user.user_position.civic_number,
             cap: data.user.user_position.cap,
             location: location,
           });
@@ -83,36 +83,36 @@ const Login = () => {
 
           login({
             name: data.user.name,
-            cognome: data.user.cognome,
-            telefono: data.user.telefono,
-            ruolo: data.user.ruolo,
+            surname: data.user.surname,
+            phone: data.user.phone,
+            role: data.user.role,
             email: data.user.email,
             token: data.access_token,
-            comune: data.user.user_position.comune,
-            provincia: data.user.user_position.provincia,
-            via: data.user.user_position.via,
-            numero_civico: data.user.user_position.numero_civico,
+            city: data.user.user_position.city,
+            province: data.user.user_position.province,
+            street: data.user.user_position.street,
+            civic_number: data.user.user_position.civic_number,
             cap: data.user.user_position.cap,
             location: defaultLocation,
           });
 
           console.error(error);
         }
-      } else if (data.user.ruolo === "struttura") {
-        const fullAddress = `${data.user.via} ${data.user.numero_civico}, ${data.user.cap} ${data.user.comune}, ${data.user.provincia}`;
+      } else if (data.user.role === "structure") {
+        const fullAddress = `${data.user.street} ${data.user.civic_number}, ${data.user.cap} ${data.user.city}, ${data.user.province}`;
         try {
           const location = await geocodeAddress(fullAddress);
 
           login({
-            ragione_sociale: data.user.ragione_sociale,
-            comune: data.user.comune,
-            provincia: data.user.provincia,
-            via: data.user.via,
-            numero_civico: data.user.numero_civico,
+            corporate: data.user.corporate,
+            city: data.user.city,
+            province: data.user.province,
+            street: data.user.street,
+            civic_number: data.user.civic_number,
             cap: data.user.cap,
-            ruolo: data.user.ruolo,
+            role: data.user.role,
             email: data.user.email,
-            telefono: data.user.telefono,
+            phone: data.user.phone,
             token: data.access_token,
             location: location,
           });
@@ -123,15 +123,15 @@ const Login = () => {
           };
 
           login({
-            ragione_sociale: data.user.ragione_sociale,
-            comune: data.user.comune,
-            provincia: data.user.provincia,
-            via: data.user.via,
-            numero_civico: data.user.numero_civico,
+            corporate: data.user.corporate,
+            city: data.user.city,
+            province: data.user.province,
+            street: data.user.street,
+            civic_number: data.user.civic_number,
             cap: data.user.cap,
-            ruolo: data.user.ruolo,
+            role: data.user.role,
             email: data.user.email,
-            telefono: data.user.telefono,
+            phone: data.user.phone,
             token: data.access_token,
             location: defaultLocation,
           });
@@ -142,13 +142,13 @@ const Login = () => {
       navigate("/dashboard");
     } catch (err) {
       if (err instanceof TypeError && err.message === "Failed to fetch") {
-        setErroreLogin(
-          "Impossibile connettersi al server. Verifica la connessione o i permessi CORS."
+        setLoginError(
+          "Impossible to connect to the server. Check the connection or Cors for permits. Check the connection or CORS permits."
         );
       } else if (err instanceof Error) {
-        setErroreLogin(err.message);
+        setLoginError(err.message);
       } else {
-        setErroreLogin("Errore sconosciuto.");
+        setLoginError("Unknown error.");
       }
       setLoginFailed(true);
     }
@@ -163,7 +163,7 @@ const Login = () => {
         <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 w-1/4 flex flex-col items-center">
           <legend className="fieldset-legend">Login</legend>
 
-          {/** CAMPO EMAIL */}
+          {/** EMAIL */}
           <label
             className={`input w-3/4 text-center ${
               loginFailed ? "border-red-600" : ""
@@ -196,7 +196,7 @@ const Login = () => {
           </label>
           <div className="validator-hint hidden">Enter valid email address</div>
 
-          {/** CAMPO PASSWORD */}
+          {/** PASSWORD */}
           <label
             className={`input w-3/4 text-center ${
               loginFailed ? "border-red-600" : ""
@@ -243,14 +243,14 @@ const Login = () => {
         </fieldset>
       </form>
 
-      {erroreLogin && <div className="text-red-600 mt-3">{erroreLogin}</div>}
+      {loginError && <div className="text-red-600 mt-3">{loginError}</div>}
 
       <hr className="my-8"></hr>
 
       <div className="flex flex-row items-center justify-center m-3">
-        <p className="mr-3">Non hai un account?</p>
+        <p className="mr-3">Don't have an account?</p>
         <Link to="/register" className="btn btn-outline btn-primary">
-          Registrati
+          Register
         </Link>
       </div>
     </div>

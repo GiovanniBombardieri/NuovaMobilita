@@ -1,17 +1,17 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 
-// Definizione del tipo per il ruolo Utente
+// Definition of the type for the user role
 export interface User {
   name: string;
-  cognome: string;
+  surname: string;
   email: string;
-  telefono: string;
-  ruolo: string;
+  phone: string;
+  role: string;
   token: string;
-  comune: string | undefined;
-  provincia: string | undefined;
-  via: string | undefined;
-  numero_civico: string | undefined;
+  city: string | undefined;
+  province: string | undefined;
+  street: string | undefined;
+  civic_number: string | undefined;
   cap: string | undefined;
   location?: {
     lat: number;
@@ -19,17 +19,17 @@ export interface User {
   };
 }
 
-// Definizione del tipo per il ruolo Struttura
-export interface Struttura {
-  ragione_sociale: string;
-  comune: string;
-  provincia: string;
-  via: string;
-  numero_civico: string;
+// Definition of the type for the structure role
+export interface Structure {
+  corporate: string;
+  city: string;
+  province: string;
+  street: string;
+  civic_number: string;
   cap: string;
-  ruolo: string;
+  role: string;
   email: string;
-  telefono: string;
+  phone: string;
   token: string;
   location?: {
     lat: number;
@@ -37,105 +37,105 @@ export interface Struttura {
   };
 }
 
-// Definizione del tipo per il ruolo Struttura utile per il Geocoding
-export interface StrutturaGeocoding {
-  id_struttura: string;
-  id_posizione: string;
-  id_recapito: string;
-  id_sito_web: string;
-  ragione_sociale: string;
-  time_modifica: string;
-  record_attivo: number;
-  posizione: {
-    comune: string;
-    provincia: string;
-    via: string;
-    numero_civico: string;
+// Definition of the type for the role useful for geocody
+export interface GeocodingStructure {
+  structure_id: string;
+  position_id: string;
+  contact_id: string;
+  web_site_id: string;
+  corporate: string;
+  change_time: string;
+  active_record: number;
+  position: {
+    city: string;
+    province: string;
+    street: string;
+    civic_number: string;
     cap: string;
   };
 }
 
-export interface DettagliStruttura {
-  struttura: {
-    id_struttura: string;
-    ragione_sociale: string;
+export interface StructureDetail {
+  structure: {
+    structure_id: string;
+    corporate: string;
   };
-  posizione: {
+  position: {
     cap: number;
-    comune: string;
-    numero_civico: string;
-    provincia: string;
-    via: string;
+    city: string;
+    civic_number: string;
+    province: string;
+    street: string;
   };
-  recapiti: {
+  contact: {
     email?: string;
-    telefono?: string;
+    phone?: string;
   }[];
 }
 
-// Definizione del tipo per la prestazione
-export interface Prestazione {
-  id_prestazione: string;
-  id_struttura: string;
-  id_tipo_prestazione: string;
-  id_valore: string;
-  descrizione_personalizzata: string;
-  time_modifica: Date;
-  record_attivo: number;
-  tipo_prestazione?: {
-    id_tipo_prestazione: string;
-    tipologia: string;
-    titolo: string;
-    descrizione: string;
-    time_modifica: Date;
-    record_attivo: number;
+// Definition of the type for performance
+export interface Performance {
+  performance_id: string;
+  structure_id: string;
+  performance_type_id: string;
+  value_id: string;
+  personalized_description: string;
+  change_time: Date;
+  active_record: number;
+  performance_type?: {
+    performance_type_id: string;
+    type: string;
+    title: string;
+    description: string;
+    change_time: Date;
+    active_record: number;
   };
-  valore?: {
-    id_valore: string;
-    valore_numerico: number;
-    inizio_validita: Date;
-    fine_validita: Date;
-    time_modifica: Date;
-    record_attivo: number;
+  value?: {
+    value_id: string;
+    numerical_value: number;
+    validity_start: Date;
+    validity_end: Date;
+    change_time: Date;
+    active_record: number;
   };
 }
 
-export interface StrutturaDatiCompleti {
-  id_struttura: string;
-  ruolo: string;
+export interface StructureCompleteData {
+  structure_id: string;
+  role: string;
   email: string;
-  struttura?: {
-    id_posizione: string;
-    id_sito_web: string;
-    ragione_sociale: string;
-    posizione?: {
-      comune: string;
-      provincia: string;
-      via: string;
-      numero_civico: string;
+  structure?: {
+    position_id: string;
+    web_site_id: string;
+    corporate: string;
+    position?: {
+      city: string;
+      province: string;
+      street: string;
+      civic_number: string;
       cap: string;
     };
   };
 }
 
-export interface DatiTipoPrestazione {
-  id_tipo_prestazione: string;
-  tipologia: string;
-  titolo: string;
-  descrizione: string;
+export interface PerformanceTypeData {
+  performance_type_id: string;
+  type: string;
+  title: string;
+  description: string;
 }
 
-// Definizione del tipo per il contesto
+// Definition of the type for the context
 interface AuthContextType {
-  user: User | Struttura | null;
-  login: (userData: User | Struttura) => void;
+  user: User | Structure | null;
+  login: (userData: User | Structure) => void;
   logout: () => void;
 }
 
-// Creazione del contesto con valore di default null
+// Creation of the context with default Null value
 const AuthContext = createContext<AuthContextType | null>(null);
 
-// Hook personalizzato per usare il contesto
+// Personalized hook to use the context
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -145,14 +145,14 @@ export const useAuth = () => {
   return context;
 };
 
-// Provider che avvolge l'intera app per gestire l'autenticazione
+// Providers that wraps the entire app to manage authentication
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | Struttura | null>(() => {
+  const [user, setUser] = useState<User | Structure | null>(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
-  const login = (userData: User | Struttura) => {
+  const login = (userData: User | Structure) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
   };

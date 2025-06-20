@@ -3,23 +3,23 @@ import axios from "axios";
 import {
   useAuth,
   User,
-  Struttura,
-  StrutturaGeocoding,
+  Structure,
+  GeocodingStructure,
 } from "../context/AuthContext";
 import Navbar from "./Navbar";
 import UserDetails from "./userDetail";
 import ServiceOverview from "./ServiceOverview";
 import StructureMaps from "./StructuresMap";
-import Prestazioni from "./Prestazioni";
-import Strutture from "./Strutture";
+import Performance from "./Perfomance";
+import Structures from "./Structures";
 
-// Funzioni di type guard
-function isUser(user: User | Struttura | null): user is User {
-  return (user as User)?.ruolo === "utente";
+// Type guard functions
+function isUser(user: User | Structure | null): user is User {
+  return (user as User)?.role === "user";
 }
 
-function isStruttura(user: User | Struttura | null): user is Struttura {
-  return (user as Struttura)?.ruolo === "struttura";
+function isStructure(user: User | Structure | null): user is Structure {
+  return (user as Structure)?.role === "structure";
 }
 
 const geocodeAddress = async (address: string) => {
@@ -35,16 +35,16 @@ const geocodeAddress = async (address: string) => {
       lng: parseFloat(data[0].lon),
     };
   }
-  throw new Error("Geocoding fallito.");
+  throw new Error("Geocoding failed.");
 };
 
 const Dashboard = () => {
   const { user } = useAuth();
-  const [strutture, setStrutture] = useState<Struttura[]>([]);
+  const [structure, setStructure] = useState<Structure[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const fetchStruttureConGeocode = async () => {
+    const fetchStructureWithGeocode = async () => {
       try {
         const res = await axios.get(
           `${import.meta.env.VITE_API_URL}/get_strutture`,
@@ -55,50 +55,50 @@ const Dashboard = () => {
           }
         );
 
-        const struttureConCoordinate = await Promise.all(
-          res.data.data.map(async (struttura: StrutturaGeocoding) => {
-            const fullAddress = `${struttura.posizione.via} ${struttura.posizione.numero_civico}, ${struttura.posizione.cap} ${struttura.posizione.comune}, ${struttura.posizione.provincia}`;
+        const structureWithCoordinate = await Promise.all(
+          res.data.data.map(async (structure: GeocodingStructure) => {
+            const fullAddress = `${structure.position.street} ${structure.position.civic_number}, ${structure.position.cap} ${structure.position.city}, ${structure.position.province}`;
 
             try {
               const location = await geocodeAddress(fullAddress);
-              return { ...struttura, location };
+              return { ...structure, location };
             } catch (err) {
-              console.warn(`Geocoding fallito per ${fullAddress}`, err);
-              return struttura;
+              console.warn(`Geocoding failed for ${fullAddress}`, err);
+              return structure;
             }
           })
         );
 
-        setStrutture(struttureConCoordinate);
+        setStructure(structureWithCoordinate);
         setIsLoading(true);
       } catch (err) {
-        console.error("Errore nel recupero delle strutture", err);
+        console.error("Error in the recovery of the structures", err);
         setIsLoading(false);
       }
     };
 
     if (user?.token) {
-      fetchStruttureConGeocode();
+      fetchStructureWithGeocode();
     }
   }, [user?.token]);
 
-  const struttureMappate = strutture
+  const mappedStructure = structure
     .filter(
-      (s): s is Struttura & { location: { lat: number; lng: number } } =>
+      (s): s is Structure & { location: { lat: number; lng: number } } =>
         !!s.location
     )
     .map((s, index) => ({
       id: index + 1,
-      name: s.ragione_sociale,
+      name: s.corporate,
       lat: s.location.lat,
       lng: s.location.lng,
     }));
 
   useEffect(() => {
-    if (struttureMappate) {
+    if (mappedStructure) {
       setIsLoading(true);
     }
-  }, [struttureMappate]);
+  }, [mappedStructure]);
 
   const userLocation = user?.location
     ? user.location
@@ -113,10 +113,10 @@ const Dashboard = () => {
     <div className="min-h-screen w-screen flex flex-col">
       <Navbar />
 
-      {isStruttura(user) ? (
-        // Layout per STRUTTURA
+      {isStructure(user) ? (
+        // STRUCTURE LAYOUT
         <div className="flex-1 flex flex-col lg:flex-row lg:overflow-hidden">
-          {/** Colonna sinistra */}
+          {/** Left column */}
           <div className="flex flex-col w-full lg:w-2/3 h-full">
             <div className="flex-1 lg:overflow-auto pt-4 pl-4 pb-2 pr-2">
               <ServiceOverview />
@@ -125,35 +125,35 @@ const Dashboard = () => {
               <UserDetails />
               {isLoading ? (
                 <StructureMaps
-                  structures={struttureMappate}
+                  structures={mappedStructure}
                   userLocation={userLocation}
                 />
               ) : null}
             </div>
           </div>
-          {/** Colonna destra */}
+          {/** Right column */}
           <div className="h-full  w-full lg:w-1/3 pl-2 py-4 pr-4 overflow-auto">
-            {isStruttura(user) ? <Prestazioni /> : null}
+            {isStructure(user) ? <Performance /> : null}
           </div>
         </div>
       ) : isUser(user) ? (
-        // Layout per UTENTE
+        // USER LAYOUT
         <div className="flex-1 flex flex-col lg:flex-row lg:overflow-hidden">
-          {/** Colonna sinistra */}
+          {/** Left column */}
           <div className="flex flex-col w-full lg:w-2/3 h-full">
             <div className="flex-1 lg:overflow-auto pt-4 pl-4 pb-2 pr-2">
               <ServiceOverview />
             </div>
             <div className="flex-1 flex flex-col lg:flex-row justify-between lg:overflow-hidden pl-4 pb-4 pt-2 pr-2 gap-4">
               <UserDetails />
-              {isStruttura(user) ? <Prestazioni /> : <Strutture />}
+              {isStructure(user) ? <Performance /> : <Structures />}
             </div>
           </div>
-          {/** Colonna destra */}
+          {/** Right column */}
           <div className="h-full w-full lg:w-1/3 pl-2 py-4 pr-4 lg:overflow-auto">
             {isLoading ? (
               <StructureMaps
-                structures={struttureMappate}
+                structures={mappedStructure}
                 userLocation={userLocation}
               />
             ) : null}

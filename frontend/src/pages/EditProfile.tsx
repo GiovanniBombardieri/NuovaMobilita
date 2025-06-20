@@ -1,13 +1,13 @@
-import { useAuth, User, Struttura } from "../context/AuthContext";
+import { useAuth, User, Structure } from "../context/AuthContext";
 import { useState } from "react";
 
 // Funzioni di type guard
-function isUser(user: User | Struttura | null): user is User {
-  return (user as User)?.ruolo === "utente";
+function isUser(user: User | Structure | null): user is User {
+  return (user as User)?.role === "user";
 }
 
-function isStruttura(user: User | Struttura | null): user is Struttura {
-  return (user as Struttura)?.ruolo === "struttura";
+function isStructure(user: User | Structure | null): user is Structure {
+  return (user as Structure)?.role === "structure";
 }
 
 const geocodeAddress = async (address: string) => {
@@ -23,48 +23,44 @@ const geocodeAddress = async (address: string) => {
       lng: parseFloat(data[0].lon),
     };
   }
-  throw new Error("Geocoding fallito.");
+  throw new Error("Failed geocoding.");
 };
 
-const ModificaProfilo = () => {
+const EditProfile = () => {
   const { user, login } = useAuth();
 
   const [email, setEmail] = useState(user?.email || "");
 
-  // Utente
+  // User
   const [name, setName] = useState(isUser(user) ? user.name : "");
-  const [cognome, setCognome] = useState(isUser(user) ? user.cognome : "");
-  const [telefono, setTelefono] = useState(
-    isUser(user) ? user.telefono || "" : ""
+  const [surname, setSurname] = useState(isUser(user) ? user.surname : "");
+  const [phone, setPhone] = useState(isUser(user) ? user.phone || "" : "");
+  const [userCity, setUserCity] = useState(isUser(user) ? user.city : "");
+  const [userProvince, setUserProvince] = useState(
+    isUser(user) ? user.province : ""
   );
-  const [comuneUtente, setComuneUtente] = useState(
-    isUser(user) ? user.comune : ""
-  );
-  const [provinciaUtente, setProvinciaUtente] = useState(
-    isUser(user) ? user.provincia : ""
-  );
-  const [capUtente, setCapUtente] = useState(isUser(user) ? user.cap : "");
-  const [viaUtente, setViaUtente] = useState(isUser(user) ? user.via : "");
-  const [numero_civicoUtente, setNumeroCivicoUtente] = useState(
-    isUser(user) ? user.numero_civico : ""
+  const [userCap, setUserCap] = useState(isUser(user) ? user.cap : "");
+  const [userStreet, setUserStreet] = useState(isUser(user) ? user.street : "");
+  const [userCivicNumber, setUserCivicNumber] = useState(
+    isUser(user) ? user.civic_number : ""
   );
 
-  // Struttura
-  const [ragione_sociale, setRagioneSociale] = useState(
-    isStruttura(user) ? user.ragione_sociale : ""
+  // Structure
+  const [corporate, setCorporate] = useState(
+    isStructure(user) ? user.corporate : ""
   );
-  const [telefonoStruttura, setTelefonoStruttura] = useState(
-    isStruttura(user) ? user.telefono || "" : ""
+  const [structurePhone, setStructurePhone] = useState(
+    isStructure(user) ? user.phone || "" : ""
   );
 
-  const [comune, setComune] = useState(isStruttura(user) ? user.comune : "");
-  const [provincia, setProvincia] = useState(
-    isStruttura(user) ? user.provincia : ""
+  const [city, setCity] = useState(isStructure(user) ? user.city : "");
+  const [province, setProvince] = useState(
+    isStructure(user) ? user.province : ""
   );
-  const [cap, setCap] = useState(isStruttura(user) ? user.cap : "");
-  const [via, setVia] = useState(isStruttura(user) ? user.via : "");
-  const [numero_civico, setNumeroCivico] = useState(
-    isStruttura(user) ? user.numero_civico : ""
+  const [cap, setCap] = useState(isStructure(user) ? user.cap : "");
+  const [street, setStreet] = useState(isStructure(user) ? user.street : "");
+  const [civic_number, setCivicNumber] = useState(
+    isStructure(user) ? user.civic_number : ""
   );
 
   const updateProfile = async () => {
@@ -72,23 +68,23 @@ const ModificaProfilo = () => {
       ? {
           email,
           name,
-          cognome,
-          telefono,
-          comuneUtente,
-          provinciaUtente,
-          capUtente,
-          viaUtente,
-          numero_civicoUtente,
+          surname,
+          phone,
+          userCity,
+          userProvince,
+          userCap,
+          userStreet,
+          userCivicNumber,
         }
       : {
-          ragione_sociale,
+          corporate,
           email,
-          telefonoStruttura,
-          comune,
-          provincia,
+          structurePhone,
+          city,
+          province,
           cap,
-          via,
-          numero_civico,
+          street,
+          civic_number,
         };
 
     try {
@@ -106,46 +102,44 @@ const ModificaProfilo = () => {
       );
 
       if (!response.ok)
-        throw new Error(
-          "Errore nel salvataggio dei dati aggiornati del profilo"
-        );
+        throw new Error("Error in saving the updated data of the profile");
 
       const updateUser = await response.json();
 
       (document.getElementById("edit_profile") as HTMLDialogElement)?.close();
 
-      const fullAddress = `${updateUser.via} ${updateUser.numero_civico}, ${updateUser.cap} ${updateUser.comune}, ${updateUser.provincia}`;
+      const fullAddress = `${updateUser.street} ${updateUser.civic_number}, ${updateUser.cap} ${updateUser.city}, ${updateUser.province}`;
       try {
         const location = await geocodeAddress(fullAddress);
 
-        if (updateUser.ruolo === "utente") {
+        if (updateUser.role === "user") {
           login({
             name: updateUser.name,
-            cognome: updateUser.cognome,
-            telefono: updateUser.telefono,
-            ruolo: updateUser.ruolo,
+            surname: updateUser.surname,
+            phone: updateUser.phone,
+            role: updateUser.role,
             email: updateUser.email,
             token: updateUser.access_token,
-            comune: updateUser.comune,
-            provincia: updateUser.provincia,
-            via: updateUser.via,
-            numero_civico: updateUser.numero_civico,
+            city: updateUser.city,
+            province: updateUser.province,
+            street: updateUser.street,
+            civic_number: updateUser.civic_number,
             cap: updateUser.cap,
             location: location,
           });
 
           window.location.reload();
-        } else if (updateUser.ruolo === "struttura") {
+        } else if (updateUser.ruolo === "structure") {
           login({
-            ragione_sociale: updateUser.ragione_sociale,
-            comune: updateUser.comune,
-            provincia: updateUser.provincia,
-            via: updateUser.via,
-            numero_civico: updateUser.numero_civico,
+            corporate: updateUser.corporate,
+            city: updateUser.city,
+            province: updateUser.province,
+            street: updateUser.street,
+            civic_number: updateUser.civic_number,
             cap: updateUser.cap,
-            ruolo: updateUser.ruolo,
+            role: updateUser.role,
             email: updateUser.email,
-            telefono: updateUser.telefono,
+            phone: updateUser.phone,
             token: updateUser.access_token,
             location: location,
           });
@@ -158,34 +152,34 @@ const ModificaProfilo = () => {
           lat: 41.9028,
           lng: 12.4964,
         };
-        if (updateUser.ruolo === "utente") {
+        if (updateUser.ruolo === "user") {
           login({
             name: updateUser.name,
-            cognome: updateUser.cognome,
-            telefono: updateUser.telefono,
-            ruolo: updateUser.ruolo,
+            surname: updateUser.surname,
+            phone: updateUser.phone,
+            role: updateUser.role,
             email: updateUser.email,
             token: updateUser.access_token,
-            comune: updateUser.comune,
-            provincia: updateUser.provincia,
-            via: updateUser.via,
-            numero_civico: updateUser.numero_civico,
+            city: updateUser.city,
+            province: updateUser.province,
+            street: updateUser.street,
+            civic_number: updateUser.civic_number,
             cap: updateUser.cap,
             location: defaultLocation,
           });
 
           window.location.reload();
-        } else if (updateUser.ruolo === "struttura") {
+        } else if (updateUser.ruolo === "structure") {
           login({
-            ragione_sociale: updateUser.ragione_sociale,
-            comune: updateUser.comune,
-            provincia: updateUser.provincia,
-            via: updateUser.via,
-            numero_civico: updateUser.numero_civico,
+            corporate: updateUser.corporate,
+            city: updateUser.city,
+            province: updateUser.province,
+            street: updateUser.street,
+            civic_number: updateUser.civic_number,
             cap: updateUser.cap,
-            ruolo: updateUser.ruolo,
+            role: updateUser.role,
             email: updateUser.email,
-            telefono: updateUser.telefono,
+            phone: updateUser.phone,
             token: updateUser.access_token,
             location: defaultLocation,
           });
@@ -194,21 +188,21 @@ const ModificaProfilo = () => {
         }
       }
     } catch (err) {
-      console.error("Errore nel salvataggio del profilo", err);
+      console.error("Error in saving the profile", err);
     }
   };
 
   return (
     <dialog id="edit_profile" className="modal modal-bottom sm:modal-middle">
       <div className="modal-box">
-        <h3 className="font-bold text-lg mb-4">Modifica profilo</h3>
+        <h3 className="font-bold text-lg mb-4">Edit Profile</h3>
         <form
           onSubmit={(e) => {
             e.preventDefault();
             updateProfile();
           }}
         >
-          {/** UTENTE */}
+          {/** USER */}
           {isUser(user) && (
             <>
               <div>
@@ -223,7 +217,7 @@ const ModificaProfilo = () => {
                 </div>
 
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-2/5">Nome</label>
+                  <label className="label w-2/5">Name</label>
                   <input
                     type="text"
                     className="input input-bordered w-3/5"
@@ -233,42 +227,42 @@ const ModificaProfilo = () => {
                 </div>
 
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-2/5">Cognome</label>
+                  <label className="label w-2/5">Surname</label>
                   <input
                     type="text"
                     className="input input-bordered w-3/5"
-                    value={cognome}
-                    onChange={(e) => setCognome(e.target.value)}
+                    value={surname}
+                    onChange={(e) => setSurname(e.target.value)}
                   />
                 </div>
 
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-2/5">Telefono</label>
+                  <label className="label w-2/5">Phone</label>
                   <input
                     type="text"
                     className="input input-bordered w-3/5"
-                    value={telefono}
-                    onChange={(e) => setTelefono(e.target.value)}
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
 
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-2/5">Comune</label>
+                  <label className="label w-2/5">City</label>
                   <input
                     type="text"
                     className="input input-bordered w-3/5"
-                    value={comuneUtente}
-                    onChange={(e) => setComuneUtente(e.target.value)}
+                    value={userCity}
+                    onChange={(e) => setUserCity(e.target.value)}
                   />
                 </div>
 
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-2/5">Provincia (sigla)</label>
+                  <label className="label w-2/5">Province (acronym)</label>
                   <input
                     type="text"
                     className="input input-bordered w-3/5"
-                    value={provinciaUtente}
-                    onChange={(e) => setProvinciaUtente(e.target.value)}
+                    value={userProvince}
+                    onChange={(e) => setUserProvince(e.target.value)}
                     maxLength={2}
                   />
                 </div>
@@ -278,46 +272,46 @@ const ModificaProfilo = () => {
                   <input
                     type="text"
                     className="input input-bordered w-3/5"
-                    value={capUtente}
-                    onChange={(e) => setCapUtente(e.target.value)}
+                    value={userCap}
+                    onChange={(e) => setUserCap(e.target.value)}
                     maxLength={5}
                   />
                 </div>
 
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-2/5">Via</label>
+                  <label className="label w-2/5">Street</label>
                   <input
                     type="text"
                     className="input input-bordered w-3/5"
-                    value={viaUtente}
-                    onChange={(e) => setViaUtente(e.target.value)}
+                    value={userStreet}
+                    onChange={(e) => setUserStreet(e.target.value)}
                   />
                 </div>
 
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-2/5">Numero civico</label>
+                  <label className="label w-2/5">Civic Number</label>
                   <input
                     type="text"
                     className="input input-bordered w-3/5"
-                    value={numero_civicoUtente}
-                    onChange={(e) => setNumeroCivicoUtente(e.target.value)}
+                    value={userCivicNumber}
+                    onChange={(e) => setUserCivicNumber(e.target.value)}
                   />
                 </div>
               </div>
             </>
           )}
 
-          {/** STRUTTURA */}
-          {isStruttura(user) && (
+          {/** STRUCTURE */}
+          {isStructure(user) && (
             <>
               <div>
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-2/5">Ragione Sociale</label>
+                  <label className="label w-2/5">Corporate</label>
                   <input
                     type="text"
                     className="input input-bordered w-3/5"
-                    value={ragione_sociale}
-                    onChange={(e) => setRagioneSociale(e.target.value)}
+                    value={corporate}
+                    onChange={(e) => setCorporate(e.target.value)}
                   />
                 </div>
 
@@ -332,32 +326,32 @@ const ModificaProfilo = () => {
                 </div>
 
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-2/5">Telefono</label>
+                  <label className="label w-2/5">Phone</label>
                   <input
                     type="text"
                     className="input input-bordered w-3/5"
-                    value={telefonoStruttura}
-                    onChange={(e) => setTelefonoStruttura(e.target.value)}
+                    value={structurePhone}
+                    onChange={(e) => setStructurePhone(e.target.value)}
                   />
                 </div>
 
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-2/5">Comune</label>
+                  <label className="label w-2/5">City</label>
                   <input
                     type="text"
                     className="input input-bordered w-3/5"
-                    value={comune}
-                    onChange={(e) => setComune(e.target.value)}
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
                   />
                 </div>
 
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-2/5">Provincia</label>
+                  <label className="label w-2/5">Province</label>
                   <input
                     type="text"
                     className="input input-bordered w-3/5"
-                    value={provincia}
-                    onChange={(e) => setProvincia(e.target.value)}
+                    value={province}
+                    onChange={(e) => setProvince(e.target.value)}
                   />
                 </div>
 
@@ -372,22 +366,22 @@ const ModificaProfilo = () => {
                 </div>
 
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-2/5">Via</label>
+                  <label className="label w-2/5">Street</label>
                   <input
                     type="text"
                     className="input input-bordered w-3/5"
-                    value={via}
-                    onChange={(e) => setVia(e.target.value)}
+                    value={street}
+                    onChange={(e) => setStreet(e.target.value)}
                   />
                 </div>
 
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-2/5">Numero civico</label>
+                  <label className="label w-2/5">Civic Number</label>
                   <input
                     type="text"
                     className="input input-bordered w-3/5"
-                    value={numero_civico}
-                    onChange={(e) => setNumeroCivico(e.target.value)}
+                    value={civic_number}
+                    onChange={(e) => setCivicNumber(e.target.value)}
                   />
                 </div>
               </div>
@@ -396,7 +390,7 @@ const ModificaProfilo = () => {
 
           <div className="modal-action">
             <button type="submit" className="btn btn-primary mr-2">
-              Salva
+              Save
             </button>
             <button
               className="btn"
@@ -415,4 +409,4 @@ const ModificaProfilo = () => {
   );
 };
 
-export default ModificaProfilo;
+export default EditProfile;
