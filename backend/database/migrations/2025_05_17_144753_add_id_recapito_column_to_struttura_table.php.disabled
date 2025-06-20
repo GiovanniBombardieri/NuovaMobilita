@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('struttura', function (Blueprint $table) {
-            $table->uuid('id_recapito');
+            $table->uuid('contact_id');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('struttura', function (Blueprint $table) {
-            $table->dropColumn('id_recapito');
+            $table->dropColumn('contact_id');
         });
     }
 };

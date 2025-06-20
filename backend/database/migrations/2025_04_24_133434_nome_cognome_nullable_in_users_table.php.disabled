@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('name')->nullable()->change();
-            $table->string('cognome')->nullable()->change();
+            $table->string('surname')->nullable()->change();
         });
     }
 
@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('name')->nullable(false)->change();
-            $table->string('cognome')->nullable(false)->change();
+            $table->string('surname')->nullable(false)->change();
         });
     }
 };

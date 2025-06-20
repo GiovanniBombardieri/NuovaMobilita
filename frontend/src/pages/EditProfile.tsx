@@ -129,7 +129,7 @@ const EditProfile = () => {
           });
 
           window.location.reload();
-        } else if (updateUser.ruolo === "structure") {
+        } else if (updateUser.role === "structure") {
           login({
             corporate: updateUser.corporate,
             city: updateUser.city,
@@ -152,7 +152,7 @@ const EditProfile = () => {
           lat: 41.9028,
           lng: 12.4964,
         };
-        if (updateUser.ruolo === "user") {
+        if (updateUser.role === "user") {
           login({
             name: updateUser.name,
             surname: updateUser.surname,
@@ -169,7 +169,7 @@ const EditProfile = () => {
           });
 
           window.location.reload();
-        } else if (updateUser.ruolo === "structure") {
+        } else if (updateUser.role === "structure") {
           login({
             corporate: updateUser.corporate,
             city: updateUser.city,

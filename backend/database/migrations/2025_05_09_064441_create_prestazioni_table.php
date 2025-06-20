@@ -12,19 +12,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('prestazioni', function (Blueprint $table) {
-            $table->string('id_prestazione', 36)->primary();
-            $table->string('id_tipo_prestazione', 36);
-            $table->string('id_struttura', 36);
-            $table->string('id_valore', 36);
+        Schema::create('performance', function (Blueprint $table) {
+            $table->string('performance_id', 36)->primary();
+            $table->string('performance_type_id', 36);
+            $table->string('structure_id', 36);
+            $table->string('value_id', 36);
             $table->longText('descrizione_personalizzata')->nullable();
-            $table->dateTime('time_modifica')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
-            $table->tinyInteger('record_attivo')->default(1);
+            $table->dateTime('change_time')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
+            $table->tinyInteger('active_record')->default(1);
 
             // Foreign keys
-            // $table->foreign('id_tipo_prestazione')->references('id_tipo_prestazione')->on('tipo_prestazione')->onDelete('cascade');
-            // $table->foreign('id_struttura')->references('id_struttura')->on('struttura')->onDelete('cascade');
-            // $table->foreign('id_valore')->references('id_valore')->on('valore')->onDelete('cascade');
+            // $table->foreign('performance_type_id')->references('performance_type_id')->on('performance_type')->onDelete('cascade');
+            // $table->foreign('structure_id')->references('structure_id')->on('struttura')->onDelete('cascade');
+            // $table->foreign('value_id')->references('value_id')->on('value')->onDelete('cascade');
         });
     }
 
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('prestazioni');
+        Schema::dropIfExists('performance');
     }
 };

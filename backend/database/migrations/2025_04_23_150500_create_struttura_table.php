@@ -13,20 +13,20 @@ return new class extends Migration
   public function up(): void
   {
     Schema::create('struttura', function (Blueprint $table) {
-      $table->string('id_struttura', 36)->primary();
+      $table->string('structure_id', 36)->primary();
 
-      $table->string('id_posizione', 36);
-      $table->string('id_sito_web', 36)->nullable();
-      $table->string('id_recapito', 36)->nullable();
+      $table->string('position_id', 36);
+      $table->string('web_site_id', 36)->nullable();
+      $table->string('contact_id', 36)->nullable();
 
-      $table->text('ragione_sociale');
-      $table->dateTime('time_modifica')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
-      $table->tinyInteger('record_attivo')->default(1);
+      $table->text('corporate');
+      $table->dateTime('change_time')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
+      $table->tinyInteger('active_record')->default(1);
 
       // Foreign keys
-      // $table->foreign('id_posizione')->references('id_posizione')->on('posizione')->onDelete('cascade');
-      // $table->foreign('id_sito_web')->references('id_sito_web')->on('sito_web')->onDelete('cascade');
-      // $table->foreign('id_recapito')->references('id_recapito')->on('recapito')->onDelete('cascade');
+      // $table->foreign('position_id')->references('position_id')->on('position')->onDelete('cascade');
+      // $table->foreign('web_site_id')->references('web_site_id')->on('web_site')->onDelete('cascade');
+      // $table->foreign('contact_id')->references('contact_id')->on('contact')->onDelete('cascade');
     });
   }
 

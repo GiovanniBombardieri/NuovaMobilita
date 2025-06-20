@@ -14,20 +14,20 @@ Route::middleware('auth:sanctum')->group(function () {
 	Route::put('/update-profile', [AuthController::class, 'updateProfile']);
 
 	// Prestazioni
-	Route::get('/get_prestazioni/{id_prestazione}', [PrestazioneController::class, 'SinglePerformance']);
+	Route::get('/get_prestazioni/{performance_id}', [PrestazioneController::class, 'SinglePerformance']);
 	Route::get('/get_prestazioni', [PrestazioneController::class, 'getPrestazioni']);
-	Route::put('/update_prestazione/{id_prestazione}', [PrestazioneController::class, 'updatePrestazione']);
+	Route::put('/update_prestazione/{performance_id}', [PrestazioneController::class, 'updatePrestazione']);
 	Route::post('/create_prestazione', [PrestazioneController::class, 'createPrestazione']);
-	Route::put('/delete_prestazione/{id_prestazione}', [PrestazioneController::class, 'deletePrestazione']);
+	Route::put('/delete_prestazione/{performance_id}', [PrestazioneController::class, 'deletePrestazione']);
 	Route::get('/get_tipo_prestazioni', [PrestazioneController::class, 'getTipoPrestazioni']);
-	Route::get('/get_tipo_prestazione_singola/{id_tipo_prestazione}', [PrestazioneController::class, 'getTipoPrestazioneSingola']);
+	Route::get('/get_tipo_prestazione_singola/{performance_type_id}', [PrestazioneController::class, 'getTipoPrestazioneSingola']);
 
 	// Strutture
 	Route::get('/get_strutture_paginate', [StrutturaController::class, 'getStrutturePaginate']);
 	Route::get('/get_strutture', [StrutturaController::class, 'getStrutture']);
-	Route::get('/get_prestazioni_azienda/{id_struttura}', [StrutturaController::class, 'getPrestazioniStruttura']);
-	Route::get('/get_dettaglio_struttura/{id_struttura}', [StrutturaController::class, 'getDettaglioStruttura']);
-	Route::post('/add_struttura_preferita/{id_struttura}', [StrutturaController::class, 'addStrutturaPreferita']);
+	Route::get('/get_prestazioni_azienda/{structure_id}', [StrutturaController::class, 'getPrestazioniStruttura']);
+	Route::get('/get_dettaglio_struttura/{structure_id}', [StrutturaController::class, 'getDettaglioStruttura']);
+	Route::post('/add_struttura_preferita/{structure_id}', [StrutturaController::class, 'addStrutturaPreferita']);
 	Route::get('/get_strutture_preferite', [StrutturaController::class, 'getStrutturePreferite']);
-	Route::put('/remove_struttura_preferita/{id_struttura}', [StrutturaController::class, 'removeStrutturaPreferita']);
+	Route::put('/remove_struttura_preferita/{structure_id}', [StrutturaController::class, 'removeStrutturaPreferita']);
 });

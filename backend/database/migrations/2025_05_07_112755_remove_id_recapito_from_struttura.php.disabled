@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('struttura', function (Blueprint $table) {
-            $table->dropForeign(['id_recapito']); // solo se esiste
-            $table->dropColumn('id_recapito');
+            $table->dropForeign(['contact_id']); // solo se esiste
+            $table->dropColumn('contact_id');
         });
     }
 
@@ -23,10 +23,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('struttura', function (Blueprint $table) {
-            $table->string('id_recapito', 36)->nullable();
-            $table->foreign('id_recapito')
-                ->references('id_recapito')
-                ->on('recapito')
+            $table->string('contact_id', 36)->nullable();
+            $table->foreign('contact_id')
+                ->references('contact_id')
+                ->on('contact')
                 ->onDelete('set null');
         });
     }

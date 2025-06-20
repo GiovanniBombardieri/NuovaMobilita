@@ -12,18 +12,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posizione', function (Blueprint $table) {
-            $table->string('id_posizione', 36)->primary();
-            $table->string('comune', 100)->nullable();
-            $table->char('provincia', 2)->nullable();
-            $table->string('via', 100)->nullable();
-            $table->string('numero_civico', 10)->nullable();
+        Schema::create('position', function (Blueprint $table) {
+            $table->string('position_id', 36)->primary();
+            $table->string('city', 100)->nullable();
+            $table->char('province', 2)->nullable();
+            $table->string('street', 100)->nullable();
+            $table->string('civic_number', 10)->nullable();
             $table->char('cap', 5)->nullable();
-            $table->dateTime('time_modifica')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
-            $table->tinyInteger('record_attivo')->default(1);
+            $table->dateTime('change_time')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
+            $table->tinyInteger('active_record')->default(1);
 
-            // $table->foreign('id_struttura')->references('id_struttura')->on('struttura')->onDelete('cascade');
-            // $table->foreign('id_utente')->references('id')->on('users')->onDelete('cascade');
+            // $table->foreign('structure_id')->references('structure_id')->on('struttura')->onDelete('cascade');
+            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posizione');
+        Schema::dropIfExists('position');
     }
 };

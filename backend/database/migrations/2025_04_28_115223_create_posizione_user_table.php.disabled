@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('posizione_user', function (Blueprint $table) {
-            $table->string('id_posizione', 36)->primary();
-            $table->string('comune', 100)->nullable();
-            $table->char('provincia', 2)->nullable();
-            $table->string('via', 100)->nullable();
-            $table->string('numero_civico', 10)->nullable();
+            $table->string('position_id', 36)->primary();
+            $table->string('city', 100)->nullable();
+            $table->char('province', 2)->nullable();
+            $table->string('street', 100)->nullable();
+            $table->string('civic_number', 10)->nullable();
             $table->char('cap', 5)->nullable();
-            $table->dateTime('time_modifica')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
-            $table->tinyInteger('record_attivo')->default(0);
+            $table->dateTime('change_time')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
+            $table->tinyInteger('active_record')->default(0);
         });
     }
 

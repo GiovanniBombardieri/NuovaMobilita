@@ -17,38 +17,38 @@ class ValoreSeeder extends Seeder
     {
         $now = Carbon::now();
 
-        DB::table('valore')->insert(array(
+        DB::table('value')->insert(array(
             array(
-                'id_valore' => Str::uuid(),
-                'valore_numerico' => '50',
-                'inizio_validita' => Carbon::create(2025, 05, 11, 0, 0, 0),
-                'fine_validita' => Carbon::create(2099, 12, 31, 23, 59, 59),
-                'time_modifica' => $now,
-                'record_attivo' => 1,
+                'value_id' => Str::uuid(),
+                'numerical_value' => '50',
+                'validity_start' => Carbon::create(2025, 05, 11, 0, 0, 0),
+                'validity_end' => Carbon::create(2099, 12, 31, 23, 59, 59),
+                'change_time' => $now,
+                'active_record' => 1,
             ),
             array(
-                'id_valore' => Str::uuid(),
-                'valore_numerico' => '60',
-                'inizio_validita' => Carbon::create(2025, 05, 11, 0, 0, 0),
-                'fine_validita' => Carbon::create(2099, 12, 31, 23, 59, 59),
-                'time_modifica' => $now,
-                'record_attivo' => 1,
+                'value_id' => Str::uuid(),
+                'numerical_value' => '60',
+                'validity_start' => Carbon::create(2025, 05, 11, 0, 0, 0),
+                'validity_end' => Carbon::create(2099, 12, 31, 23, 59, 59),
+                'change_time' => $now,
+                'active_record' => 1,
             ),
             array(
-                'id_valore' => Str::uuid(),
-                'valore_numerico' => '55',
-                'inizio_validita' => Carbon::create(2025, 05, 11, 0, 0, 0),
-                'fine_validita' => Carbon::create(2099, 12, 31, 23, 59, 59),
-                'time_modifica' => $now,
-                'record_attivo' => 1,
+                'value_id' => Str::uuid(),
+                'numerical_value' => '55',
+                'validity_start' => Carbon::create(2025, 05, 11, 0, 0, 0),
+                'validity_end' => Carbon::create(2099, 12, 31, 23, 59, 59),
+                'change_time' => $now,
+                'active_record' => 1,
             ),
             array(
-                'id_valore' => Str::uuid(),
-                'valore_numerico' => '70',
-                'inizio_validita' => Carbon::create(2025, 05, 11, 0, 0, 0),
-                'fine_validita' => Carbon::create(2099, 12, 31, 23, 59, 59),
-                'time_modifica' => $now,
-                'record_attivo' => 1,
+                'value_id' => Str::uuid(),
+                'numerical_value' => '70',
+                'validity_start' => Carbon::create(2025, 05, 11, 0, 0, 0),
+                'validity_end' => Carbon::create(2099, 12, 31, 23, 59, 59),
+                'change_time' => $now,
+                'active_record' => 1,
             ),
         ));
     }

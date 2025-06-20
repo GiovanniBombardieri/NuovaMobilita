@@ -7,15 +7,15 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::table('tipo_prestazione', function (Blueprint $table) {
-            $table->text('descrizione')->change();
+        Schema::table('performance_type', function (Blueprint $table) {
+            $table->text('description')->change();
         });
     }
 
     public function down(): void
     {
-        Schema::table('tipo_prestazione', function (Blueprint $table) {
-            $table->string('descrizione', 255)->change();
+        Schema::table('performance_type', function (Blueprint $table) {
+            $table->string('description', 255)->change();
         });
     }
 };

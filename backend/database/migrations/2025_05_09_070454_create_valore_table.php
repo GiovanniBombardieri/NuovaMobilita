@@ -12,13 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('valore', function (Blueprint $table) {
-            $table->string('id_valore', 36)->primary();
-            $table->decimal('valore_numerico', total: 10, places: 2);
-            $table->dateTime('inizio_validita');
-            $table->dateTime('fine_validita');
-            $table->dateTime('time_modifica')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
-            $table->tinyInteger('record_attivo')->default(1);
+        Schema::create('value', function (Blueprint $table) {
+            $table->string('value_id', 36)->primary();
+            $table->decimal('numerical_value', total: 10, places: 2);
+            $table->dateTime('validity_start');
+            $table->dateTime('validity_end');
+            $table->dateTime('change_time')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
+            $table->tinyInteger('active_record')->default(1);
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('valore');
+        Schema::dropIfExists('value');
     }
 };

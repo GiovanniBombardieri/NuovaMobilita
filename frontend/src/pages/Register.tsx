@@ -38,13 +38,13 @@ const Register = () => {
       } else if (role === "structure") {
         bodyData = {
           role,
-          //ragione_sociale: ragioneSociale,
+          //corporate: ragioneSociale,
           corporate,
           city,
           province,
           cap,
           street,
-          //numero_civico: numeroCivico,
+          //civic_number: numeroCivico,
           civicNumber,
           email,
           password,
@@ -66,7 +66,7 @@ const Register = () => {
 
       const data = await response.json();
 
-      // Differenzio i dati di login in base al ruolo selezionato
+      // Differenzio i dati di login in base al role selezionato
       if (role === "user") {
         login({
           name: data.user.name,

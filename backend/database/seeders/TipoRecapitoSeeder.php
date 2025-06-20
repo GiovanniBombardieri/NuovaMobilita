@@ -16,18 +16,18 @@ class TipoRecapitoSeeder extends Seeder
     {
         $now = Carbon::now();
 
-        DB::table('tipo_recapito')->insert([
+        DB::table('contact_type')->insert([
             [
-                'id_tipo_recapito' => '0000004a-0000-0000-0000-000000000001',
-                'descrizione' => 'email',
-                'time_modifica' => $now,
-                'record_attivo' => 1,
+                'contact_type_id' => '0000004a-0000-0000-0000-000000000001',
+                'description' => 'email',
+                'change_time' => $now,
+                'active_record' => 1,
             ],
             [
-                'id_tipo_recapito' => '0000004e-0000-0000-0000-000000000002',
-                'descrizione' => 'telefono',
-                'time_modifica' => $now,
-                'record_attivo' => 1,
+                'contact_type_id' => '0000004e-0000-0000-0000-000000000002',
+                'description' => 'phone',
+                'change_time' => $now,
+                'active_record' => 1,
             ],
         ]);
     }

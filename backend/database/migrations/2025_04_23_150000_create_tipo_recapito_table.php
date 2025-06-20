@@ -12,11 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tipo_recapito', function (Blueprint $table) {
-            $table->string('id_tipo_recapito', 36)->primary();
-            $table->string('descrizione');
-            $table->dateTime('time_modifica')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
-            $table->tinyInteger('record_attivo')->default(1);
+        Schema::create('contact_type', function (Blueprint $table) {
+            $table->string('contact_type_id', 36)->primary();
+            $table->string('description');
+            $table->dateTime('change_time')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
+            $table->tinyInteger('active_record')->default(1);
         });
     }
 
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tipo_recapito');
+        Schema::dropIfExists('contact_type');
     }
 };

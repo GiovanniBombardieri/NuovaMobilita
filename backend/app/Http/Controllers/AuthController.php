@@ -17,7 +17,7 @@ class AuthController extends Controller
 {
 	public function register(Request $request)
 	{
-		if ($request->ruolo === 'structure') {
+		if ($request->role === 'structure') {
 			return $this->registerStruttura($request);
 		}
 

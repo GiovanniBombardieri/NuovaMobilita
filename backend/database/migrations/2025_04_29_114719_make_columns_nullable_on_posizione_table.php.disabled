@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('posizione', function (Blueprint $table) {
-            $table->string('comune', 100)->nullable()->change();
-            $table->char('provincia', 2)->nullable()->change();
-            $table->string('via', 100)->nullable()->change();
-            $table->string('numero_civico', 10)->nullable()->change();
+        Schema::table('position', function (Blueprint $table) {
+            $table->string('city', 100)->nullable()->change();
+            $table->char('province', 2)->nullable()->change();
+            $table->string('street', 100)->nullable()->change();
+            $table->string('civic_number', 10)->nullable()->change();
             $table->char('cap', 5)->nullable()->change();
         });
     }
@@ -25,11 +25,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('posizione', function (Blueprint $table) {
-            $table->string('comune', 100)->nullable(false)->change();
-            $table->char('provincia', 2)->nullable(false)->change();
-            $table->string('via', 100)->nullable(false)->change();
-            $table->string('numero_civico', 10)->nullable(false)->change();
+        Schema::table('position', function (Blueprint $table) {
+            $table->string('city', 100)->nullable(false)->change();
+            $table->char('province', 2)->nullable(false)->change();
+            $table->string('street', 100)->nullable(false)->change();
+            $table->string('civic_number', 10)->nullable(false)->change();
             $table->char('cap', 5)->nullable(false)->change();
         });
     }

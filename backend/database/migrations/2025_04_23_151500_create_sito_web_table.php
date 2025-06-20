@@ -12,11 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sito_web', function (Blueprint $table) {
-            $table->string('id_sito_web', 36)->primary();
+        Schema::create('web_site', function (Blueprint $table) {
+            $table->string('web_site_id', 36)->primary();
             $table->string('url');
-            $table->dateTime('time_modifica')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
-            $table->tinyInteger('record_attivo')->default(1);
+            $table->dateTime('change_time')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
+            $table->tinyInteger('active_record')->default(1);
         });
     }
 
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sito_web');
+        Schema::dropIfExists('web_site');
     }
 };

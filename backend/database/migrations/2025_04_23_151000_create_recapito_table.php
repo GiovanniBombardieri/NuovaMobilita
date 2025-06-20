@@ -12,18 +12,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('recapito', function (Blueprint $table) {
-            $table->string('id_recapito', 36)->primary();
-            $table->string('id_struttura', 36);
-            $table->string('id_tipo_recapito', 36);
-            $table->char('telefono')->nullable();
+        Schema::create('contact', function (Blueprint $table) {
+            $table->string('contact_id', 36)->primary();
+            $table->string('structure_id', 36);
+            $table->string('contact_type_id', 36);
+            $table->char('phone')->nullable();
             $table->string('mail')->nullable();
-            $table->dateTime('time_modifica')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
-            $table->tinyInteger('record_attivo')->default(1);
+            $table->dateTime('change_time')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
+            $table->tinyInteger('active_record')->default(1);
 
             // Foreign keys
-            $table->foreign('id_tipo_recapito')->references('id_tipo_recapito')->on('tipo_recapito')->onDelete('cascade');
-            $table->foreign('id_struttura')->references('id_struttura')->on('struttura')->onDelete('cascade');
+            $table->foreign('contact_type_id')->references('contact_type_id')->on('contact_type')->onDelete('cascade');
+            $table->foreign('structure_id')->references('structure_id')->on('struttura')->onDelete('cascade');
         });
     }
 
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('recapito');
+        Schema::dropIfExists('contact');
     }
 };

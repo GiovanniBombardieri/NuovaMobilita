@@ -29,13 +29,13 @@ const FavoriteStructures = () => {
       });
   }, [user?.token]);
 
-  const removePreferredStructure = async ($id_struttura: string) => {
+  const removePreferredStructure = async ($structure_id: string) => {
     try {
       await axios.put(
         `${
           import.meta.env.VITE_API_URL
-        }/remove_struttura_preferita/${$id_struttura}`,
-        { $id_struttura },
+        }/remove_struttura_preferita/${$structure_id}`,
+        { $structure_id },
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -85,7 +85,7 @@ const FavoriteStructures = () => {
             <input
               type="search"
               required
-              placeholder="Cerca per titolo"
+              placeholder="Cerca per title"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -180,7 +180,7 @@ const FavoriteStructures = () => {
             onClick={() =>
               (
                 document.getElementById(
-                  "strutture_preferite"
+                  "preferred_structures"
                 ) as HTMLDialogElement
               )?.close()
             }

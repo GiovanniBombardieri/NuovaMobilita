@@ -56,7 +56,7 @@ const Login = () => {
       }
 
       // Differences Login data based on the selected role
-      if (data.user.ruolo === "user") {
+      if (data.user.role === "user") {
         const fullAddress = `${data.user.user_position.street} ${data.user.user_position.civic_number}, ${data.user.user_position.cap} ${data.user.user_position.city}, ${data.user.user_position.province}`;
         try {
           const location = await geocodeAddress(fullAddress);
