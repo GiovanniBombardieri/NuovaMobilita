@@ -26,7 +26,7 @@ class PrestazioneController extends Controller
         return response()->json($perfomances);
     }
 
-    public function getPrestazioniSingola(Request $request, $perfomance_id)
+    public function SinglePerformance(Request $request, $perfomance_id)
     {
         $user = $request->user();
         $structure = $user->structure;
