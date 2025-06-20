@@ -10,9 +10,9 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class PrestazioneController extends Controller
+class PerformanceController extends Controller
 {
-    public function getPrestazioni(Request $request)
+    public function getPerformance(Request $request)
     {
         $user = $request->user();
         $structure = $user->structure;
@@ -45,7 +45,7 @@ class PrestazioneController extends Controller
         return response()->json($perfomance);
     }
 
-    public function updatePrestazione(Request $request, $perfomance_id)
+    public function updatePerformance(Request $request, $perfomance_id)
     {
         $perfomance = Performance::findOrFail($perfomance_id);
         $perfomance->personalized_description = $request->input('description');
@@ -63,7 +63,7 @@ class PrestazioneController extends Controller
         return response()->json(['message' => 'Successful updated performance']);
     }
 
-    public function createPrestazione(Request $request)
+    public function createPerformance(Request $request)
     {
         $user = $request->user();
         $structure = $user?->structure;
@@ -203,7 +203,7 @@ class PrestazioneController extends Controller
         }
     }
 
-    public function deletePrestazione($perfomance_id)
+    public function deletePerformance($perfomance_id)
     {
         $perfomance = Performance::findOrFail($perfomance_id);
         $perfomance->active_record = 0;
@@ -212,13 +212,13 @@ class PrestazioneController extends Controller
         return response()->json(['message' => 'Performance successfully eliminated'], 201);
     }
 
-    public function getTipoPrestazioni(Request $request)
+    public function getPerformanceType (Request $request)
     {
         $performance_type = PerformanceType::where('active_record', 1)->paginate(6);
         return response()->json($performance_type);
     }
 
-    public function getTipoPrestazioneSingola($performance_type_id)
+    public function getSinglePerformanceType ($performance_type_id)
     {
         $performance_type = PerformanceType::where('performance_type_id', $performance_type_id)->first();
         return response()->json($performance_type);

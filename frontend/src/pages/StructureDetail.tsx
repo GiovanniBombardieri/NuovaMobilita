@@ -47,7 +47,7 @@ const StructureDetails = ({
         .get(
           `${
             import.meta.env.VITE_API_URL
-          }/get_prestazioni_azienda/${structure_id}`,
+          }/structure_performances/${structure_id}`,
           {
             headers: {
               Authorization: `Bearer ${user?.token}`,
@@ -72,7 +72,7 @@ const StructureDetails = ({
         .get(
           `${
             import.meta.env.VITE_API_URL
-          }/get_dettaglio_struttura/${structure_id}`,
+          }/structure_detail/${structure_id}`,
           {
             headers: {
               Authorization: `Bearer ${user?.token}`,

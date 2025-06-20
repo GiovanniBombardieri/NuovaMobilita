@@ -16,9 +16,9 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class StrutturaController extends Controller
+class StructureController extends Controller
 {
-    public function getStrutturePaginate(Request $request)
+    public function getPaginatedStructures (Request $request)
     {
         $structures = User::whereNotNull('structure_id')
             ->with(['structure.position'])
@@ -27,7 +27,7 @@ class StrutturaController extends Controller
         return response()->json($structures);
     }
 
-    public function getStrutture(Request $request)
+    public function getStructures (Request $request)
     {
         $structures = Structure::where('active_record', 1)
             ->with('position')
@@ -35,7 +35,7 @@ class StrutturaController extends Controller
         return response()->json(['data' => $structures]);
     }
 
-    public function getPrestazioniStruttura($structure_id)
+    public function getStructurePerformances ($structure_id)
     {
         $structure = Structure::with('performance.performanceType', 'performance.value')->find($structure_id);
 
@@ -49,7 +49,7 @@ class StrutturaController extends Controller
         ]);
     }
 
-    public function getDettaglioStruttura($structure_id)
+    public function getStructureDetail ($structure_id)
     {
         $structure = Structure::with(['contact', 'position'])->find($structure_id);
 
@@ -78,7 +78,7 @@ class StrutturaController extends Controller
         ]);
     }
 
-    public function addStrutturaPreferita(Request $request, $structure_id)
+    public function addPreferredStructure (Request $request, $structure_id)
     {
         $user = $request->user();
         $user_id = $user->id;
@@ -104,7 +104,7 @@ class StrutturaController extends Controller
         }
     }
 
-    public function getStrutturePreferite(Request $request)
+    public function getPreferredStructures (Request $request)
     {
         $user = $request->user();
         $user_id = $user->id;
@@ -144,7 +144,7 @@ class StrutturaController extends Controller
         ]);
     }
 
-    public function removeStrutturaPreferita(Request $request, $structure_id)
+    public function removePreferredStructure (Request $request, $structure_id)
     {
         $user = $request->user();
         $user_id = $user->id;

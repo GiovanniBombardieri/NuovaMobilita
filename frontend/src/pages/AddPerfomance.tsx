@@ -15,7 +15,7 @@ const AddPerformance = () => {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/create_prestazione`,
+        `${import.meta.env.VITE_API_URL}/performance`,
         { title, type, price, description },
         {
           headers: {

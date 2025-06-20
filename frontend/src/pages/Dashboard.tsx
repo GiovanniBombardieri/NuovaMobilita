@@ -47,7 +47,7 @@ const Dashboard = () => {
     const fetchStructureWithGeocode = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/get_strutture`,
+          `${import.meta.env.VITE_API_URL}/structures`,
           {
             headers: {
               Authorization: `Bearer ${user?.token}`,

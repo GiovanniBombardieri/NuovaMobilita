@@ -22,7 +22,7 @@ const Structures = () => {
       .get(
         `${
           import.meta.env.VITE_API_URL
-        }/get_strutture_paginate?page=${currentPage}`,
+        }/paginated_structures?page=${currentPage}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -43,7 +43,7 @@ const Structures = () => {
       await axios.post(
         `${
           import.meta.env.VITE_API_URL
-        }/add_struttura_preferita/${structure_id}`,
+        }/preferred_structure/${structure_id}`,
         { structure_id },
         {
           headers: {

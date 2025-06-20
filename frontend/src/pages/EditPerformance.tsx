@@ -62,7 +62,7 @@ const EditPerformance = ({
 
     axios
       .get(
-        `${import.meta.env.VITE_API_URL}/get_prestazioni/${performance_id}`,
+        `${import.meta.env.VITE_API_URL}/performance/${performance_id}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -82,7 +82,7 @@ const EditPerformance = ({
 
     try {
       await axios.put(
-        `${import.meta.env.VITE_API_URL}/update_prestazione/${performance_id}`,
+        `${import.meta.env.VITE_API_URL}/performance/${performance_id}`,
         {
           title,
           description,

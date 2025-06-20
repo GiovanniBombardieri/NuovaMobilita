@@ -16,7 +16,7 @@ const FavoriteStructures = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_URL}/get_strutture_preferite`, {
+      .get(`${import.meta.env.VITE_API_URL}/preferred_structures`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
@@ -31,10 +31,10 @@ const FavoriteStructures = () => {
 
   const removePreferredStructure = async ($structure_id: string) => {
     try {
-      await axios.put(
+      await axios.delete(
         `${
           import.meta.env.VITE_API_URL
-        }/remove_struttura_preferita/${$structure_id}`,
+        }/preferred_structure/${$structure_id}`,
         { $structure_id },
         {
           headers: {

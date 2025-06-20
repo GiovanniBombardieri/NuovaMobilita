@@ -23,7 +23,7 @@ const Performances = () => {
   useEffect(() => {
     axios
       .get(
-        `${import.meta.env.VITE_API_URL}/get_prestazioni?page=${currentPage}`,
+        `${import.meta.env.VITE_API_URL}/performance?page=${currentPage}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -48,8 +48,8 @@ const Performances = () => {
     if (!confirm_variable) return;
 
     try {
-      await axios.put(
-        `${import.meta.env.VITE_API_URL}/delete_prestazione/${perfomance_id}`,
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/performance/${perfomance_id}`,
         {},
         {
           headers: {
@@ -59,7 +59,7 @@ const Performances = () => {
       );
 
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/get_prestazioni?page=${currentPage}`,
+        `${import.meta.env.VITE_API_URL}/performance?page=${currentPage}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,

@@ -42,7 +42,7 @@ const PerfomanceType = () => {
         .get(
           `${
             import.meta.env.VITE_API_URL
-          }/get_tipo_prestazione_singola/${performance_type_id}`,
+          }/single_performance_type/${performance_type_id}`,
           {
             headers: {
               Authorization: `Bearer ${user?.token}`,
@@ -75,7 +75,7 @@ const PerfomanceType = () => {
       .get(
         `${
           import.meta.env.VITE_API_URL
-        }/get_tipo_prestazioni?page=${currentPage}`,
+        }/performance_type?page=${currentPage}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -97,7 +97,7 @@ const PerfomanceType = () => {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/create_prestazione`,
+        `${import.meta.env.VITE_API_URL}/performance`,
         { performance_type_id, title, type, price, description },
         {
           headers: {
