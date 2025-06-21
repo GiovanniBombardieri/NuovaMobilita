@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/protectedRoute";
 import Register from "./pages/Register";
@@ -8,6 +10,11 @@ import Home from "./pages/Home";
 import "./App.css";
 
 function App() {
+  useEffect(() => {
+    document.documentElement.classList.remove("dark");
+    document.documentElement.setAttribute("data-theme", "light");
+  }, []);
+
   return (
     <AuthProvider>
       <Router>
