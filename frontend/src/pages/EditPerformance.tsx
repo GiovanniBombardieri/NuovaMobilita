@@ -61,14 +61,11 @@ const EditPerformance = ({
     if (!performance_id) return;
 
     axios
-      .get(
-        `${import.meta.env.VITE_API_URL}/performance/${performance_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        }
-      )
+      .get(`${import.meta.env.VITE_API_URL}/performance/${performance_id}`, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      })
       .then((res) => {
         setPerformance(res.data);
       })
@@ -98,7 +95,7 @@ const EditPerformance = ({
 
       alert("Successful updated performance");
       (
-        document.getElementById("edit_prestazione") as HTMLDialogElement
+        document.getElementById("edit_performance") as HTMLDialogElement
       )?.close();
     } catch (error) {
       console.error("Successful updated performance: ", error);
@@ -108,7 +105,7 @@ const EditPerformance = ({
 
   return (
     <dialog
-      id="edit_prestazione"
+      id="edit_performance"
       className="modal modal-bottom sm:modal-middle"
     >
       <div className="modal-box">
@@ -187,7 +184,7 @@ const EditPerformance = ({
               onClick={() =>
                 (
                   document.getElementById(
-                    "edit_prestazione"
+                    "edit_performance"
                   ) as HTMLDialogElement
                 )?.close()
               }

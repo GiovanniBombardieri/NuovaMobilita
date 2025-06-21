@@ -225,121 +225,117 @@ class AuthController extends Controller
 		]);
 	}
 
-	public function updateProfile(Request $request)
+	public function updateProfileUser(Request $request)
 	{
 		$user = $request->user();
+		$position = $user->user_position;
 
-		if ($user->role === "user") {
-			$position = $user->user_position;
-
-			$request->validate([
-				'name' => 'nullable|string|max:255',
-				'surname' => 'nullable|string|max:255',
-				'email' => 'nullable|string|max:255',
-				'phone' => 'nullable|string|max:20',
-				'address' => 'nullable|string|max:255',
-				'city' => 'nullable|string|max:100',
-				'province' => 'nullable|char|max:2',
-				'cap' => 'nullable|char|max:5',
-				'street' => 'nullable|string|max:100',
-				'civic_number' => 'nullable|string|max:10',
-			]);
-
-			$user->name = $request->name;
-			$user->surname = $request->surname;
-			$user->email = $request->email;
-			$user->phone = $request->phone;
-			$position->city = $request->userCity;
-			$position->province = $request->userProvince;
-			$position->cap = $request->userCap;
-			$position->street = $request->userStreet;
-			$position->civic_number = $request->userCivicNumber;
-
-			$user->save();
-			$position->save();
-
-			return response()->json([
-				'name' => $user->name,
-				'surname' => $user->surname,
-				'email' => $user->email,
-				'phone' => $user->phone,
-				'role' => $user->role,
-				'access_token' => $request->bearerToken(),
-				'city' => $position->city,
-				'province' => $position->province,
-				'street' => $position->street,
-				'civic_number' => $position->civic_number,
-				'cap' => $position->cap,
-			]);
-		} else if ($user->role === "structure") {
-			$structure = $user->structure;
-			$position = $structure?->position;
-			$contact = $structure?->contact;
-
-			$structure->corporate = $request->corporate;
-			$user->email = $request->email;
-			$position->city = $request->city;
-			$position->province = $request->province;
-			$position->street = $request->street;
-			$position->civic_number = $request->civic_number;
-			$position->cap = $request->cap;
-
-			if ($request->structurePhone) {
-				$contactWithActivePhone = $contact?->first(function ($r) {
-					return (!empty($r->phone) && $r->active_record === 1);
-				});
-				if ($contactWithActivePhone) {
-					$contactWithActivePhone->phone = $request->structurePhone;
-					$contactWithActivePhone->save();
-				} else {
-					$newContact = new Contact();
-					$newContact->contact_id = (string) \Illuminate\Support\Str::uuid();
-					$newContact->structure_id = $structure->structure_id;
-					$newContact->phone = $request->structurePhone;
-					$newContact->contact_type_id = '0000004e-0000-0000-0000-000000000002';
-					$newContact->change_time = now();
-					$newContact->active_record = 1;
-
-					$newContact->save();
-				}
-			} else if ($request->structurePhone === NULL) {
-				$contactWithPhone = $contact?->first(function ($r) {
-					return !empty($r->phone);
-				});
-
-				if ($contactWithPhone) {
-					$contactWithPhone->active_record = 0;
-					$contactWithPhone->save();
-				}
-			}
-
-			if ($request->email) {
-				$contactWithEmail = $contact?->first(function ($r) {
-					return !empty($r->email);
-				});
-
-				if ($contactWithEmail) {
-					$contactWithEmail->email = $request->email;
-					$contactWithEmail->save();
-				}
-			}
-
-			$user->save();
-			$structure->save();
-			$position->save();
-
-			return response()->json([
-				'role' => $user->role,
-				'email' => ($user->email === $contactWithEmail->email) ? $user->email : null,
-				'phone' => (isset($newContact) ? $newContact->phone : (isset($contactWithActivePhone) ? $contactWithActivePhone->phone : null)),
-				'corporate' => $structure->corporate,
-				'city' => $position->city,
-				'province' => $position->province,
-				'street' => $position->street,
-				'civic_number' => $position->civic_number,
-				'cap' => $position->cap,
-				'access_token' => $request->bearerToken(),
-			]);
+		if (!$position) {
+			$position = new \App\Models\Position();
+			$position->position_id = (string) Str::uuid();
 		}
+
+		$request->validate([
+			'name' => 'nullable|string|max:255',
+			'surname' => 'nullable|string|max:255',
+			'email' => 'nullable|string|max:255',
+			'phone' => 'nullable|string|max:20',
+			'address' => 'nullable|string|max:255',
+			'city' => 'nullable|string|max:100',
+			'province' => 'nullable|char|max:2',
+			'cap' => 'nullable|char|max:5',
+			'street' => 'nullable|string|max:100',
+			'civic_number' => 'nullable|string|max:10',
+		]);
+
+		$user->name = $request->name;
+		$user->surname = $request->surname;
+		$user->email = $request->email;
+		$user->phone = $request->phone;
+		$user->position_id = $position->position_id;
+		$position->city = $request->userCity;
+		$position->province = $request->userProvince;
+		$position->cap = $request->userCap;
+		$position->street = $request->userStreet;
+		$position->civic_number = $request->userCivicNumber;
+
+		$user->save();
+		$position->save();
+
+		return response()->json([
+			'name' => $user->name,
+			'surname' => $user->surname,
+			'email' => $user->email,
+			'phone' => $user->phone,
+			'role' => $user->role,
+			'access_token' => $request->bearerToken(),
+			'city' => $position->city,
+			'province' => $position->province,
+			'street' => $position->street,
+			'civic_number' => $position->civic_number,
+			'cap' => $position->cap,
+		]);
+	}
+
+	public function updateProfileStructure(Request $request)
+	{
+		$user = $request->user();
+		$structure = $user->structure;
+		$position = $structure?->position;
+		$contact = $structure?->contact;
+
+		$structure->corporate = $request->corporate;
+		$user->email = $request->email;
+		$position->city = $request->city;
+		$position->province = $request->province;
+		$position->street = $request->street;
+		$position->civic_number = $request->civic_number;
+		$position->cap = $request->cap;
+
+		if ($request->structurePhone) {
+			$contactWithActivePhone = $contact?->first(function ($r) {
+				return (!empty($r->phone) && $r->active_record === 1);
+			});
+			if ($contactWithActivePhone) {
+				$contactWithActivePhone->phone = $request->structurePhone;
+				$contactWithActivePhone->save();
+			} else {
+				$newContact = new Contact();
+				$newContact->contact_id = (string) \Illuminate\Support\Str::uuid();
+				$newContact->structure_id = $structure->structure_id;
+				$newContact->phone = $request->structurePhone;
+				$newContact->contact_type_id = '0000004e-0000-0000-0000-000000000002';
+				$newContact->change_time = now();
+				$newContact->active_record = 1;
+
+				$newContact->save();
+			}
+		} else if ($request->structurePhone === NULL) {
+			$contactWithPhone = $contact?->first(function ($r) {
+				return !empty($r->phone);
+			});
+
+			if ($contactWithPhone) {
+				$contactWithPhone->active_record = 0;
+				$contactWithPhone->save();
+			}
+		}
+
+		$user->save();
+		$structure->save();
+		$position->save();
+
+		return response()->json([
+			'role' => $user->role,
+			'email' => $user->email,
+			'phone' => (isset($newContact) ? $newContact->phone : (isset($contactWithActivePhone) ? $contactWithActivePhone->phone : null)),
+			'corporate' => $structure->corporate,
+			'city' => $position->city,
+			'province' => $position->province,
+			'street' => $position->street,
+			'civic_number' => $position->civic_number,
+			'cap' => $position->cap,
+			'access_token' => $request->bearerToken(),
+		]);
 	}
 }

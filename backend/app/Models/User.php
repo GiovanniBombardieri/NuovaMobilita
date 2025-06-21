@@ -60,7 +60,7 @@ class User extends Authenticatable
         return $this->hasOne(Structure::class, 'structure_id', 'structure_id');
     }
 
-    public function user_position()
+    public function position()
     {
         return $this->hasOne(Position::class, 'position_id', 'position_id');
     }

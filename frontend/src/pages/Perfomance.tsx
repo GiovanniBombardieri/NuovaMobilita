@@ -82,7 +82,7 @@ const Performances = () => {
       <ul className="list bg-base-100 rounded-box shadow-md h-full">
         <div className="flex flex-row justify-between items-center">
           <li className="p-4 pb-2 text-2xl opacity-60 tracking-wide">
-            Your Perfomance
+            Your Performance
           </li>
           <button
             className="btn btn-square btn-ghost mr-5 mt-2"

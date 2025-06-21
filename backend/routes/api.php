@@ -11,13 +11,15 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
 	// User
 	Route::post('/logout', [AuthController::class, 'logout']);
-	Route::put('/update-profile', [AuthController::class, 'updateProfile']);
+	Route::put('/update-profile/user', [AuthController::class, 'updateProfileUser']);
+	Route::put('/update-profile/structure', [AuthController::class, 'updateProfileStructure']);
 
 	// Performance
 	Route::get('/performance/{performance_id}', [PerformanceController::class, 'SinglePerformance']);
 	Route::get('/performance', [PerformanceController::class, 'getPerformance']);
 	Route::put('/performance/{performance_id}', [PerformanceController::class, 'updatePerformance']);
 	Route::post('/performance', [PerformanceController::class, 'createPerformance']);
+	Route::post('/performance/{performance_type_id}', [PerformanceController::class, 'createPerformanceFromnTypeId']);
 	Route::delete('/performance/{performance_id}', [PerformanceController::class, 'deletePerformance']);
 	Route::get('/performance_type', [PerformanceController::class, 'getPerformanceType']);
 	Route::get('/single_performance_type/{performance_type_id}', [PerformanceController::class, 'getSinglePerformanceType']);

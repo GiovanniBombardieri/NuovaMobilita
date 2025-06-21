@@ -64,32 +64,34 @@ const EditProfile = () => {
   );
 
   const updateProfile = async () => {
-    const updateData = isUser(user)
-      ? {
-          email,
-          name,
-          surname,
-          phone,
-          userCity,
-          userProvince,
-          userCap,
-          userStreet,
-          userCivicNumber,
-        }
-      : {
-          corporate,
-          email,
-          structurePhone,
-          city,
-          province,
-          cap,
-          street,
-          civic_number,
-        };
-
     try {
+      const updateData = isUser(user)
+        ? {
+            email,
+            name,
+            surname,
+            phone,
+            userCity,
+            userProvince,
+            userCap,
+            userStreet,
+            userCivicNumber,
+          }
+        : {
+            corporate,
+            email,
+            structurePhone,
+            city,
+            province,
+            cap,
+            street,
+            civic_number,
+          };
+
+      const url_param = isUser(user) ? "user" : "structure";
+
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/update-profile`,
+        `${import.meta.env.VITE_API_URL}/update-profile/${url_param}`,
         {
           method: "PUT",
           headers: {
@@ -213,6 +215,7 @@ const EditProfile = () => {
                     className="input input-bordered w-3/5"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    readOnly
                   />
                 </div>
 
@@ -223,6 +226,7 @@ const EditProfile = () => {
                     className="input input-bordered w-3/5"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    readOnly
                   />
                 </div>
 
@@ -233,6 +237,7 @@ const EditProfile = () => {
                     className="input input-bordered w-3/5"
                     value={surname}
                     onChange={(e) => setSurname(e.target.value)}
+                    readOnly
                   />
                 </div>
 
@@ -322,6 +327,7 @@ const EditProfile = () => {
                     className="input input-bordered w-3/5"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    readOnly
                   />
                 </div>
 
