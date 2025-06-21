@@ -73,9 +73,7 @@ const PerfomanceType = () => {
   useEffect(() => {
     axios
       .get(
-        `${
-          import.meta.env.VITE_API_URL
-        }/performance_type?page=${currentPage}`,
+        `${import.meta.env.VITE_API_URL}/performance_type?page=${currentPage}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -97,8 +95,8 @@ const PerfomanceType = () => {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/performance`,
-        { performance_type_id, title, type, price, description },
+        `${import.meta.env.VITE_API_URL}/performance/${performance_type_id}`,
+        { title, type, price, description },
         {
           headers: {
             Authorization: `Bearer ${user.token}`,
