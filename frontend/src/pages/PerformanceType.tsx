@@ -1,48 +1,48 @@
 import { useState, useEffect, useCallback } from "react";
 import {
   useAuth,
-  DatiTipoPrestazione,
-  Prestazione,
+  PerformanceTypeData,
+  Performance,
 } from "../context/AuthContext";
 import axios from "axios";
 
-const TipoPrestazione = () => {
+const PerfomanceType = () => {
   const { user } = useAuth();
 
-  const [tipoPrestazioni, setTipoPrestazioni] = useState<DatiTipoPrestazione[]>(
+  const [performanceType, setPerformanceType] = useState<PerformanceTypeData[]>(
     []
   );
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isTipoPrestazioneSelected, setIsTipoPrestazioneSelected] =
+  const [isPerformanceTypeSelected, setIsPerformanceTypeSelected] =
     useState("");
-  const [loadingDatiPrestazione, setLoadingDatiPrestazione] = useState(false);
+  const [loadingPerformanceData, setLoadingPerformanceData] = useState(false);
 
-  const [prestazione, setPrestazione] = useState<Prestazione | null>(null);
-  const [id_tipo_prestazione, setIdTipoPrestazione] = useState("");
-  const [titolo, setTitolo] = useState("");
-  const [tipologia, setTipologia] = useState("");
-  const [costo, setCosto] = useState<number>();
-  const [descrizione, setDescrizione] = useState("");
+  const [performance, setPerformance] = useState<Performance | null>(null);
+  const [performance_type_id, setPerformanceTypeId] = useState("");
+  const [title, setTitle] = useState("");
+  const [type, setType] = useState("");
+  const [price, setPrice] = useState<number>();
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
-    if (prestazione) {
-      setIsTipoPrestazioneSelected(prestazione.id_tipo_prestazione);
+    if (performance) {
+      setIsPerformanceTypeSelected(performance.performance_type_id);
     }
-  }, [prestazione]);
+  }, [performance]);
 
-  // Carico i dati della prestazione
-  const caricaTipoFunzione = useCallback(
-    (id_tipo_prestazione: string) => {
-      if (!id_tipo_prestazione) return;
+  // Loading the performance data
+  const uploadingTypeFunction = useCallback(
+    (performance_type_id: string) => {
+      if (!performance_type_id) return;
 
-      setLoadingDatiPrestazione(true);
+      setLoadingPerformanceData(true);
       axios
         .get(
           `${
             import.meta.env.VITE_API_URL
-          }/get_tipo_prestazione_singola/${id_tipo_prestazione}`,
+          }/single_performance_type/${performance_type_id}`,
           {
             headers: {
               Authorization: `Bearer ${user?.token}`,
@@ -50,32 +50,32 @@ const TipoPrestazione = () => {
           }
         )
         .then((res) => {
-          const dati = res.data;
-          setPrestazione(dati);
+          const data = res.data;
+          setPerformance(data);
 
           // Inizializzo gli stati degli input
-          setTitolo(dati?.titolo);
-          setTipologia(dati?.tipologia);
-          setDescrizione(dati?.descrizione);
-          setIdTipoPrestazione(dati?.id_tipo_prestazione);
+          setTitle(data?.title);
+          setType(data?.type);
+          setDescription(data?.description);
+          setPerformanceTypeId(data?.performance_type_id);
         })
         .catch((err) => {
-          console.error("Errore nel recupero del tipo di prestazione", err);
+          console.error("Error in recovering the type of performance", err);
         })
         .finally(() => {
-          setLoadingDatiPrestazione(false);
+          setLoadingPerformanceData(false);
         });
     },
     [user?.token]
   );
 
-  // Funzione per avere i tipi di prestazione presenti nel db
+  // Function to have the types of performance present in the database
   useEffect(() => {
     axios
       .get(
         `${
           import.meta.env.VITE_API_URL
-        }/get_tipo_prestazioni?page=${currentPage}`,
+        }/performance_type?page=${currentPage}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -83,22 +83,22 @@ const TipoPrestazione = () => {
         }
       )
       .then((res) => {
-        setTipoPrestazioni(res.data.data);
+        setPerformanceType(res.data.data);
         setLastPage(res.data.last_page);
       })
       .catch((err) => {
-        console.error("Errore nel recupero dei tipi di prestazioni", err);
+        console.error("Error in the recovery of types of performance", err);
       });
   }, [currentPage, user?.token]);
 
-  // Funzione per aggiungere la prestazione una volta scelto il tipo
-  const addPrestazione = async () => {
+  // Function to add the performance once the type is chosen
+  const addPerformance = async () => {
     if (!user?.token) return;
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/create_prestazione`,
-        { id_tipo_prestazione, titolo, tipologia, costo, descrizione },
+        `${import.meta.env.VITE_API_URL}/performance`,
+        { performance_type_id, title, type, price, description },
         {
           headers: {
             Authorization: `Bearer ${user.token}`,
@@ -107,92 +107,90 @@ const TipoPrestazione = () => {
       );
 
       (
-        document.getElementById("cerca_tipo_prestazione") as HTMLDialogElement
+        document.getElementById("search_performance_type") as HTMLDialogElement
       )?.close();
 
-      alert("Prestazione aggiunta con successo!");
+      alert("Successful performance successfully!");
 
-      setTitolo("");
-      setTipologia("");
-      setDescrizione("");
+      setTitle("");
+      setType("");
+      setDescription("");
     } catch (error) {
-      console.error("Errore durante la creazione della prestazione: ", error);
-      alert("Errore durante l'aggiunta della prestazione!");
+      console.error("Error when creating the performance: ", error);
+      alert("Error during the addition of the performance!");
     }
   };
 
   return (
     <dialog
-      id="cerca_tipo_prestazione"
+      id="search_performance_type"
       className="modal modal-bottom sm:modal-middle"
     >
       <div className="modal-box">
-        {isTipoPrestazioneSelected && !loadingDatiPrestazione ? (
+        {isPerformanceTypeSelected && !loadingPerformanceData ? (
           <>
-            <h3 className="font-bold text-lg mb-4">Aggiungi prestazione</h3>
+            <h3 className="font-bold text-lg mb-4">Add Performance</h3>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                addPrestazione();
+                addPerformance();
               }}
             >
-              {/** CAMPO TITOLO */}
+              {/** TITLE */}
               <div>
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-1/5">Titolo</label>
+                  <label className="label w-1/5">Title</label>
                   <input
                     type="text"
                     className="input input-bordered w-4/5"
-                    value={titolo}
-                    onChange={(e) => setTitolo(e.target.value)}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                     required
                     readOnly
                   />
                 </div>
               </div>
 
-              {/** CAMPO TIPOLOGIA */}
+              {/** TYPE */}
               <div>
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-1/5 text-wrap">
-                    Tipologia prestazione
-                  </label>
+                  <label className="label w-1/5 text-wrap">Type</label>
                   <input
                     type="text"
                     className="input input-bordered w-4/5"
-                    value={tipologia === "P" ? "Psicologica" : "Motoria"}
+                    value={type === "P" ? "Psychological" : "Motor"}
                     readOnly
                   />
                 </div>
               </div>
 
-              {/** CAMPO COSTO */}
+              {/** PRICE */}
               <div>
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-1/5">Costo (€)</label>
+                  <label className="label w-1/5">Price (€)</label>
                   <input
                     type="number"
                     min={0}
                     className="input input-bordered w-4/5"
-                    value={costo}
+                    value={price}
                     onChange={(e) => {
-                      const valore = e.target.value.replace(",", ".");
-                      const numero = parseFloat(valore);
-                      setCosto(isNaN(numero) ? 0 : numero);
+                      const value = e.target.value.replace(",", ".");
+                      const number = parseFloat(value);
+                      setPrice(isNaN(number) ? 0 : number);
                     }}
                     required
                   />
                 </div>
               </div>
 
-              {/** CAMPO DESCRIZIONE */}
+              {/** DESCRIPTION */}
               <div>
                 <div className="form-control mb-4 w-full flex items-center justify-between">
-                  <label className="label w-1/5">Descrizione</label>
+                  <label className="label w-1/5">Description</label>
                   <textarea
                     className="input input-bordered w-4/5 h-60 resize-none whitespace-normal"
-                    value={descrizione}
-                    onChange={(e) => setDescrizione(e.target.value)}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                     required
                   />
                 </div>
@@ -200,16 +198,16 @@ const TipoPrestazione = () => {
 
               <div className="modal-action">
                 <button type="submit" className="btn btn-primary mr-2">
-                  Salva
+                  Save
                 </button>
                 <button
                   type="button"
                   className="btn"
                   onClick={() => {
-                    setIsTipoPrestazioneSelected("");
+                    setIsPerformanceTypeSelected("");
                   }}
                 >
-                  Indietro
+                  Back
                 </button>
               </div>
             </form>
@@ -223,7 +221,7 @@ const TipoPrestazione = () => {
                 onClick={() =>
                   (
                     document.getElementById(
-                      "cerca_tipo_prestazione"
+                      "search_performance_type"
                     ) as HTMLDialogElement
                   )?.close()
                 }
@@ -245,7 +243,7 @@ const TipoPrestazione = () => {
               </button>
             </div>
             <h3 className="font-bold text-lg mb-4 text-center">
-              Cerca tipo prestazione
+              Search Performance Type
             </h3>
             <div className="w-full">
               <label className="input w-full">
@@ -268,38 +266,38 @@ const TipoPrestazione = () => {
                 <input
                   type="search"
                   required
-                  placeholder="Cerca per titolo"
+                  placeholder="Search for title"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </label>
             </div>
 
-            {tipoPrestazioni
-              .filter((tipo_prestazione) =>
-                tipo_prestazione.titolo
+            {performanceType
+              .filter((perfomanceType) =>
+                perfomanceType.title
                   .toLowerCase()
                   .includes(searchTerm.toLowerCase())
               )
-              .map((tipo_prestazione: DatiTipoPrestazione) => (
+              .map((perfomanceType: PerformanceTypeData) => (
                 <ul className="list bg-base-100 rounded-box shadow-md h-full my-5">
                   <li
                     className="list-row"
-                    key={tipo_prestazione.id_tipo_prestazione}
+                    key={perfomanceType.performance_type_id}
                   >
                     <div>
-                      <div className="font-bold">{tipo_prestazione.titolo}</div>
+                      <div className="font-bold">{perfomanceType.title}</div>
                       <div>
-                        {tipo_prestazione.tipologia === "P"
-                          ? "Psicologica"
-                          : "Motoria"}
+                        {perfomanceType.type === "P"
+                          ? "Psychological"
+                          : "Motor"}
                       </div>
-                      <div>{tipo_prestazione.descrizione}</div>
+                      <div>{perfomanceType.description}</div>
                     </div>
                     <button
                       onClick={() => {
-                        caricaTipoFunzione(
-                          tipo_prestazione.id_tipo_prestazione
+                        uploadingTypeFunction(
+                          perfomanceType.performance_type_id
                         );
                       }}
                       className="btn btn-square btn-ghost"
@@ -356,4 +354,4 @@ const TipoPrestazione = () => {
   );
 };
 
-export default TipoPrestazione;
+export default PerfomanceType;

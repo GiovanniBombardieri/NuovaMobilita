@@ -1,11 +1,11 @@
-import { useAuth, User, Struttura } from "../context/AuthContext";
+import { useAuth, User, Structure } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import StrutturePreferite from "./StrutturePreferite";
+import FavoriteStructures from "./FavoriteStructures";
 
-import TipoPrestazione from "./TipoPrestazione";
+import PerfomanceType from "./PerformanceType";
 
-function isStruttura(user: User | Struttura | null): user is Struttura {
-  return (user as Struttura)?.ruolo === "struttura";
+function isStructure(user: User | Structure | null): user is Structure {
+  return (user as Structure)?.role === "structure";
 }
 
 const Navbar = () => {
@@ -25,7 +25,7 @@ const Navbar = () => {
         navigate("/login");
       })
       .catch((error) => {
-        console.error("Errore nel logout:", error);
+        console.error("Logout error:", error);
       });
   };
 
@@ -75,13 +75,13 @@ const Navbar = () => {
           <a className="btn btn-ghost text-xl">Nuova Mobilità</a>
         </div>
         <div className="navbar-end">
-          {isStruttura(user) ? (
+          {isStructure(user) ? (
             <button
               className="btn btn-ghost btn-circle"
               onClick={() =>
                 (
                   document.getElementById(
-                    "cerca_tipo_prestazione"
+                    "search_performance_type"
                   ) as HTMLDialogElement
                 )?.showModal()
               }
@@ -103,13 +103,13 @@ const Navbar = () => {
               </svg>
             </button>
           ) : null}
-          {isStruttura(user) ? null : (
+          {isStructure(user) ? null : (
             <button
               className="btn btn-ghost btn-circle mx-1"
               onClick={() =>
                 (
                   document.getElementById(
-                    "strutture_preferite"
+                    "preferred_structures"
                   ) as HTMLDialogElement
                 )?.showModal()
               }
@@ -154,8 +154,8 @@ const Navbar = () => {
         </div>
       </div>
       {/** DIALOG */}
-      <TipoPrestazione />
-      <StrutturePreferite />
+      <PerfomanceType />
+      <FavoriteStructures />
     </div>
   );
 };

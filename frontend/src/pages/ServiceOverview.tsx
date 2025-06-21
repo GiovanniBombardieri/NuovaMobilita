@@ -1,7 +1,7 @@
-import { useAuth, User, Struttura } from "../context/AuthContext";
+import { useAuth, User, Structure } from "../context/AuthContext";
 
-function isStruttura(user: User | Struttura | null): user is Struttura {
-  return (user as Struttura)?.ruolo === "struttura";
+function isStructure(user: User | Structure | null): user is Structure {
+  return (user as Structure)?.role === "structure";
 }
 
 const ServiceOverview = () => {
@@ -11,79 +11,71 @@ const ServiceOverview = () => {
     <div className="h-full w-full">
       <div className="card bg-base-100 w-full h-full shadow-l">
         <div className="card-body flex flex-col items-start text-start">
-          {isStruttura(user) ? (
+          {isStructure(user) ? (
             <>
               <h3 className="card-title">
-                👋🏼 Benvenutə nella piattaforma dedicata al recupero
-                post-amputazione!
+                👋🏼 Welcome to the platform dedicated to post-amputation
+                recovery!
               </h3>
               <hr className="my-4 border-t border-gray-300 w-full" />
               <p>
-                Hai appena acceduto al tuo spazio riservato: un ambiente pensato
-                per facilitare l’incontro tra strutture qualificate come la tua
-                e le persone che stanno affrontando un percorso di
-                riabilitazione dopo un’amputazione.
+                You have just accessed your reserved space: an environment
+                designed to facilitate the encounter between qualified
+                structures such as yours and the people who are facing a
+                rehabilitation path after an amputation.
                 <br />
                 <br />
-                Questa piattaforma nasce con un obiettivo chiaro: mettere in
-                connessione chi ha bisogno di supporto concreto con realtà in
-                grado di offrirlo, valorizzando competenze, servizi e approcci
-                personalizzati.
+                This platform was born with a clear goal: to connect those who
+                need concrete support with realities capable of offering it,
+                enhancing skills, services and personalized approaches.
                 <br />
                 <br />
-                Sappiamo quanto sia importante garantire un’assistenza efficace,
-                umana e su misura. Per questo, qui troverai strumenti per
-                presentare al meglio la tua struttura, ricevere richieste
-                mirate, e accompagnare ogni paziente nel percorso più adatto
-                alle sue esigenze.
+                We know how important it is to guarantee effective, human and
+                tailor -made assistance. For this, here you will find tools to
+                best present your structure, receive targeted requests, and
+                accompany each patient in the most suitable path to his needs.
               </p>
               <span className="border-l-4 border-gray-500 pl-4 inline-block align-middle mb-10">
-                Insieme, possiamo fare la differenza.
+                Together, we can make the difference.
               </span>
               <p>
-                Aggiorna i tuoi servizi, gestisci le richieste e contribuisci
-                attivamente a costruire una rete sanitaria più accessibile e
-                consapevole.
+                Update your services, manage requests and actively contribute to
+                building a more accessible and conscious health network.
               </p>
             </>
           ) : (
             <>
               <h3 className="card-title">
-                👋🏼 Benvenutə nel tuo spazio dedicato alla ripartenza!
+                👋🏼 Welcome to your space dedicated to restart!
               </h3>
               <hr className="my-4 border-t border-gray-300 w-full" />
               <p>
-                <strong>
-                  Questa piattaforma nasce con un obiettivo chiaro:
-                </strong>{" "}
-                diventare il ponte tra le persone che hanno vissuto
-                un'amputazione e le strutture sanitarie più adatte ad
-                accompagnarle in un percorso di recupero efficace, umano e
-                personalizzato.
+                <strong>This platform was born with a clear goal:</strong>{" "}
+                Becoming the bridge between the people who have experienced an
+                amputation and the most suitable health structures to accompany
+                them on an effective, human and personalized recovery path.
                 <br />
                 <br />
-                Sappiamo quanto sia complesso orientarsi nel mondo sanitario
-                dopo un evento così impattante: non tutte le strutture sono
-                preparate ad affrontare questo tipo di percorso, e spesso
-                mancano informazioni, strumenti adeguati o semplicemente la
-                giusta esperienza.
+                We know how complex it is to orient ourselves in the health
+                world after such an impacting event: not all structures are
+                prepared to face this type of path, and often lacking
+                information, adequate tools or simply the right experience.
                 <br />
                 <br />
                 <strong>
-                  Qui trovi solo strutture realmente pronte ad aiutarti.
+                  Here you only find structures really ready to help you.
                 </strong>{" "}
-                Centri ortopedici, fisioterapici, ospedali e professionisti
-                qualificati, selezionati per offrire le competenze e i servizi
-                migliori per il tuo tipo di recupero.
+                Orthopedic centers, physiotherapy, hospitals and qualified
+                professionals, selected to offer the best skills and services
+                for your type of recovery.
               </p>
               <span className="border-l-4 border-gray-500 pl-4 inline-block align-middle mb-10">
-                Il nostro obiettivo è rendere il tuo percorso più semplice, più
-                diretto e meno solitario.
+                Our goal is to make your path easier, more direct and less
+                lonely.
               </span>
               <p>
-                Naviga con facilità, scopri prestazioni specifiche, contatta i
-                centri più adatti a te e costruisci il tuo percorso, passo dopo
-                passo.
+                Navigate with ease, discover specific performance, contact the
+                most suitable centers to you and build your path, step by step.
               </p>
             </>
           )}

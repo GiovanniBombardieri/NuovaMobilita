@@ -1,61 +1,52 @@
 import { useEffect, useState } from "react";
-import { Prestazione, useAuth, User, Struttura } from "../context/AuthContext";
+import { Performance, useAuth, User, Structure } from "../context/AuthContext";
 import axios from "axios";
 
 import img_prest_sanitaria from "../../public/icona-prest-sanitaria.jpg";
 import img_prest_psicologica from "../../public/icona-prest-psicologica.jpg";
 
-import ModificaPrestazione from "./ModificaPrestazione";
-import AggiungiPrestazione from "./AggiungiPrestazione";
+import EditPerfomance from "./EditPerformance";
+import AddPerformance from "./AddPerfomance";
 
-// Funzioni di type guard
-// function isUser(user: User | Struttura | null): user is User {
-//   return (user as User)?.ruolo === "utente";
-// }
-
-function isStruttura(user: User | Struttura | null): user is Struttura {
-  return (user as Struttura)?.ruolo === "struttura";
+function isStructure(user: User | Structure | null): user is Structure {
+  return (user as Structure)?.role === "structure";
 }
 
-const Prestazioni = () => {
+const Performances = () => {
   const { user } = useAuth();
 
-  const [prestazioni, setPrestazioni] = useState<Prestazione[]>([]);
+  const [perfomances, setPerfomances] = useState<Performance[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   useEffect(() => {
     axios
-      .get(
-        `${import.meta.env.VITE_API_URL}/get_prestazioni?page=${currentPage}`,
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        }
-      )
+      .get(`${import.meta.env.VITE_API_URL}/performance?page=${currentPage}`, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      })
       .then((res) => {
-        setPrestazioni(res.data.data);
+        setPerfomances(res.data.data);
         setLastPage(res.data.last_page);
       })
       .catch((err) => {
-        console.error("Errore nel recupero prestazioni", err);
+        console.error("Performance recovery error", err);
       });
   }, [currentPage, user?.token]);
 
-  const deletePrestazione = async (id_prestazione: string) => {
-    if (!id_prestazione || !user?.token) return;
+  const deletePerformance = async (performance_id: string) => {
+    if (!performance_id || !user?.token) return;
 
-    const conferma = confirm(
-      "Sei sicuro di voler eliminare questa prestazione?"
+    const confirm_variable = confirm(
+      "You are sure you want to eliminate this performance?"
     );
-    if (!conferma) return;
+    if (!confirm_variable) return;
 
     try {
-      await axios.put(
-        `${import.meta.env.VITE_API_URL}/delete_prestazione/${id_prestazione}`,
-        {},
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/performance/${performance_id}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -64,7 +55,7 @@ const Prestazioni = () => {
       );
 
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/get_prestazioni?page=${currentPage}`,
+        `${import.meta.env.VITE_API_URL}/performance?page=${currentPage}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -72,18 +63,18 @@ const Prestazioni = () => {
         }
       );
 
-      setPrestazioni(res.data.data);
+      setPerfomances(res.data.data);
       setLastPage(res.data.last_page);
     } catch (error) {
-      console.error("Errore durante l'eliminazione della prestazione: ", error);
-      alert("Errore nell'eliminazione della prestazione");
+      console.error("Error when eliminating the performance: ", error);
+      alert("Error in the elimination of the performance");
     }
   };
 
   return (
     <div
       className={`rounded-box ${
-        isStruttura(user)
+        isStructure(user)
           ? "h-full w-auto overflow-auto"
           : "h-[583px] w-full lg:w-1/2 mx-5 mb-5"
       }`}
@@ -91,13 +82,13 @@ const Prestazioni = () => {
       <ul className="list bg-base-100 rounded-box shadow-md h-full">
         <div className="flex flex-row justify-between items-center">
           <li className="p-4 pb-2 text-2xl opacity-60 tracking-wide">
-            Le tue prestazioni
+            Your Perfomance
           </li>
           <button
             className="btn btn-square btn-ghost mr-5 mt-2"
             onClick={() => {
               (
-                document.getElementById("add_prestazione") as HTMLDialogElement
+                document.getElementById("add_performance") as HTMLDialogElement
               )?.showModal();
             }}
           >
@@ -117,14 +108,14 @@ const Prestazioni = () => {
           </button>
         </div>
 
-        {prestazioni.map((prestazione: Prestazione) => (
+        {perfomances.map((perfomance: Performance) => (
           <li className="list-row">
-            <div className="w-[490px] flex flex-row justify-stretch">
-              <div className="w-1/12 flex justify-center mr-4">
+            <div className="lg:w-[490px] flex flex-row justify-stretch">
+              <div className="lg:w-1/12 flex justify-center mr-4">
                 <img
                   className="size-8 rounded-box"
                   src={
-                    prestazione.tipo_prestazione?.tipologia === "P"
+                    perfomance.performance_type?.type === "P"
                       ? img_prest_psicologica
                       : img_prest_sanitaria
                   }
@@ -133,17 +124,17 @@ const Prestazioni = () => {
               </div>
               <div className="w-10/12 mr-5">
                 <div>
-                  <strong>{prestazione.tipo_prestazione?.titolo}</strong>
+                  <strong>{perfomance.performance_type?.title}</strong>
                 </div>
                 <p className="list-col-wrap text-xs mt-0">
-                  {prestazione.descrizione_personalizzata
-                    ? prestazione.descrizione_personalizzata.length > 150
-                      ? prestazione.descrizione_personalizzata.slice(0, 150) +
+                  {perfomance.personalized_description
+                    ? perfomance.personalized_description.length > 150
+                      ? perfomance.personalized_description.slice(0, 150) +
                         "..."
-                      : prestazione.descrizione_personalizzata
-                    : prestazione.tipo_prestazione?.descrizione &&
-                      prestazione.tipo_prestazione?.descrizione.length > 150
-                    ? prestazione.tipo_prestazione?.descrizione.slice(0, 150) +
+                      : perfomance.personalized_description
+                    : perfomance.performance_type?.description &&
+                      perfomance.performance_type?.description.length > 150
+                    ? perfomance.performance_type?.description.slice(0, 150) +
                       "..."
                     : ""}
                 </p>
@@ -151,10 +142,10 @@ const Prestazioni = () => {
               <div className="w-1/12 text-end">
                 <button
                   onClick={() => {
-                    setSelectedId(prestazione.id_prestazione);
+                    setSelectedId(perfomance.performance_id);
                     (
                       document.getElementById(
-                        "edit_prestazione"
+                        "edit_performance"
                       ) as HTMLDialogElement
                     )?.showModal();
                   }}
@@ -175,7 +166,7 @@ const Prestazioni = () => {
                   </svg>
                 </button>
                 <button
-                  onClick={() => deletePrestazione(prestazione.id_prestazione)}
+                  onClick={() => deletePerformance(perfomance.performance_id)}
                   className="btn btn-square btn-ghost"
                 >
                   <svg
@@ -198,7 +189,7 @@ const Prestazioni = () => {
             </div>
           </li>
         ))}
-        {prestazioni.length !== 0 ? (
+        {perfomances.length !== 0 ? (
           <div className="w-full h-full flex flex-row justify-center items-center">
             <div className="join">
               {[...Array(lastPage)].map((_, index) => (
@@ -217,21 +208,20 @@ const Prestazioni = () => {
         ) : (
           <div className="w-full h-full flex flex-col justify-center items-center">
             <div className="w-5/6 text-center">
-              Nessuna prestazione presente a database.
+              No performance present at database.
             </div>
             <br />
             <div className="w-5/6 text-center">
-              Utilizza il pulsante di ricerca per trovare le prestazioni già
-              presenti nei nostri sistemi oppure aggiungila con il pulsante qua
-              sopra!
+              Use the search button to find the performance already present in
+              our systems or add it with the button above!
             </div>
           </div>
         )}
       </ul>
-      <ModificaPrestazione id_prestazione={selectedId} />
-      <AggiungiPrestazione />
+      <EditPerfomance performance_id={selectedId} />
+      <AddPerformance />
     </div>
   );
 };
 
-export default Prestazioni;
+export default Performances;

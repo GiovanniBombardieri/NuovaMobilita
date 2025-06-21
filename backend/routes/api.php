@@ -1,33 +1,33 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\PrestazioneController;
-use App\Http\Controllers\StrutturaController;
+use App\Http\Controllers\PerformanceController;
+use App\Http\Controllers\StructureController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-	// Utente
+	// User
 	Route::post('/logout', [AuthController::class, 'logout']);
 	Route::put('/update-profile', [AuthController::class, 'updateProfile']);
 
-	// Prestazioni
-	Route::get('/get_prestazioni/{id_prestazione}', [PrestazioneController::class, 'getPrestazioniSingola']);
-	Route::get('/get_prestazioni', [PrestazioneController::class, 'getPrestazioni']);
-	Route::put('/update_prestazione/{id_prestazione}', [PrestazioneController::class, 'updatePrestazione']);
-	Route::post('/create_prestazione', [PrestazioneController::class, 'createPrestazione']);
-	Route::put('/delete_prestazione/{id_prestazione}', [PrestazioneController::class, 'deletePrestazione']);
-	Route::get('/get_tipo_prestazioni', [PrestazioneController::class, 'getTipoPrestazioni']);
-	Route::get('/get_tipo_prestazione_singola/{id_tipo_prestazione}', [PrestazioneController::class, 'getTipoPrestazioneSingola']);
+	// Performance
+	Route::get('/performance/{performance_id}', [PerformanceController::class, 'SinglePerformance']);
+	Route::get('/performance', [PerformanceController::class, 'getPerformance']);
+	Route::put('/performance/{performance_id}', [PerformanceController::class, 'updatePerformance']);
+	Route::post('/performance', [PerformanceController::class, 'createPerformance']);
+	Route::delete('/performance/{performance_id}', [PerformanceController::class, 'deletePerformance']);
+	Route::get('/performance_type', [PerformanceController::class, 'getPerformanceType']);
+	Route::get('/single_performance_type/{performance_type_id}', [PerformanceController::class, 'getSinglePerformanceType']);
 
-	// Strutture
-	Route::get('/get_strutture_paginate', [StrutturaController::class, 'getStrutturePaginate']);
-	Route::get('/get_strutture', [StrutturaController::class, 'getStrutture']);
-	Route::get('/get_prestazioni_azienda/{id_struttura}', [StrutturaController::class, 'getPrestazioniStruttura']);
-	Route::get('/get_dettaglio_struttura/{id_struttura}', [StrutturaController::class, 'getDettaglioStruttura']);
-	Route::post('/add_struttura_preferita/{id_struttura}', [StrutturaController::class, 'addStrutturaPreferita']);
-	Route::get('/get_strutture_preferite', [StrutturaController::class, 'getStrutturePreferite']);
-	Route::put('/remove_struttura_preferita/{id_struttura}', [StrutturaController::class, 'removeStrutturaPreferita']);
+	// Structure
+	Route::get('/paginated_structures', [StructureController::class, 'getPaginatedStructures']);
+	Route::get('/structures', [StructureController::class, 'getStructures']);
+	Route::get('/structure_performances/{structure_id}', [StructureController::class, 'getStructurePerformances']);
+	Route::get('/structure_detail/{structure_id}', [StructureController::class, 'getStructureDetail']);
+	Route::post('/preferred_structure/{structure_id}', [StructureController::class, 'addPreferredStructure']);
+	Route::get('/preferred_structures', [StructureController::class, 'getPreferredStructures']);
+	Route::delete('/preferred_structure/{structure_id}', [StructureController::class, 'removePreferredStructure']);
 });

@@ -2,49 +2,52 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRef } from "react";
 
-import { DettagliStruttura, useAuth } from "../context/AuthContext";
-import { Prestazione } from "../context/AuthContext";
+import { StructureDetail, useAuth } from "../context/AuthContext";
+import { Performance } from "../context/AuthContext";
 
-const StrutturaDetail = ({ id_struttura }: { id_struttura: string | null }) => {
+const StructureDetails = ({
+  structure_id,
+}: {
+  structure_id: string | null;
+}) => {
   const { user } = useAuth();
   const dialogRef = useRef<HTMLDialogElement>(null);
 
-  const [prestazioniAzienda, setPrestazioniAzienda] = useState<Prestazione[]>(
-    []
-  );
+  const [perfomanceCompany, setPerfomanceCompany] = useState<Performance[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [dettaglioStruttura, setDettaglioStruttura] =
-    useState<DettagliStruttura | null>(null);
-  const [dettagliPrestazioniSelected, setDettagliPrestazioniSelected] =
+  const [stuctureDetail, setStuctureDetail] = useState<StructureDetail | null>(
+    null
+  );
+  const [selectedPerformanceDetail, setSelectedPerformanceDetail] =
     useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState("");
 
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    if (!isLoading && dettaglioStruttura) {
+    if (!isLoading && stuctureDetail) {
       setIsOpen(true);
       setTimeout(() => {
         dialogRef.current?.showModal();
       }, 0);
     }
-  }, [isLoading, dettaglioStruttura]);
+  }, [isLoading, stuctureDetail]);
 
   const handleClose = () => {
     dialogRef.current?.close();
     (document.getElementById("struttura_detail") as HTMLDialogElement)?.close();
     setIsOpen(false);
-    setDettaglioStruttura(null);
+    setStuctureDetail(null);
     setIsLoading(true);
   };
 
   useEffect(() => {
-    if (id_struttura !== null) {
+    if (structure_id !== null) {
       axios
         .get(
           `${
             import.meta.env.VITE_API_URL
-          }/get_prestazioni_azienda/${id_struttura}`,
+          }/structure_performances/${structure_id}`,
           {
             headers: {
               Authorization: `Bearer ${user?.token}`,
@@ -52,24 +55,22 @@ const StrutturaDetail = ({ id_struttura }: { id_struttura: string | null }) => {
           }
         )
         .then((res) => {
-          setPrestazioniAzienda(res.data.prestazioni);
+          setPerfomanceCompany(res.data.performance);
         })
         .catch((err) => {
           console.error(
-            "Errore nel recupero delle prestazioni dell'azienda",
+            "Error in the recovery of the company's performance",
             err
           );
         });
     }
-  }, [user?.token, id_struttura]);
+  }, [user?.token, structure_id]);
 
   useEffect(() => {
-    if (id_struttura !== null) {
+    if (structure_id !== null) {
       axios
         .get(
-          `${
-            import.meta.env.VITE_API_URL
-          }/get_dettaglio_struttura/${id_struttura}`,
+          `${import.meta.env.VITE_API_URL}/structure_detail/${structure_id}`,
           {
             headers: {
               Authorization: `Bearer ${user?.token}`,
@@ -77,18 +78,18 @@ const StrutturaDetail = ({ id_struttura }: { id_struttura: string | null }) => {
           }
         )
         .then((res) => {
-          setDettaglioStruttura(res.data);
+          setStuctureDetail(res.data);
           setIsLoading(false);
         })
         .catch((err) => {
           console.error(
-            "Errore nel recupero dei dettagli della struttura selezionata",
+            "Error in the recovery of details of the selected structure",
             err
           );
           setIsLoading(false);
         });
     }
-  }, [user?.token, id_struttura]);
+  }, [user?.token, structure_id]);
 
   return (
     <dialog
@@ -104,12 +105,10 @@ const StrutturaDetail = ({ id_struttura }: { id_struttura: string | null }) => {
           </div>
         ) : (
           <>
-            {dettagliPrestazioniSelected ? (
+            {selectedPerformanceDetail ? (
               <>
                 <div className="flex justify-between items-center">
-                  <h3 className="font-bold text-lg mb-4">
-                    Dettaglio Struttura
-                  </h3>
+                  <h3 className="font-bold text-lg mb-4">Structure Details</h3>
                   <button
                     type="button"
                     className="btn bg-red-500 btn-circle"
@@ -134,7 +133,7 @@ const StrutturaDetail = ({ id_struttura }: { id_struttura: string | null }) => {
                 <div className="card bg-base-100 shadow-xl w-2/2 h-full">
                   <div className="card-body flex flex-col p-5 justify-between items-center">
                     <h3 className="card-title mb-5 text-3xl">
-                      {dettaglioStruttura?.struttura?.ragione_sociale}
+                      {stuctureDetail?.structure?.corporate}
                     </h3>
 
                     {/** EMAIL */}
@@ -143,62 +142,60 @@ const StrutturaDetail = ({ id_struttura }: { id_struttura: string | null }) => {
                         <h3 className="card-title">E-mail:</h3>
                       </div>
                       <div className="flex w-2/3 justify-center">
-                        {dettaglioStruttura?.recapiti?.some((r) => r.email) ? (
+                        {stuctureDetail?.contact?.some((r) => r.email) ? (
                           <div className="flex flex-col items-center">
-                            {dettaglioStruttura.recapiti
+                            {stuctureDetail.contact
                               .filter((r) => r.email)
                               .map((r, idx) => (
                                 <p key={idx}>{r.email}</p>
                               ))}
                           </div>
                         ) : (
-                          <p>Email non presente</p>
+                          <p>Email not found</p>
                         )}
                       </div>
                     </div>
 
-                    {/** TELEFONO */}
+                    {/** PHONE */}
                     <div className="flex flex-row items-center text-center w-full mb-5">
                       <div className="flex w-1/3 justify-start">
-                        <h3 className="card-title">Telefono:</h3>
+                        <h3 className="card-title">Phone:</h3>
                       </div>
                       <div className="flex w-2/3 justify-center">
-                        {dettaglioStruttura?.recapiti?.some(
-                          (r) => r.telefono
-                        ) ? (
+                        {stuctureDetail?.contact?.some((r) => r.phone) ? (
                           <div className="flex flex-col items-center">
-                            {dettaglioStruttura.recapiti
-                              .filter((r) => r.telefono)
+                            {stuctureDetail.contact
+                              .filter((r) => r.phone)
                               .map((r, idx) => (
-                                <p key={idx}>{r.telefono}</p>
+                                <p key={idx}>{r.phone}</p>
                               ))}
                           </div>
                         ) : (
-                          <p>Telefono non presente</p>
+                          <p>Phone not found</p>
                         )}
                       </div>
                     </div>
 
-                    {/** POSIZIONE */}
+                    {/** POSITION */}
                     <div className="flex flex-row items-center text-center w-full mb-5">
                       <div className="flex w-1/3 justify-start">
-                        <h3 className="card-title">Posizione:</h3>
+                        <h3 className="card-title">Position:</h3>
                       </div>
                       <div className="flex w-2/3 justify-center">
                         <p>
-                          {dettaglioStruttura?.posizione?.via}{" "}
-                          {dettaglioStruttura?.posizione?.numero_civico},{" "}
-                          {dettaglioStruttura?.posizione?.cap}{" "}
-                          {dettaglioStruttura?.posizione?.comune} (
-                          {dettaglioStruttura?.posizione?.provincia})
+                          {stuctureDetail?.position?.street}{" "}
+                          {stuctureDetail?.position?.civic_number},{" "}
+                          {stuctureDetail?.position?.cap}{" "}
+                          {stuctureDetail?.position?.city} (
+                          {stuctureDetail?.position?.province})
                         </p>
                       </div>
                     </div>
                     <button
                       className="btn btn-sm btn-primary"
-                      onClick={() => setDettagliPrestazioniSelected(false)}
+                      onClick={() => setSelectedPerformanceDetail(false)}
                     >
-                      Vedi Prestazioni
+                      See Performances
                     </button>
                   </div>
                 </div>
@@ -206,7 +203,7 @@ const StrutturaDetail = ({ id_struttura }: { id_struttura: string | null }) => {
             ) : (
               <>
                 <h3 className="font-bold text-lg mb-4">
-                  Prestazioni Struttura
+                  Structure's Performance
                 </h3>
 
                 <div className="w-full">
@@ -230,43 +227,43 @@ const StrutturaDetail = ({ id_struttura }: { id_struttura: string | null }) => {
                     <input
                       type="search"
                       required
-                      placeholder="Cerca per titolo"
+                      placeholder="Search for title"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </label>
                 </div>
 
-                {prestazioniAzienda.length === 0 ? (
-                  <p>Nessuna prestazione trovata per questa struttura.</p>
+                {perfomanceCompany.length === 0 ? (
+                  <p>No performance found for this structure.</p>
                 ) : (
                   <>
-                    {prestazioniAzienda
-                      .filter((prestazione) =>
-                        prestazione.tipo_prestazione?.titolo
+                    {perfomanceCompany
+                      .filter((perfomance) =>
+                        perfomance.performance_type?.title
                           .toLowerCase()
                           .includes(searchTerm.toLowerCase())
                       )
-                      .map((prestazione: Prestazione) => (
+                      .map((perfomance: Performance) => (
                         <ul className="list bg-base-100 rounded-box shadow-md h-full my-5">
                           <li
                             className="list-row"
-                            key={prestazione.id_prestazione}
+                            key={perfomance.performance_id}
                           >
                             <div>
                               <div className="font-bold">
-                                {prestazione.tipo_prestazione?.titolo}
+                                {perfomance.performance_type?.title}
                               </div>
                               <div className="mt-3">
-                                {prestazione.descrizione_personalizzata
-                                  ? prestazione.descrizione_personalizzata
-                                  : prestazione.tipo_prestazione?.descrizione}
+                                {perfomance.personalized_description
+                                  ? perfomance.personalized_description
+                                  : perfomance.performance_type?.description}
                               </div>
                               <div className="mt-5 flex justify-end">
                                 <label className="input w-28">
                                   <input
                                     className="text-end pointer-events-none select-none"
-                                    value={prestazione.valore?.valore_numerico}
+                                    value={perfomance.value?.numerical_value}
                                   />
                                   <span className="label">€</span>
                                 </label>
@@ -277,9 +274,9 @@ const StrutturaDetail = ({ id_struttura }: { id_struttura: string | null }) => {
                       ))}
                     <button
                       className="btn btn-sm btn-secondary mb-4"
-                      onClick={() => setDettagliPrestazioniSelected(true)}
+                      onClick={() => setSelectedPerformanceDetail(true)}
                     >
-                      Indietro
+                      Back
                     </button>
                   </>
                 )}
@@ -292,4 +289,4 @@ const StrutturaDetail = ({ id_struttura }: { id_struttura: string | null }) => {
   );
 };
 
-export default StrutturaDetail;
+export default StructureDetails;

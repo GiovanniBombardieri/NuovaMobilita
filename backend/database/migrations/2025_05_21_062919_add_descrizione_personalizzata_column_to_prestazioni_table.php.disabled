@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('prestazioni', function (Blueprint $table) {
-            $table->longText('descrizione_personalizzata')->after('id_valore')->nullable();
+        Schema::table('performance', function (Blueprint $table) {
+            $table->longText('descrizione_personalizzata')->after('value_id')->nullable();
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('prestazioni', function (Blueprint $table) {
+        Schema::table('performance', function (Blueprint $table) {
             $table->dropColumn('descrizione_personalizzata');
         });
     }

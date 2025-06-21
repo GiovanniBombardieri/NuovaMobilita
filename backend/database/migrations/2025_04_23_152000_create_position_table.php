@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -11,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posizione_user', function (Blueprint $table) {
+        Schema::create('position', function (Blueprint $table) {
             $table->string('position_id', 36)->primary();
             $table->string('city', 100)->nullable();
             $table->char('province', 2)->nullable();
@@ -19,7 +20,10 @@ return new class extends Migration
             $table->string('civic_number', 10)->nullable();
             $table->char('cap', 5)->nullable();
             $table->dateTime('change_time')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
-            $table->tinyInteger('active_record')->default(0);
+            $table->tinyInteger('active_record')->default(1);
+
+            // $table->foreign('structure_id')->references('structure_id')->on('structure')->onDelete('cascade');
+            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -28,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posizione_user');
+        Schema::dropIfExists('position');
     }
 };

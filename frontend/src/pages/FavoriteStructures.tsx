@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { DettagliStruttura, useAuth } from "../context/AuthContext";
+import { StructureDetail, useAuth } from "../context/AuthContext";
 import img_struttura_sanitaria from "../../public/struttura-sanitaria.png";
-import StrutturaDetail from "./StrutturaDetail";
+import StrutturaDetail from "./StructureDetail";
 
-const StrutturePreferite = () => {
+const FavoriteStructures = () => {
   const { user } = useAuth();
-  const [strutturePreferite, setStrutturePreferite] = useState<
-    DettagliStruttura[]
+  const [favoriteStructures, setFavoriteStructures] = useState<
+    StructureDetail[]
   >([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStrutturaId, setSelectedStrutturaId] = useState<string | null>(
@@ -16,26 +16,23 @@ const StrutturePreferite = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_URL}/get_strutture_preferite`, {
+      .get(`${import.meta.env.VITE_API_URL}/preferred_structures`, {
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
       })
       .then((res) => {
-        setStrutturePreferite(res.data.data);
+        setFavoriteStructures(res.data.data);
       })
       .catch((err) => {
-        console.error("Errore nel recupero delle strutture preferite", err);
+        console.error("Error in the recovery of favorite structures", err);
       });
   }, [user?.token]);
 
-  const removePreferredStructure = async ($id_struttura: string) => {
+  const removePreferredStructure = async ($structure_id: string) => {
     try {
-      await axios.put(
-        `${
-          import.meta.env.VITE_API_URL
-        }/remove_struttura_preferita/${$id_struttura}`,
-        { $id_struttura },
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/preferred_structure/${$structure_id}`,
         {
           headers: {
             Authorization: `Bearer ${user?.token}`,
@@ -43,26 +40,26 @@ const StrutturePreferite = () => {
         }
       );
 
-      alert("Struttura rimossa dai propri preferiti!");
+      alert("Structure removed from its favorites!");
       window.location.reload();
     } catch (error) {
       console.error(
-        "Errore durante la rimozione della struttura dai propri preferiti ",
+        "Error when removing the structure from your favorites ",
         error
       );
       alert(
-        "Si è verificato un errore durante la rimoione della struttura dai propri preferiti"
+        "A mistake has occurred during the removal of the structure from your favorites"
       );
     }
   };
 
   return (
     <dialog
-      id="strutture_preferite"
+      id="preferred_structures"
       className="modal modal-bottom sm:modal-middle"
     >
       <div className="modal-box">
-        <h3 className="font-bold text-lg mb-4">Le mie strutture preferite</h3>
+        <h3 className="font-bold text-lg mb-4">My Favorite Structures</h3>
 
         <div className="flex justify-center items-center">
           <label className="input w-full">
@@ -85,23 +82,23 @@ const StrutturePreferite = () => {
             <input
               type="search"
               required
-              placeholder="Cerca per titolo"
+              placeholder="Cerca per title"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </label>
         </div>
 
-        {strutturePreferite
-          .filter((strutturePreferite) =>
-            strutturePreferite.struttura?.ragione_sociale
+        {favoriteStructures
+          .filter((favoriteStructures) =>
+            favoriteStructures.structure?.corporate
               .toLowerCase()
               .includes(searchTerm.toLowerCase())
           )
-          .map((strutturePreferite: DettagliStruttura) => (
+          .map((favoriteStructures: StructureDetail) => (
             <li
               className="list-row list-none my-5"
-              key={strutturePreferite.struttura?.id_struttura}
+              key={favoriteStructures.structure?.structure_id}
             >
               <div className="flex flex-row justify-stretch">
                 <div className="w-1/12 flex justify-center items-center mr-4">
@@ -112,15 +109,13 @@ const StrutturePreferite = () => {
                   />
                 </div>
                 <div className="w-10/12 mr-5 flex items-center text-lg">
-                  <strong>
-                    {strutturePreferite.struttura?.ragione_sociale}
-                  </strong>
+                  <strong>{favoriteStructures.structure?.corporate}</strong>
                 </div>
                 <div className="tooltip" data-tip="Dettaglio">
                   <button
                     onClick={() => {
                       setSelectedStrutturaId(
-                        strutturePreferite.struttura?.id_struttura
+                        favoriteStructures.structure?.structure_id
                       );
                       (
                         document.getElementById(
@@ -149,7 +144,7 @@ const StrutturePreferite = () => {
                   <button
                     onClick={() => {
                       removePreferredStructure(
-                        strutturePreferite.struttura?.id_struttura
+                        favoriteStructures.structure?.structure_id
                       );
                     }}
                     className="btn btn-square btn-ghost text-red-500"
@@ -176,13 +171,13 @@ const StrutturePreferite = () => {
             </li>
           ))}
 
-        <div className="flex justify-end">
+        <div className="flex justify-end mt-3">
           <button
             className="btn"
             onClick={() =>
               (
                 document.getElementById(
-                  "strutture_preferite"
+                  "preferred_structures"
                 ) as HTMLDialogElement
               )?.close()
             }
@@ -190,10 +185,10 @@ const StrutturePreferite = () => {
             Close
           </button>
         </div>
-        <StrutturaDetail id_struttura={selectedStrutturaId} />
+        <StrutturaDetail structure_id={selectedStrutturaId} />
       </div>
     </dialog>
   );
 };
 
-export default StrutturePreferite;
+export default FavoriteStructures;

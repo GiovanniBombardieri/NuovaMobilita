@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('id_struttura', 36)->nullable()->after('id');
+            $table->string('structure_id', 36)->nullable()->after('id');
 
             // Foreign keys
-            // $table->foreign('id_struttura')->references('id_struttura')->on('struttura')->onDelete('cascade');
+            // $table->foreign('structure_id')->references('structure_id')->on('structure')->onDelete('cascade');
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['id_struttura']);
-            $table->dropColumn('id_struttura');
+            $table->dropForeign(['structure_id']);
+            $table->dropColumn('structure_id');
         });
     }
 };

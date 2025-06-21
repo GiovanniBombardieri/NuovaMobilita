@@ -7,7 +7,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Se l'utente è loggato
+    // If user is log in
     if (user) {
       navigate("/dashboard");
     } else {

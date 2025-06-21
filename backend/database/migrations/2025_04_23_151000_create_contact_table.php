@@ -12,12 +12,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('preferred_structures', function (Blueprint $table) {
-            $table->string('preferred_structure_id', 36)->primary();
+        Schema::create('contact', function (Blueprint $table) {
+            $table->string('contact_id', 36)->primary();
             $table->string('structure_id', 36);
-            $table->string('user_id', 36);
+            $table->string('contact_type_id', 36);
+            $table->char('phone')->nullable();
+            $table->string('mail')->nullable();
             $table->dateTime('change_time')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
             $table->tinyInteger('active_record')->default(1);
+
+            // Foreign keys
+            $table->foreign('contact_type_id')->references('contact_type_id')->on('contact_type')->onDelete('cascade');
+            $table->foreign('structure_id')->references('structure_id')->on('structure')->onDelete('cascade');
         });
     }
 
@@ -26,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('preferred_structures');
+        Schema::dropIfExists('contact');
     }
 };

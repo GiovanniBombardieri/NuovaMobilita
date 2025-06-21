@@ -12,10 +12,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('preferred_structures', function (Blueprint $table) {
-            $table->string('preferred_structure_id', 36)->primary();
-            $table->string('structure_id', 36);
-            $table->string('user_id', 36);
+        Schema::create('contact_type', function (Blueprint $table) {
+            $table->string('contact_type_id', 36)->primary();
+            $table->string('description');
             $table->dateTime('change_time')->default(DB::raw('CURRENT_TIMESTAMP'))->useCurrent()->useCurrentOnUpdate();
             $table->tinyInteger('active_record')->default(1);
         });
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('preferred_structures');
+        Schema::dropIfExists('contact_type');
     }
 };

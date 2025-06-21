@@ -1,15 +1,14 @@
-import { useAuth, User, Struttura } from "../context/AuthContext";
+import { useAuth, User, Structure } from "../context/AuthContext";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import ModificaProfilo from "./ModificaProfilo";
+import EditProfile from "./EditProfile";
 
-// Funzioni di type guard
-function isUser(user: User | Struttura | null): user is User {
-  return (user as User)?.ruolo === "utente";
+function isUser(user: User | Structure | null): user is User {
+  return (user as User)?.role === "user";
 }
 
-function isStruttura(user: User | Struttura | null): user is Struttura {
-  return (user as Struttura)?.ruolo === "struttura";
+function isStructure(user: User | Structure | null): user is Structure {
+  return (user as Structure)?.role === "structure";
 }
 
 const UserDetails = () => {
@@ -32,12 +31,12 @@ const UserDetails = () => {
             <div className="w-24 h-24 rounded-full bg-primary text-white flex items-center justify-center text-5xl font-bold">
               {isUser(user)
                 ? `${user.name.charAt(0)?.toUpperCase() ?? ""}${
-                    user.cognome.charAt(0)?.toUpperCase() ?? ""
+                    user.surname.charAt(0)?.toUpperCase() ?? ""
                   }`
-                : isStruttura(user)
+                : isStructure(user)
                 ? `${
-                    user.ragione_sociale.charAt(0)?.toUpperCase() +
-                    user.ragione_sociale.charAt(1)?.toUpperCase()
+                    user.corporate.charAt(0)?.toUpperCase() +
+                    user.corporate.charAt(1)?.toUpperCase()
                   }`
                 : "UG"}
             </div>
@@ -53,12 +52,12 @@ const UserDetails = () => {
                 transition={{ duration: 0.7 }}
                 className="text-center font-bold text-2xl my-3 md:ml-10"
               >
-                Benvenutə{" "}
+                Welcome{" "}
                 {isUser(user)
                   ? user.name
-                  : isStruttura(user)
-                  ? user.ragione_sociale
-                  : "Utente generico"}
+                  : isStructure(user)
+                  ? user.corporate
+                  : "Generic user"}
               </motion.span>
             ) : (
               <motion.span
@@ -69,7 +68,7 @@ const UserDetails = () => {
                 transition={{ duration: 0.7 }}
                 className="text-center font-bold text-2xl my-3 md:ml-10"
               >
-                Ecco i dati relativi al tuo account
+                Here are the data relating to your account
               </motion.span>
             )}
           </AnimatePresence>
@@ -77,15 +76,15 @@ const UserDetails = () => {
 
         <div className="card-body flex flex-col p-0">
           <div className="h-2/3 px-10">
-            {/** RUOLO */}
+            {/** ROLE */}
             <div className="flex flex-col md:flex-row items-center text-center w-full mb-5">
               <div className="flex md:w-1/3 w-full justify-center">
-                <h3 className="card-title">Ruolo:</h3>
+                <h3 className="card-title">Role:</h3>
               </div>
               <div className="flex md:w-2/3 w-full justify-center">
                 <p>
-                  {user?.ruolo
-                    ? user.ruolo.charAt(0).toUpperCase() + user.ruolo.slice(1)
+                  {user?.role
+                    ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
                     : ""}
                 </p>
               </div>
@@ -101,84 +100,78 @@ const UserDetails = () => {
               </div>
             </div>
 
-            {/** TELEFONO */}
+            {/** PHONE */}
             <div className="flex flex-col md:flex-row items-center text-center w-full mb-5">
               <div className="flex md:w-1/3 w-full justify-center">
-                <h3 className="card-title">Telefono:</h3>
+                <h3 className="card-title">Phone:</h3>
               </div>
               {isUser(user) ? (
-                user.telefono ? (
+                user.phone ? (
                   <div className="flex md:w-2/3 w-full justify-center">
-                    <p>{user.telefono}</p>
+                    <p>{user.phone}</p>
                   </div>
                 ) : (
                   <div className="flex md:w-2/3 w-full justify-center">
-                    <p className="text-red-600 text-xs">
-                      Telefono non inserito
-                    </p>
+                    <p className="text-red-600 text-xs">Phone not entered</p>
                   </div>
                 )
-              ) : isStruttura(user) && user?.telefono ? (
+              ) : isStructure(user) && user?.phone ? (
                 <div className="flex md:w-2/3 w-full justify-center">
-                  <p>{user.telefono}</p>
+                  <p>{user.phone}</p>
                 </div>
               ) : (
                 <div className="flex md:w-2/3 w-full justify-center">
-                  <p className="text-red-600 text-xs">Telefono non inserito</p>
+                  <p className="text-red-600 text-xs">Phone not entered</p>
                 </div>
               )}
             </div>
 
-            {/** INDIRIZZO */}
+            {/** ADDRESS */}
             <div className="flex flex-col md:flex-row items-center text-center w-full mb-5">
               <div className="flex md:w-1/3 w-full justify-center">
-                <h3 className="card-title">Indirizzo:</h3>
+                <h3 className="card-title">Address:</h3>
               </div>
               {isUser(user) ? (
-                user?.comune &&
-                user?.via &&
-                user?.numero_civico &&
+                user?.city &&
+                user?.street &&
+                user?.civic_number &&
                 user?.cap &&
-                user?.provincia ? (
+                user?.province ? (
                   <div className="flex md:w-2/3 w-full justify-center">
                     <p>
-                      {user.via} {user.numero_civico}, {user.cap} {user.comune},{" "}
-                      {user.provincia}
+                      {user.street} {user.civic_number}, {user.cap} {user.city},{" "}
+                      {user.province}
                     </p>
                   </div>
                 ) : (
                   <div className="flex flex-col md:w-2/3 w-full justify-center text-xs items-center">
-                    <p className="text-red-600">Indirizzo non corretto</p>
-                    <p className="text-red-600">
-                      Inserire tutti i dati richiesti
-                    </p>
+                    <p className="text-red-600">Incorrect address</p>
+                    <p className="text-red-600">Enter all the required data</p>
                   </div>
                 )
-              ) : isStruttura(user) &&
-                user?.comune &&
-                user?.via &&
-                user?.numero_civico &&
+              ) : isStructure(user) &&
+                user?.city &&
+                user?.street &&
+                user?.civic_number &&
                 user?.cap &&
-                user?.provincia ? (
+                user?.province ? (
                 <div className="flex md:w-2/3 w-full justify-center">
                   <p>
-                    {user.via} {user.numero_civico}, {user.comune} {user.cap} (
-                    {user.provincia})
+                    {user.street} {user.civic_number}, {user.city} {user.cap} (
+                    {user.province})
                   </p>
                 </div>
               ) : (
                 <div className="flex flex-col md:w-2/3 w-full justify-center text-xs items-center">
-                  <p className="text-red-600">Indirizzo non corretto</p>
-                  <p className="text-red-600">
-                    Inserire tutti i dati richiesti
-                  </p>
+                  <p className="text-red-600">Incorrect address</p>
+                  <p className="text-red-600">Enter all the required data</p>
                 </div>
               )}
             </div>
           </div>
 
           <div className="w-full h-1/3 px-10 py-5 md:py-2">
-            {/** PULSANTE MODIFICA PROFILO */}
+            {/** Profile Edit button */}
             <button
               onClick={() =>
                 (
@@ -201,12 +194,12 @@ const UserDetails = () => {
                   d="M15.232 5.232l3.536 3.536M9 11l6-6m2 2L13 9m0 0L9 13v4h4l4-4z"
                 />
               </svg>
-              Modifica profilo
+              Edit Profile
             </button>
           </div>
 
           {/** DIALOG */}
-          <ModificaProfilo />
+          <EditProfile />
         </div>
       </div>
     </div>

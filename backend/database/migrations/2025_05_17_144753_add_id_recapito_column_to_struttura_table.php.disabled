@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('struttura', function (Blueprint $table) {
-            $table->uuid('id_recapito');
+        Schema::table('structure', function (Blueprint $table) {
+            $table->uuid('contact_id');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('struttura', function (Blueprint $table) {
-            $table->dropColumn('id_recapito');
+        Schema::table('structure', function (Blueprint $table) {
+            $table->dropColumn('contact_id');
         });
     }
 };
