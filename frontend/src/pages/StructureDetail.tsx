@@ -235,7 +235,15 @@ const StructureDetails = ({
                 </div>
 
                 {perfomanceCompany.length === 0 ? (
-                  <p>No performance found for this structure.</p>
+                  <>
+                    <p>No performance found for this structure.</p>
+                    <button
+                      className="btn btn-sm btn-secondary mt-4"
+                      onClick={() => setSelectedPerformanceDetail(true)}
+                    >
+                      Back
+                    </button>
+                  </>
                 ) : (
                   <>
                     {perfomanceCompany
