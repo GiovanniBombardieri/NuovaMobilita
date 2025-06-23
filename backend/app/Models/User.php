@@ -57,16 +57,16 @@ class User extends Authenticatable
 
     public function structure()
     {
-        return $this->hasOne(Structure::class, 'structure_id', 'structure_id');
+        return $this->hasOne(Structure::class, 'structure_id', 'structure_id')->where('active_record', 1);;
     }
 
     public function position()
     {
-        return $this->hasOne(Position::class, 'position_id', 'position_id');
+        return $this->hasOne(Position::class, 'position_id', 'position_id')->where('active_record', 1);
     }
 
     public function preferredStructure()
     {
-        return $this->hasMany(PreferredStructure::class, 'user_id');
+        return $this->hasMany(PreferredStructure::class, 'user_id')->where('active_record', 1);;
     }
 }

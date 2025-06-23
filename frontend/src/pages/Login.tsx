@@ -4,9 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 const geocodeAddress = async (address: string) => {
   const response = await fetch(
-    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-      address
-    )}`
+    `${import.meta.env.VITE_API_URL}/geocode?q=${encodeURIComponent(address)}`
   );
   const data = await response.json();
   if (data && data.length > 0) {
