@@ -9,7 +9,7 @@ const ServiceOverview = () => {
 
   return (
     <div className="h-full w-full">
-      <div className="card bg-base-100 w-full h-full shadow-l">
+      <div className="card bg-base-100 w-full h-full shadow-md">
         <div className="card-body flex flex-col items-start text-start">
           {isStructure(user) ? (
             <>
