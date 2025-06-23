@@ -160,7 +160,7 @@ const Login = () => {
         onSubmit={handleLogin}
         className="w-full flex flex-col items-center justify-center"
       >
-        <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 w-1/4 flex flex-col items-center">
+        <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 lg:w-1/4 flex flex-col items-center">
           <legend className="fieldset-legend">Login</legend>
 
           {/** EMAIL */}
