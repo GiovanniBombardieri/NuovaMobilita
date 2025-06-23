@@ -47,7 +47,7 @@ class Structure extends Model
 
     public function performance()
     {
-        return $this->hasMany(Performance::class, 'structure_id', 'structure_id');
+        return $this->hasMany(Performance::class, 'structure_id', 'structure_id')->where('active_record', 1);
     }
 
     public function preferredStructure()
