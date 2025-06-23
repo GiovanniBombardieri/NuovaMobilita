@@ -39,7 +39,7 @@ const StructureMaps = ({ structures, userLocation }: Props) => {
       scrollWheelZoom={true}
       className={`${
         isStructure(user)
-          ? "w-1/2 h-full lg:overflow-auto"
+          ? "lg:w-1/2 lg:h-full h-[500px] lg:overflow-auto"
           : "w-full lg:h-full h-[500px]"
       } rounded-lg shadow overflow-scroll`}
     >
