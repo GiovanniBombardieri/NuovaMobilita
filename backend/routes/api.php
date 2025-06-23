@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PerformanceController;
 use App\Http\Controllers\StructureController;
+use App\Http\Controllers\GeoCodingController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -33,3 +34,6 @@ Route::middleware('auth:sanctum')->group(function () {
 	Route::get('/preferred_structures', [StructureController::class, 'getPreferredStructures']);
 	Route::delete('/preferred_structure/{structure_id}', [StructureController::class, 'removePreferredStructure']);
 });
+
+// Geocoding
+Route::get('/geocode', [GeoCodingController::class, 'search']);

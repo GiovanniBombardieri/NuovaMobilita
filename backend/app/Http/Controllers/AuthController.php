@@ -163,7 +163,7 @@ class AuthController extends Controller
 		$token = $user->createToken('auth_token')->plainTextToken;
 
 		if ($user->role === "user") {
-			$position = $user->user_position;
+			$position = $user->position;
 
 			return response()->json([
 				'user' => [
@@ -173,11 +173,11 @@ class AuthController extends Controller
 					'email' => $user->email,
 					'phone' => $user->phone,
 					'user_position' => [
-						'city' => $posizione->city ?? null,
-						'province' => $posizione->province ?? null,
-						'street' => $posizione->street ?? null,
-						'civic_number' => $posizione->civic_number ?? null,
-						'cap' => $posizione->cap ?? null,
+						'city' => $position->city ?? null,
+						'province' => $position->province ?? null,
+						'street' => $position->street ?? null,
+						'civic_number' => $position->civic_number ?? null,
+						'cap' => $position->cap ?? null,
 					],
 				],
 				'access_token' => $token,
