@@ -118,10 +118,10 @@ const Dashboard = () => {
         <div className="flex-1 flex flex-col lg:flex-row lg:overflow-hidden">
           {/** Left column */}
           <div className="flex flex-col w-full lg:w-2/3 h-full">
-            <div className="flex-1 lg:overflow-auto pt-4 pl-4 pb-2 pr-2">
+            <div className="flex-1 lg:overflow-auto pt-4 lg:pl-4 pl-1 pb-2 lg:pr-2 pr-1">
               <ServiceOverview />
             </div>
-            <div className="flex-1 flex flex-col lg:flex-row justify-between lg:overflow-hidden pl-4 pb-4 pt-2 pr-2 gap-4">
+            <div className="flex-1 flex flex-col lg:flex-row justify-between lg:overflow-hidden lg:pl-4 pl-1 pb-1 pt-2 lg:pr-2 pr-1 gap-4">
               <UserDetails />
               {isLoading ? (
                 <StructureMaps
@@ -132,7 +132,7 @@ const Dashboard = () => {
             </div>
           </div>
           {/** Right column */}
-          <div className="h-full  w-full lg:w-1/3 pl-2 py-4 pr-4 overflow-auto">
+          <div className="h-full  w-full lg:w-1/3 lg:pl-2 pl-1 lg:py-4 py-1 lg:pr-4 pr-1 overflow-auto">
             {isStructure(user) ? <Performance /> : null}
           </div>
         </div>
