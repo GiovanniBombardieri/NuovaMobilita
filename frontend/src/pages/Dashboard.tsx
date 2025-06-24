@@ -83,7 +83,8 @@ const Dashboard = () => {
   const mappedStructure = structure
     .filter(
       (s): s is Structure & { location: { lat: number; lng: number } } =>
-        !!s.location
+        !!s.location &&
+        (!isStructure(user) || s.structure_id !== user.structure_id)
     )
     .map((s, index) => ({
       id: index + 1,

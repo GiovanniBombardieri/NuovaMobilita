@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -197,6 +198,7 @@ class AuthController extends Controller
 			return response()->json([
 				'user' => [
 					'role' => $user->role,
+					'structure_id' => $user->structure_id,
 					'email' => $user->email,
 					'phone' => $contactWithPhone->phone ?? null,
 					'corporate' => $structure->corporate ?? null,

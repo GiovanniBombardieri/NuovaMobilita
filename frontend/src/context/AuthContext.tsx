@@ -21,6 +21,7 @@ export interface User {
 
 // Definition of the type for the structure role
 export interface Structure {
+  structure_id: string;
   corporate: string;
   city: string;
   province: string;

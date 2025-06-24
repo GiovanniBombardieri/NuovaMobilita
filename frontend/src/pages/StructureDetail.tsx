@@ -236,7 +236,9 @@ const StructureDetails = ({
 
                 {perfomanceCompany.length === 0 ? (
                   <>
-                    <p>No performance found for this structure.</p>
+                    <p className="my-5 w-full text-center">
+                      No performance found for this structure.
+                    </p>
                     <button
                       className="btn btn-sm btn-secondary mt-4"
                       onClick={() => setSelectedPerformanceDetail(true)}
