@@ -131,6 +131,7 @@ const EditProfile = () => {
           window.location.reload();
         } else if (updateUser.role === "structure") {
           login({
+            structure_id: updateUser.structure_id,
             corporate: updateUser.corporate,
             city: updateUser.city,
             province: updateUser.province,
@@ -171,6 +172,7 @@ const EditProfile = () => {
           window.location.reload();
         } else if (updateUser.role === "structure") {
           login({
+            structure_id: updateUser.structure_id,
             corporate: updateUser.corporate,
             city: updateUser.city,
             province: updateUser.province,
