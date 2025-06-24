@@ -42,7 +42,7 @@ class Structure extends Model
 
     public function contact()
     {
-        return $this->hasMany(Contact::class, 'structure_id', 'structure_id');
+        return $this->hasMany(Contact::class, 'structure_id', 'structure_id')->where('active_record', 1);
     }
 
     public function performance()

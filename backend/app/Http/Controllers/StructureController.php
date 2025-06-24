@@ -65,7 +65,7 @@ class StructureController extends Controller
             ],
             'contact' => $structure->contact->map(function ($contact) {
                 return [
-                    'email' => $contact->email,
+                    'email' => $contact->mail,
                     'phone' => $contact->phone,
                 ];
             }),
