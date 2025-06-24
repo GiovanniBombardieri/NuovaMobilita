@@ -12,8 +12,16 @@ const userIcon = new L.Icon({
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
-  shadowUrl: "/markers/marker-shadow.png",
+  // shadowUrl: "/markers/marker-shadow.png",
   shadowSize: [41, 41],
+});
+const structureIcon = new L.Icon({
+  iconUrl: "/markers/marker-icon-blue.png",
+  iconSize: [25, 30],
+  iconAnchor: [12, 30],
+  popupAnchor: [1, -25],
+  // shadowUrl: "/markers/marker-shadow.png",
+  shadowSize: [30, 30],
 });
 
 type StructureMap = {
@@ -55,7 +63,11 @@ const StructureMaps = ({ structures, userLocation }: Props) => {
       )}
 
       {structures.map((structure) => (
-        <Marker key={structure.id} position={[structure.lat, structure.lng]}>
+        <Marker
+          key={structure.id}
+          position={[structure.lat, structure.lng]}
+          icon={structureIcon}
+        >
           <Popup>{structure.name}</Popup>
         </Marker>
       ))}
