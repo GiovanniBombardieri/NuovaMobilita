@@ -83,6 +83,7 @@ const Register = () => {
         });
       } else if (role === "structure") {
         login({
+          structure_id: data.user.structure_id,
           corporate: data.user.corporate,
           city: data.user.city,
           province: data.user.province,
