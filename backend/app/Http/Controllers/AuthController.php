@@ -133,6 +133,7 @@ class AuthController extends Controller
 
 			return response()->json([
 				'user' => [
+					'structure_id' => $user->structure_id,
 					'role' => $user->role,
 					'email' => $user->email,
 					'corporate' => $structure->corporate,

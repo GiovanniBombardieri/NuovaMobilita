@@ -39,8 +39,6 @@ const Register = () => {
           password,
         };
 
-        console.log(role);
-
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/register/${role}`,
           {
@@ -62,15 +60,15 @@ const Register = () => {
         await login({
           name: data.user.name,
           surname: data.user.surname,
-          phone: data.user.phone,
           role: data.user.role,
           email: data.user.email,
-          token: data.token,
-          city: data.user.city,
-          province: data.user.province,
-          street: data.user.street,
-          civic_number: data.user.civic_number,
-          cap: data.user.cap,
+          phone: data.user.phone,
+          city: data.user_position.city,
+          province: data.user_position.province,
+          street: data.user_position.street,
+          civic_number: data.user_position.civic_number,
+          cap: data.user_position.cap,
+          token: data.access_token,
         });
 
         // Structure register
@@ -109,16 +107,16 @@ const Register = () => {
 
         await login({
           structure_id: data.user.structure_id,
+          role: data.user.role,
+          email: data.user.email,
           corporate: data.user.corporate,
           city: data.user.city,
           province: data.user.province,
           street: data.user.street,
           civic_number: data.user.civic_number,
           cap: data.user.cap,
-          role: data.user.role,
-          email: data.user.email,
           phone: data.user.phone,
-          token: data.token,
+          token: data.access_token,
         });
       }
 
