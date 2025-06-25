@@ -120,7 +120,7 @@ class PerformanceController extends Controller
         }
     }
 
-    public function createPerformanceFromnTypeId(Request $request, $performance_type_id)
+    public function createPerformanceFromTypeId(Request $request, $performance_type_id)
     {
         $user = $request->user();
         $structure = $user?->structure;

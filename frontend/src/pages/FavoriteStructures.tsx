@@ -13,8 +13,11 @@ const FavoriteStructures = () => {
   const [selectedStrutturaId, setSelectedStrutturaId] = useState<string | null>(
     null
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
+
     axios
       .get(`${import.meta.env.VITE_API_URL}/preferred_structures`, {
         headers: {
@@ -26,6 +29,9 @@ const FavoriteStructures = () => {
       })
       .catch((err) => {
         console.error("Error in the recovery of favorite structures", err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [user?.token]);
 
@@ -89,87 +95,93 @@ const FavoriteStructures = () => {
           </label>
         </div>
 
-        {favoriteStructures
-          .filter((favoriteStructures) =>
-            favoriteStructures.structure?.corporate
-              .toLowerCase()
-              .includes(searchTerm.toLowerCase())
-          )
-          .map((favoriteStructures: StructureDetail) => (
-            <li
-              className="list-row list-none my-5"
-              key={favoriteStructures.structure?.structure_id}
-            >
-              <div className="flex flex-row justify-stretch">
-                <div className="w-1/12 flex justify-center items-center mr-4">
-                  <img
-                    className="size-8 rounded-box"
-                    src={img_struttura_sanitaria}
-                    alt="Avatar"
-                  />
-                </div>
-                <div className="w-10/12 mr-5 flex items-center text-lg">
-                  <strong>{favoriteStructures.structure?.corporate}</strong>
-                </div>
-                <div className="tooltip" data-tip="Dettaglio">
-                  <button
-                    onClick={() => {
-                      setSelectedStrutturaId(
-                        favoriteStructures.structure?.structure_id
-                      );
-                      (
-                        document.getElementById(
-                          "struttura_detail"
-                        ) as HTMLDialogElement
-                      )?.showModal();
-                    }}
-                    className="btn btn-square btn-ghost"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="size-[1.2em]"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+        {isLoading ? (
+          <div className="w-full flex justify-center items-center py-8">
+            <span className="loading loading-spinner loading-lg"></span>
+          </div>
+        ) : (
+          favoriteStructures
+            .filter((favoriteStructures) =>
+              favoriteStructures.structure?.corporate
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase())
+            )
+            .map((favoriteStructures: StructureDetail) => (
+              <li
+                className="list-row list-none my-5"
+                key={favoriteStructures.structure?.structure_id}
+              >
+                <div className="flex flex-row justify-stretch">
+                  <div className="w-1/12 flex justify-center items-center mr-4">
+                    <img
+                      className="size-8 rounded-box"
+                      src={img_struttura_sanitaria}
+                      alt="Avatar"
+                    />
+                  </div>
+                  <div className="w-10/12 mr-5 flex items-center text-lg">
+                    <strong>{favoriteStructures.structure?.corporate}</strong>
+                  </div>
+                  <div className="tooltip" data-tip="Dettaglio">
+                    <button
+                      onClick={() => {
+                        setSelectedStrutturaId(
+                          favoriteStructures.structure?.structure_id
+                        );
+                        (
+                          document.getElementById(
+                            "struttura_detail"
+                          ) as HTMLDialogElement
+                        )?.showModal();
+                      }}
+                      className="btn btn-square btn-ghost"
                     >
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                      <circle cx="12" cy="12" r="3" />
-                    </svg>
-                  </button>
-                </div>
-                <div>
-                  <button
-                    onClick={() => {
-                      removePreferredStructure(
-                        favoriteStructures.structure?.structure_id
-                      );
-                    }}
-                    className="btn btn-square btn-ghost text-red-500"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="size-[1.2em]"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="size-[1.2em]"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div>
+                    <button
+                      onClick={() => {
+                        removePreferredStructure(
+                          favoriteStructures.structure?.structure_id
+                        );
+                      }}
+                      className="btn btn-square btn-ghost text-red-500"
                     >
-                      <polyline points="3 6 5 6 21 6" />
-                      <path d="M19 6 18.09 19.39A2 2 0 0 1 16.11 21H7.89A2 2 0 0 1 5.91 19.39L5 6" />
-                      <path d="M10 11v6" />
-                      <path d="M14 11v6" />
-                      <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
-                    </svg>
-                  </button>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="size-[1.2em]"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6 18.09 19.39A2 2 0 0 1 16.11 21H7.89A2 2 0 0 1 5.91 19.39L5 6" />
+                        <path d="M10 11v6" />
+                        <path d="M14 11v6" />
+                        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </li>
-          ))}
+              </li>
+            ))
+        )}
 
         <div className="flex justify-end mt-3">
           <button
