@@ -16,12 +16,8 @@ use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
-	public function register(Request $request)
+	public function userRegister(Request $request)
 	{
-		if ($request->role === 'structure') {
-			return $this->registerStruttura($request);
-		}
-
 		$request->validate([
 			'role' => 'required|string|max:50',
 			'name' => 'required|string|max:255',
@@ -72,8 +68,20 @@ class AuthController extends Controller
 		]);
 	}
 
-	public function registerStruttura(Request $request)
+	public function structureRegister(Request $request)
 	{
+		$request->validate([
+			'role' => 'required|string|max:50',
+			'corporate' => 'required|string|max:255',
+			'city' => 'required|string|max:255',
+			'province' => 'required|string|max:2',
+			'cap' => 'required|integer|min:5|max:5',
+			'street' => 'required|string|max:255',
+			'civicNumber' => 'required|string|max:10',
+			'email' => 'required|string|email|max:255|unique:users',
+			'password' => 'required|string|min:8',
+		]);
+
 		DB::beginTransaction();
 		try {
 			// Create structure_id, position_id, contact_id
@@ -164,58 +172,66 @@ class AuthController extends Controller
 		$token = $user->createToken('auth_token')->plainTextToken;
 
 		if ($user->role === "user") {
-			$position = $user->position;
-
-			return response()->json([
-				'user' => [
-					'name' => $user->name,
-					'surname' => $user->surname,
-					'role' => $user->role,
-					'email' => $user->email,
-					'phone' => $user->phone,
-					'user_position' => [
-						'city' => $position->city ?? null,
-						'province' => $position->province ?? null,
-						'street' => $position->street ?? null,
-						'civic_number' => $position->civic_number ?? null,
-						'cap' => $position->cap ?? null,
-					],
-				],
-				'access_token' => $token,
-				'token_type' => 'Bearer',
-			]);
+			return $this->userLogin($user, $token);
+		}
+		if ($user->role === "structure") {
+			return $this->structureLogin($user, $token);
 		}
 
-		if ($user->role === "structure") {
-			$structure = $user->structure;
-			$position = $structure?->position;
+		return response()->json([
+			'error' => 'Not recognized role.'
+		], 422);
+	}
 
-			$contact = $structure?->contact ?? collect();
-			$contactWithPhone = $contact->first(function ($r) {
-				return !empty($r->phone) && $r->active_record === 1;
-			});
-
-			return response()->json([
-				'user' => [
-					'role' => $user->role,
-					'structure_id' => $user->structure_id,
-					'email' => $user->email,
-					'phone' => $contactWithPhone->phone ?? null,
-					'corporate' => $structure->corporate ?? null,
+	public function userLogin($user, $token)
+	{
+		$position = $user->position;
+		return response()->json([
+			'user' => [
+				'name' => $user->name,
+				'surname' => $user->surname,
+				'role' => $user->role,
+				'email' => $user->email,
+				'phone' => $user->phone,
+				'user_position' => [
 					'city' => $position->city ?? null,
 					'province' => $position->province ?? null,
 					'street' => $position->street ?? null,
 					'civic_number' => $position->civic_number ?? null,
 					'cap' => $position->cap ?? null,
 				],
-				'access_token' => $token,
-				'token_type' => 'Bearer',
-			]);
-		}
+			],
+			'access_token' => $token,
+			'token_type' => 'Bearer',
+		]);
+	}
+
+	public function structureLogin($user, $token)
+	{
+		$structure = $user->structure;
+		$position = $structure?->position;
+
+		$contact = $structure?->contact ?? collect();
+		$contactWithPhone = $contact->first(function ($r) {
+			return !empty($r->phone) && $r->active_record === 1;
+		});
 
 		return response()->json([
-			'error' => 'Not recognized role.'
-		], 422);
+			'user' => [
+				'role' => $user->role,
+				'structure_id' => $user->structure_id,
+				'email' => $user->email,
+				'phone' => $contactWithPhone->phone ?? null,
+				'corporate' => $structure->corporate ?? null,
+				'city' => $position->city ?? null,
+				'province' => $position->province ?? null,
+				'street' => $position->street ?? null,
+				'civic_number' => $position->civic_number ?? null,
+				'cap' => $position->cap ?? null,
+			],
+			'access_token' => $token,
+			'token_type' => 'Bearer',
+		]);
 	}
 
 	public function logout(Request $request)

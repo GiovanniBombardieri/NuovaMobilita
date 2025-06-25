@@ -6,7 +6,8 @@ use App\Http\Controllers\StructureController;
 use App\Http\Controllers\GeoCodingController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('/register/user', [AuthController::class, 'userRegister']);
+Route::post('/register/structure', [AuthController::class, 'structureRegister']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
