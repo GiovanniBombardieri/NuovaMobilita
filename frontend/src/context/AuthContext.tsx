@@ -131,6 +131,7 @@ interface AuthContextType {
   user: User | Structure | null;
   login: (userData: User | Structure) => void;
   logout: () => void;
+  isLoading: boolean;
 }
 
 // Creation of the context with default Null value
@@ -148,14 +149,18 @@ export const useAuth = () => {
 
 // Providers that wraps the entire app to manage authentication
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const [user, setUser] = useState<User | Structure | null>(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
   const login = (userData: User | Structure) => {
+    setIsLoading(true);
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
+    setIsLoading(false);
   };
 
   const logout = () => {
@@ -164,7 +169,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

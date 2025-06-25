@@ -20,13 +20,16 @@ const Register = () => {
 
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       let bodyData;
 
+      // User Register
       if (role === "user") {
         bodyData = {
           role,
@@ -35,6 +38,42 @@ const Register = () => {
           email,
           password,
         };
+
+        console.log(role);
+
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/register/${role}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify(bodyData),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed Register");
+        }
+
+        const data = await response.json();
+
+        await login({
+          name: data.user.name,
+          surname: data.user.surname,
+          phone: data.user.phone,
+          role: data.user.role,
+          email: data.user.email,
+          token: data.token,
+          city: data.user.city,
+          province: data.user.province,
+          street: data.user.street,
+          civic_number: data.user.civic_number,
+          cap: data.user.cap,
+        });
+
+        // Structure register
       } else if (role === "structure") {
         bodyData = {
           role,
@@ -49,40 +88,26 @@ const Register = () => {
           email,
           password,
         };
-      }
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(bodyData),
-      });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/register/${role}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify(bodyData),
+          }
+        );
 
-      if (!response.ok) {
-        throw new Error("Failed Register");
-      }
+        if (!response.ok) {
+          throw new Error("Failed Register");
+        }
 
-      const data = await response.json();
+        const data = await response.json();
 
-      // Differenzio i dati di login in base al role selezionato
-      if (role === "user") {
-        login({
-          name: data.user.name,
-          surname: data.user.surname,
-          phone: data.user.phone,
-          role: data.user.role,
-          email: data.user.email,
-          token: data.token,
-          city: data.user.city,
-          province: data.user.province,
-          street: data.user.street,
-          civic_number: data.user.civic_number,
-          cap: data.user.cap,
-        });
-      } else if (role === "structure") {
-        login({
+        await login({
           structure_id: data.user.structure_id,
           corporate: data.user.corporate,
           city: data.user.city,
@@ -97,9 +122,13 @@ const Register = () => {
         });
       }
 
-      navigate("/dashboard");
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 300);
     } catch (error) {
       console.error("Error in registration:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -384,8 +413,12 @@ const Register = () => {
           )}
 
           {role && (
-            <button type="submit" className="btn btn-neutral my-4 w-3/4">
-              Register
+            <button
+              type="submit"
+              className="btn btn-neutral my-4 w-3/4"
+              disabled={loading}
+            >
+              {loading ? "Registering..." : "Register"}
             </button>
           )}
         </fieldset>
