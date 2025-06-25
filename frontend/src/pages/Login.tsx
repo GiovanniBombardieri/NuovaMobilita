@@ -23,9 +23,11 @@ const Login = () => {
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState("");
   const [loginFailed, setLoginFailed] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
@@ -59,7 +61,7 @@ const Login = () => {
         try {
           const location = await geocodeAddress(fullAddress);
 
-          login({
+          await login({
             name: data.user.name,
             surname: data.user.surname,
             phone: data.user.phone,
@@ -79,7 +81,7 @@ const Login = () => {
             lng: 12.4964,
           };
 
-          login({
+          await login({
             name: data.user.name,
             surname: data.user.surname,
             phone: data.user.phone,
@@ -139,7 +141,9 @@ const Login = () => {
           console.log(error);
         }
       }
-      navigate("/dashboard");
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 300);
     } catch (err) {
       if (err instanceof TypeError && err.message === "Failed to fetch") {
         setLoginError(
@@ -151,6 +155,8 @@ const Login = () => {
         setLoginError("Unknown error.");
       }
       setLoginFailed(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -237,8 +243,12 @@ const Login = () => {
             At least one uppercase letter
           </p>
 
-          <button type="submit" className="btn btn-neutral my-4 w-3/4">
-            Login
+          <button
+            type="submit"
+            className="btn btn-neutral my-4 w-3/4"
+            disabled={loading}
+          >
+            {loading ? "Logging..." : "Login"}
           </button>
         </fieldset>
       </form>
