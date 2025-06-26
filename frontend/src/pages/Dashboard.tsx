@@ -117,26 +117,23 @@ const Dashboard = () => {
         <div className="w-full h-full flex flex-col justify-center items-center py-8">
           {user.role === "user" ? (
             <>
-              <p className="text-xl">
-                ✨ Grazie per aver utilizzato Nuova Mobilità!
-              </p>
+              <p className="text-xl">✨ Thanks for using Nuova Mobilità!</p>
               <br />
               <p className="text-xl">
                 {" "}
-                Alla prossima esperienza insieme — ti aspettiamo per scoprire
-                nuovi servizi e opportunità vicino a te! 🚀💙
+                At the next experience together - we are waiting for you to
+                discover new services and opportunities near you! 🚀💙
               </p>
             </>
           ) : (
             <>
               <p className="text-xl">
-                👏 Grazie per esserti affidato a Nuova Mobilità!
+                👏 Thanks for entrusting you to Nuova Mobilità!
               </p>
               <br />
               <p className="text-xl">
-                Continua a far crescere la tua visibilità e a offrire servizi di
-                qualità: ti aspettiamo presto per nuove opportunità e successi
-                condivisi. 🌐🚀
+                Continue to grow your visibility and to offer quality services:
+                we are early for new opportunities and shared successes. 🌐🚀
               </p>
             </>
           )}

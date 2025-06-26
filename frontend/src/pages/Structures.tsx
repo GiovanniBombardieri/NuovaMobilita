@@ -70,7 +70,7 @@ const Structures = () => {
   };
 
   // User loading information writing
-  const fullText = "Stiamo cercando le strutture più vicine a te...";
+  const fullText = "We are looking for the structures closest to you...";
   const [displayedText, setDisplayedText] = useState("");
   const [index, setIndex] = useState(0);
   useEffect(() => {
