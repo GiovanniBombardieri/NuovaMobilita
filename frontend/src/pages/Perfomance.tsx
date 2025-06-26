@@ -22,6 +22,7 @@ const Performances = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     axios
       .get(`${import.meta.env.VITE_API_URL}/performance?page=${currentPage}`, {
         headers: {
@@ -34,6 +35,9 @@ const Performances = () => {
       })
       .catch((err) => {
         console.error("Performance recovery error", err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [currentPage, user?.token]);
 
@@ -73,6 +77,21 @@ const Performances = () => {
       alert("Error in the elimination of the performance");
     }
   };
+
+  // User loading information writing
+  const fullText = "🥁 We are loading the performance you saved 🥁.";
+  const [displayedText, setDisplayedText] = useState("");
+  const [index, setIndex] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDisplayedText((prev) =>
+        index < fullText.length ? prev + fullText[index] : ""
+      );
+      setIndex((prev) => (prev < fullText.length ? prev + 1 : 0));
+    }, 70);
+
+    return () => clearInterval(interval);
+  }, [index]);
 
   return (
     <div
@@ -200,7 +219,7 @@ const Performances = () => {
         )}
         {isLoading ? (
           <div className="w-full flex justify-center items-center py-8">
-            <span className="loading loading-spinner loading-lg"></span>
+            <p className="mt-5">{displayedText}</p>
           </div>
         ) : perfomances.length !== 0 ? (
           <div className="w-full h-full flex flex-row justify-center items-center">
