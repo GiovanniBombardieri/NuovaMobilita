@@ -69,6 +69,21 @@ const Structures = () => {
     }
   };
 
+  // User loading information writing
+  const fullText = "Stiamo cercando le strutture più vicine a te...";
+  const [displayedText, setDisplayedText] = useState("");
+  const [index, setIndex] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDisplayedText((prev) =>
+        index < fullText.length ? prev + fullText[index] : ""
+      );
+      setIndex((prev) => (prev < fullText.length ? prev + 1 : 0));
+    }, 70);
+
+    return () => clearInterval(interval);
+  }, [index]);
+
   return (
     <div className="h-auto lg:h-full w-full lg:w-1/2 lg:overflow-auto">
       <ul className="list bg-base-100 rounded-box shadow-md h-full w-full items-center">
@@ -107,8 +122,10 @@ const Structures = () => {
         </div>
 
         {isLoading ? (
-          <div className="w-full flex justify-center items-center py-8">
+          <div className="w-full flex flex-col justify-center items-center py-8">
             <span className="loading loading-spinner loading-lg"></span>
+            <br />
+            {displayedText}
           </div>
         ) : (
           structures
