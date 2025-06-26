@@ -7,7 +7,6 @@
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/89384be9-c396-4eef-b566-648b5f8fe327" alt="nuova-mobilita" width="400"/>
-
   <br />
 
 Nuova Mobilità is a web platform dedicated to supporting people who are undergoing a post-amputation recovery journey. It connects users and qualified healthcare facilities, making it easier to find services, manage treatments, and facilitate communication between patients and specialized centers.
@@ -34,7 +33,7 @@ Nuova Mobilità is a web platform dedicated to supporting people who are undergo
 - **Pagination system** for browsing facilities and services
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/9e847153-6e20-42bb-ba2c-bf35fe07e28d" alt="nuova-mobilita" width="1000"/>
+  <img src="images/nuova_mobilita.jpeg" alt="nuova-mobilita" width="1000"/>
 </div>
 
 ## Technologies used
