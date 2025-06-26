@@ -16,9 +16,10 @@ Nuova Mobilità is a web platform dedicated to supporting people who are undergo
 <br/>
 <br/>
 
-<div style="font-size: 12px; text-align: center; border-left: 5px solid #8C60C1ff; border-right: 5px solid #87D399ff; border-top-left-radius: 10px; border-bottom-right-radius: 10px; padding: 10px">
-🕰️ <u>Please note</u>: the application might take a few extra seconds to start. It's hosted on free-tier servers (startup budget still pending!), so a bit of patience is appreciated — I promise it's worth the wait!
-</div>
+> 🚀 **Warning**  
+> ⚠️ The app could use a few seconds to leave (free server).  
+> 🪙 Budget coming - thanks for your patience!
+
 
 ## Main Features
 
