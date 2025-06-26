@@ -114,7 +114,7 @@ const EditPerformance = ({
   };
 
   // User loading information writing
-  const fullText = "...";
+  const fullText = "Your performance is coming, what do we modify? 👨🏻‍💻";
   const [displayedText, setDisplayedText] = useState("");
   const [index, setIndex] = useState(0);
   useEffect(() => {
@@ -135,93 +135,103 @@ const EditPerformance = ({
     >
       <div className="modal-box">
         <h3 className="font-bold text-lg mb-4">Edit performance</h3>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            updatePerformance();
-          }}
-        >
-          {/** TITLE */}
-          <div>
-            <div className="form-control mb-4 w-full flex items-center justify-between">
-              <label className="label w-1/5">Title</label>
-              <input
-                type="text"
-                className="input input-bordered w-4/5"
-                value={isLoading ? displayedText : title}
-                onChange={(e) => setTitle(e.target.value)}
-                readOnly
-              />
+        {isLoading ? (
+          <div className="w-full flex flex-col justify-center items-center py-8">
+            <span className="loading loading-spinner loading-lg"></span>
+            <br />
+            {displayedText}
+          </div>
+        ) : (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              updatePerformance();
+            }}
+          >
+            {/** TITLE */}
+            <div>
+              <div className="form-control mb-4 w-full flex items-center justify-between">
+                <label className="label w-1/5">Title</label>
+                <input
+                  type="text"
+                  className="input input-bordered w-4/5"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  readOnly
+                />
+              </div>
             </div>
-          </div>
 
-          {/** TYPE */}
-          <div>
-            <div className="form-control mb-4 w-full flex items-center justify-between">
-              <label className="label w-1/5 text-wrap">Performance Type</label>
-              <input
-                type="text"
-                className="input input-bordered w-4/5"
-                value={isLoading ? displayedText : type}
-                onChange={(e) => setType(e.target.value)}
-                readOnly
-              />
+            {/** TYPE */}
+            <div>
+              <div className="form-control mb-4 w-full flex items-center justify-between">
+                <label className="label w-1/5 text-wrap">
+                  Performance Type
+                </label>
+                <input
+                  type="text"
+                  className="input input-bordered w-4/5"
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  readOnly
+                />
+              </div>
             </div>
-          </div>
 
-          {/** PRICE */}
-          <div>
-            <div className="form-control mb-4 w-full flex items-center justify-between">
-              <label className="label w-1/5">Price (€)</label>
-              <input
-                type="number"
-                min={0}
-                className="input input-bordered w-4/5"
-                value={isLoading ? displayedText : price}
-                onChange={(e) => {
-                  const value = e.target.value.replace(",", ".");
-                  const number = parseFloat(value);
-                  setPrice(isNaN(number) ? 0 : number);
-                }}
-              />
+            {/** PRICE */}
+            <div>
+              <div className="form-control mb-4 w-full flex items-center justify-between">
+                <label className="label w-1/5">Price (€)</label>
+                <input
+                  type="number"
+                  min={0}
+                  className="input input-bordered w-4/5"
+                  value={price}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(",", ".");
+                    const number = parseFloat(value);
+                    setPrice(isNaN(number) ? 0 : number);
+                  }}
+                />
+              </div>
             </div>
-          </div>
 
-          {/** DESCRIPTION */}
-          <div>
-            <div className="form-control mb-4 w-full flex items-center justify-between">
-              <label className="label w-1/5">Description</label>
-              <textarea
-                className="input input-bordered w-4/5 h-32 resize-none whitespace-normal"
-                value={isLoading ? displayedText : description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
+            {/** DESCRIPTION */}
+            <div>
+              <div className="form-control mb-4 w-full flex items-center justify-between">
+                <label className="label w-1/5">Description</label>
+                <textarea
+                  className="input input-bordered w-4/5 h-32 resize-none whitespace-normal"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="modal-action">
-            <button
-              type="submit"
-              className="btn btn-primary mr-2"
-              disabled={isLoading}
-            >
-              {isLoading ? "Saving performance..." : "Save"}
-            </button>
-            <button
-              type="button"
-              className="btn"
-              onClick={() =>
-                (
-                  document.getElementById(
-                    "edit_performance"
-                  ) as HTMLDialogElement
-                )?.close()
-              }
-            >
-              Close
-            </button>
-          </div>
-        </form>
+            <div className="modal-action">
+              <button
+                type="submit"
+                className="btn btn-primary mr-2"
+                disabled={isLoading}
+              >
+                {isLoading ? "Saving performance..." : "Save"}
+              </button>
+              <button
+                type="button"
+                className="btn"
+                onClick={() =>
+                  (
+                    document.getElementById(
+                      "edit_performance"
+                    ) as HTMLDialogElement
+                  )?.close()
+                }
+              >
+                Close
+              </button>
+            </div>
+          </form>
+        )}
       </div>
     </dialog>
   );
