@@ -19,6 +19,7 @@ const Performances = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     axios
@@ -37,6 +38,7 @@ const Performances = () => {
   }, [currentPage, user?.token]);
 
   const deletePerformance = async (performance_id: string) => {
+    setIsLoading(true);
     if (!performance_id || !user?.token) return;
 
     const confirm_variable = confirm(
@@ -65,6 +67,7 @@ const Performances = () => {
 
       setPerfomances(res.data.data);
       setLastPage(res.data.last_page);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error when eliminating the performance: ", error);
       alert("Error in the elimination of the performance");
@@ -108,87 +111,93 @@ const Performances = () => {
           </button>
         </div>
 
-        {perfomances.map((perfomance: Performance) => (
-          <li className="list-row">
-            <div className="lg:w-[490px] flex flex-row justify-stretch">
-              <div className="lg:w-1/12 flex justify-center mr-4">
-                <img
-                  className="size-8 rounded-box"
-                  src={
-                    perfomance.performance_type?.type === "P"
-                      ? img_prest_psicologica
-                      : img_prest_sanitaria
-                  }
-                  alt="Avatar"
-                />
-              </div>
-              <div className="w-10/12 mr-5">
-                <div>
-                  <strong>{perfomance.performance_type?.title}</strong>
+        {isLoading ? (
+          <div className="w-full flex justify-center items-center py-8">
+            <span className="loading loading-spinner loading-lg"></span>
+          </div>
+        ) : (
+          perfomances.map((perfomance: Performance) => (
+            <li className="list-row">
+              <div className="lg:w-[490px] flex flex-row justify-stretch">
+                <div className="lg:w-1/12 flex justify-center mr-4">
+                  <img
+                    className="size-8 rounded-box"
+                    src={
+                      perfomance.performance_type?.type === "P"
+                        ? img_prest_psicologica
+                        : img_prest_sanitaria
+                    }
+                    alt="Avatar"
+                  />
                 </div>
-                <p className="list-col-wrap text-xs mt-0">
-                  {perfomance.personalized_description
-                    ? perfomance.personalized_description.length > 150
-                      ? perfomance.personalized_description.slice(0, 150) +
+                <div className="w-10/12 mr-5">
+                  <div>
+                    <strong>{perfomance.performance_type?.title}</strong>
+                  </div>
+                  <p className="list-col-wrap text-xs mt-0">
+                    {perfomance.personalized_description
+                      ? perfomance.personalized_description.length > 150
+                        ? perfomance.personalized_description.slice(0, 150) +
+                          "..."
+                        : perfomance.personalized_description
+                      : perfomance.performance_type?.description &&
+                        perfomance.performance_type?.description.length > 150
+                      ? perfomance.performance_type?.description.slice(0, 150) +
                         "..."
-                      : perfomance.personalized_description
-                    : perfomance.performance_type?.description &&
-                      perfomance.performance_type?.description.length > 150
-                    ? perfomance.performance_type?.description.slice(0, 150) +
-                      "..."
-                    : ""}
-                </p>
-              </div>
-              <div className="w-1/12 text-end">
-                <button
-                  onClick={() => {
-                    setSelectedId(perfomance.performance_id);
-                    (
-                      document.getElementById(
-                        "edit_performance"
-                      ) as HTMLDialogElement
-                    )?.showModal();
-                  }}
-                  className="btn btn-square btn-ghost"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="size-[1.2em]"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="blue"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                      : ""}
+                  </p>
+                </div>
+                <div className="w-1/12 text-end">
+                  <button
+                    onClick={() => {
+                      setSelectedId(perfomance.performance_id);
+                      (
+                        document.getElementById(
+                          "edit_performance"
+                        ) as HTMLDialogElement
+                      )?.showModal();
+                    }}
+                    className="btn btn-square btn-ghost"
                   >
-                    <path d="M12 20h9" />
-                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => deletePerformance(perfomance.performance_id)}
-                  className="btn btn-square btn-ghost"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="size-[1.2em]"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="red"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="size-[1.2em]"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="blue"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M12 20h9" />
+                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => deletePerformance(perfomance.performance_id)}
+                    className="btn btn-square btn-ghost"
                   >
-                    <polyline points="3 6 5 6 21 6" />
-                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3-3h8a1 1 0 0 1 1 1v2H5V4a1 1 0 0 1 1-1z" />
-                    <line x1="10" y1="11" x2="10" y2="17" />
-                    <line x1="14" y1="11" x2="14" y2="17" />
-                  </svg>
-                </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="size-[1.2em]"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="red"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="3 6 5 6 21 6" />
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3-3h8a1 1 0 0 1 1 1v2H5V4a1 1 0 0 1 1-1z" />
+                      <line x1="10" y1="11" x2="10" y2="17" />
+                      <line x1="14" y1="11" x2="14" y2="17" />
+                    </svg>
+                  </button>
+                </div>
               </div>
-            </div>
-          </li>
-        ))}
+            </li>
+          ))
+        )}
         {perfomances.length !== 0 ? (
           <div className="w-full h-full flex flex-row justify-center items-center">
             <div className="join">

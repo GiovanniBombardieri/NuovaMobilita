@@ -9,6 +9,7 @@ const EditPerformance = ({
 }) => {
   const { user } = useAuth();
   const [performance, setPerformance] = useState<Performance | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Title
   const [title, setTitle] = useState(
@@ -75,6 +76,7 @@ const EditPerformance = ({
   }, [performance_id, user?.token]);
 
   const updatePerformance = async () => {
+    setIsLoading(true);
     if (!performance_id || !user?.token) return;
 
     try {
@@ -93,7 +95,11 @@ const EditPerformance = ({
         }
       );
 
-      alert("Successful updated performance");
+      if (!isLoading) {
+        alert("Successful updated performance");
+        window.location.reload();
+      }
+
       (
         document.getElementById("edit_performance") as HTMLDialogElement
       )?.close();
@@ -175,8 +181,12 @@ const EditPerformance = ({
           </div>
 
           <div className="modal-action">
-            <button type="submit" className="btn btn-primary mr-2">
-              Save
+            <button
+              type="submit"
+              className="btn btn-primary mr-2"
+              disabled={isLoading}
+            >
+              {isLoading ? "Saving performance..." : "Save"}
             </button>
             <button
               type="button"
