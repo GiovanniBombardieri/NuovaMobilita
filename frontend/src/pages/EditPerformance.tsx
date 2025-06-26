@@ -59,6 +59,7 @@ const EditPerformance = ({
 
   // Loading the performance data
   useEffect(() => {
+    setIsLoading(true);
     if (!performance_id) return;
 
     axios
@@ -72,6 +73,9 @@ const EditPerformance = ({
       })
       .catch((err) => {
         console.error("Performance recovery error", err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [performance_id, user?.token]);
 
@@ -109,6 +113,21 @@ const EditPerformance = ({
     }
   };
 
+  // User loading information writing
+  const fullText = "...";
+  const [displayedText, setDisplayedText] = useState("");
+  const [index, setIndex] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDisplayedText((prev) =>
+        index < fullText.length ? prev + fullText[index] : ""
+      );
+      setIndex((prev) => (prev < fullText.length ? prev + 1 : 0));
+    }, 70);
+
+    return () => clearInterval(interval);
+  }, [index]);
+
   return (
     <dialog
       id="edit_performance"
@@ -129,7 +148,7 @@ const EditPerformance = ({
               <input
                 type="text"
                 className="input input-bordered w-4/5"
-                value={title}
+                value={isLoading ? displayedText : title}
                 onChange={(e) => setTitle(e.target.value)}
                 readOnly
               />
@@ -143,7 +162,7 @@ const EditPerformance = ({
               <input
                 type="text"
                 className="input input-bordered w-4/5"
-                value={type}
+                value={isLoading ? displayedText : type}
                 onChange={(e) => setType(e.target.value)}
                 readOnly
               />
@@ -158,7 +177,7 @@ const EditPerformance = ({
                 type="number"
                 min={0}
                 className="input input-bordered w-4/5"
-                value={price}
+                value={isLoading ? displayedText : price}
                 onChange={(e) => {
                   const value = e.target.value.replace(",", ".");
                   const number = parseFloat(value);
@@ -174,7 +193,7 @@ const EditPerformance = ({
               <label className="label w-1/5">Description</label>
               <textarea
                 className="input input-bordered w-4/5 h-32 resize-none whitespace-normal"
-                value={description}
+                value={isLoading ? displayedText : description}
                 onChange={(e) => setDescription(e.target.value)}
               />
             </div>
