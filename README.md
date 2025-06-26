@@ -13,6 +13,12 @@
 Nuova Mobilità is a web platform dedicated to supporting people who are undergoing a post-amputation recovery journey. It connects users and qualified healthcare facilities, making it easier to find services, manage treatments, and facilitate communication between patients and specialized centers.
 
 </div>
+<br/>
+<br/>
+
+<div style="font-size: 12px; text-align: center; border-left: 5px solid #8C60C1ff; border-right: 5px solid #87D399ff; border-top-left-radius: 10px; border-bottom-right-radius: 10px; padding: 10px">
+🕰️ <u>Please note</u>: the application might take a few extra seconds to start. It's hosted on free-tier servers (startup budget still pending!), so a bit of patience is appreciated — I promise it's worth the wait!
+</div>
 
 ## Main Features
 
