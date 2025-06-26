@@ -198,7 +198,11 @@ const Performances = () => {
             </li>
           ))
         )}
-        {perfomances.length !== 0 ? (
+        {isLoading ? (
+          <div className="w-full flex justify-center items-center py-8">
+            <span className="loading loading-spinner loading-lg"></span>
+          </div>
+        ) : perfomances.length !== 0 ? (
           <div className="w-full h-full flex flex-row justify-center items-center">
             <div className="join">
               {[...Array(lastPage)].map((_, index) => (

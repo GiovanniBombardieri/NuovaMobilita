@@ -116,6 +116,7 @@ class PerformanceController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Performance creation error: " . $e->getMessage());
+            error_log("Errore: " . $e->getMessage());
             return response()->json(['message' => 'Error when creating performance'], 500);
         }
     }
