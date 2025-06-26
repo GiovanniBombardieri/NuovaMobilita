@@ -9,8 +9,10 @@ const AddPerformance = () => {
   const [type, setType] = useState("");
   const [price, setPrice] = useState<number>();
   const [description, setDescription] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const addPerformance = async () => {
+    setIsLoading(true);
     if (!user?.token) return;
 
     try {
@@ -24,7 +26,10 @@ const AddPerformance = () => {
         }
       );
 
-      alert("Successful performance successfully!");
+      if (!isLoading) {
+        alert("Successful performance successfully!");
+        window.location.reload();
+      }
 
       setTitle("");
       setType("");
@@ -113,8 +118,12 @@ const AddPerformance = () => {
           </div>
 
           <div className="modal-action">
-            <button type="submit" className="btn btn-primary mr-2">
-              Save
+            <button
+              type="submit"
+              className="btn btn-primary mr-2"
+              disabled={isLoading}
+            >
+              {isLoading ? "Saving performance..." : "Save"}
             </button>
             <button
               className="btn"

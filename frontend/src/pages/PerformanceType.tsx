@@ -25,6 +25,7 @@ const PerfomanceType = () => {
   const [type, setType] = useState("");
   const [price, setPrice] = useState<number>();
   const [description, setDescription] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (performance) {
@@ -91,6 +92,7 @@ const PerfomanceType = () => {
 
   // Function to add the performance once the type is chosen
   const addPerformance = async () => {
+    setIsLoading(true);
     if (!user?.token) return;
 
     try {
@@ -108,7 +110,10 @@ const PerfomanceType = () => {
         document.getElementById("search_performance_type") as HTMLDialogElement
       )?.close();
 
-      alert("Successful performance successfully!");
+      if (!isLoading) {
+        alert("Successful performance successfully!");
+        window.location.reload();
+      }
 
       setTitle("");
       setType("");
@@ -195,8 +200,12 @@ const PerfomanceType = () => {
               </div>
 
               <div className="modal-action">
-                <button type="submit" className="btn btn-primary mr-2">
-                  Save
+                <button
+                  type="submit"
+                  className="btn btn-primary mr-2"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Saving performance..." : "Save"}
                 </button>
                 <button
                   type="button"
