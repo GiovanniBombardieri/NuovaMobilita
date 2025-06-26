@@ -131,25 +131,26 @@ nuova-mobilita/
 
 ## Deployment & Hosting
 
-- **Frontend**: l'applicazione React è deployata su [Netlify](https://nuova-mobilita.netlify.app/login).  
-  Le chiamate API dal frontend puntano all'endpoint definito nella variabile `VITE_API_URL` del file `.env.production` in `frontend/`.
+- **Frontend**: the React application is deployed on [Netlify](https://nuova-mobilita.netlify.app/login).  
+  API calls from the frontend point to the endpoint defined in the `VITE_API_URL` variable in the `.env.production` file in `frontend/`.
 
-  > **Nota:** Per lo sviluppo locale, assicurati di modificare la variabile `VITE_API_URL` nel file `.env` o `.env.local` per puntare a `http://localhost:8000` (o la porta usata dal backend).
+  > **Note:** For local development, make sure to change the `VITE_API_URL` variable in the `.env` or `.env.local` file to point to `http://localhost:8000` (or the port used by the backend).
 
-- **Backend**: l'API Laravel è containerizzata tramite Docker (vedi [`backend/Dockerfile`](backend/Dockerfile)) e deployata su [Render.com](https://render.com/).  
-  Il deploy esegue lo script [`backend/start.sh`](backend/start.sh) che:
+- **Backend**: the Laravel API is containerized using Docker (see [`backend/Dockerfile`](backend/Dockerfile)) and deployed on [Render.com](https://render.com/).
 
-  - imposta i permessi e le variabili d'ambiente,
-  - esegue le migrazioni (`php artisan migrate --force`),
-  - lancia i seed solo se necessario,
-  - avvia PHP-FPM e Nginx.
+  The deployment runs the script [`backend/start.sh`](backend/start.sh) which:
 
-- **Database**: anche il database (ad esempio PostgreSQL o MySQL) è hostato su Render.com e accessibile dal backend tramite le variabili d'ambiente.
+  - sets permissions and environment variables,
+  - runs the migrations (`php artisan migrate --force`),
+  - runs the seeders only if necessary,
+  - starts PHP-FPM and Nginx.
 
-### Sviluppo locale
+- **Database**: the database (e.g., PostgreSQL or MySQL) is also hosted on Render.com and is accessible by the backend through environment variables.
 
-- Per testare il frontend in locale, assicurati che la variabile `VITE_API_URL` punti al backend locale.
-- Per avviare il backend in locale, puoi usare Docker Compose seguendo le istruzioni già presenti nel README.
+### Local Development
+
+- To test the frontend locally, make sure the `VITE_API_URL` variable points to the local backend.
+- To start the backend locally, you can use Docker Compose by following the instructions already provided in the README.
 
 ## Contributing
 
