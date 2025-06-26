@@ -40,6 +40,7 @@ const Dashboard = () => {
   const { user } = useAuth();
   const [structure, setStructure] = useState<Structure[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [logoutLoading, setLogoutLoading] = useState(false);
 
   useEffect(() => {
     const fetchStructureWithGeocode = async () => {
@@ -110,55 +111,90 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen w-screen flex flex-col">
-      <Navbar />
+      <Navbar setLogoutLoading={setLogoutLoading} />
 
-      {isStructure(user) ? (
-        // STRUCTURE LAYOUT
-        <div className="flex-1 flex flex-col lg:flex-row lg:overflow-hidden">
-          {/** Left column */}
-          <div className="flex flex-col w-full lg:w-2/3 h-full">
-            <div className="flex-1 lg:overflow-auto pt-4 lg:pl-4 pl-1 pb-2 lg:pr-2 pr-1">
-              <ServiceOverview />
-            </div>
-            <div className="flex-1 flex flex-col lg:flex-row justify-between lg:overflow-hidden lg:pl-4 pl-1 pb-1 pt-2 lg:pr-2 pr-1 gap-4">
-              <UserDetails />
-              {isLoading ? (
-                <StructureMaps
-                  structures={mappedStructure}
-                  userLocation={userLocation}
-                />
-              ) : null}
-            </div>
-          </div>
-          {/** Right column */}
-          <div className="h-full  w-full lg:w-1/3 lg:pl-2 pl-1 lg:py-4 py-1 lg:pr-4 pr-1 overflow-auto">
-            {isStructure(user) ? <Performance /> : null}
-          </div>
+      {logoutLoading ? (
+        <div className="w-full h-full flex flex-col justify-center items-center py-8">
+          {user.role === "user" ? (
+            <>
+              <p className="text-xl">
+                ✨ Grazie per aver utilizzato Nuova Mobilità!
+              </p>
+              <br />
+              <p className="text-xl">
+                {" "}
+                Alla prossima esperienza insieme — ti aspettiamo per scoprire
+                nuovi servizi e opportunità vicino a te! 🚀💙
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="text-xl">
+                👏 Grazie per esserti affidato a Nuova Mobilità!
+              </p>
+              <br />
+              <p className="text-xl">
+                Continua a far crescere la tua visibilità e a offrire servizi di
+                qualità: ti aspettiamo presto per nuove opportunità e successi
+                condivisi. 🌐🚀
+              </p>
+            </>
+          )}
+          <br />
+          <br />
+          <span className="loading loading-spinner loading-xl"></span>
         </div>
-      ) : isUser(user) ? (
-        // USER LAYOUT
-        <div className="flex-1 flex flex-col lg:flex-row lg:overflow-hidden">
-          {/** Left column */}
-          <div className="flex flex-col w-full lg:w-2/3 h-full">
-            <div className="flex-1 lg:overflow-auto pt-4 lg:pl-4 pl-1 pb-2 lg:pr-2 pr-1">
-              <ServiceOverview />
+      ) : (
+        <>
+          {isStructure(user) ? (
+            // STRUCTURE LAYOUT
+            <div className="flex-1 flex flex-col lg:flex-row lg:overflow-hidden">
+              {/** Left column */}
+              <div className="flex flex-col w-full lg:w-2/3 h-full">
+                <div className="flex-1 lg:overflow-auto pt-4 lg:pl-4 pl-1 pb-2 lg:pr-2 pr-1">
+                  <ServiceOverview />
+                </div>
+                <div className="flex-1 flex flex-col lg:flex-row justify-between lg:overflow-hidden lg:pl-4 pl-1 pb-1 pt-2 lg:pr-2 pr-1 gap-4">
+                  <UserDetails />
+                  {isLoading ? (
+                    <StructureMaps
+                      structures={mappedStructure}
+                      userLocation={userLocation}
+                    />
+                  ) : null}
+                </div>
+              </div>
+              {/** Right column */}
+              <div className="h-full  w-full lg:w-1/3 lg:pl-2 pl-1 lg:py-4 py-1 lg:pr-4 pr-1 overflow-auto">
+                {isStructure(user) ? <Performance /> : null}
+              </div>
             </div>
-            <div className="flex-1 flex flex-col lg:flex-row justify-between lg:overflow-hidden lg:pl-4 pl-1 pb-4 pt-2 lg:pr-2 pr-1 gap-4">
-              <UserDetails />
-              {isStructure(user) ? <Performance /> : <Structures />}
+          ) : isUser(user) ? (
+            // USER LAYOUT
+            <div className="flex-1 flex flex-col lg:flex-row lg:overflow-hidden">
+              {/** Left column */}
+              <div className="flex flex-col w-full lg:w-2/3 h-full">
+                <div className="flex-1 lg:overflow-auto pt-4 lg:pl-4 pl-1 pb-2 lg:pr-2 pr-1">
+                  <ServiceOverview />
+                </div>
+                <div className="flex-1 flex flex-col lg:flex-row justify-between lg:overflow-hidden lg:pl-4 pl-1 pb-4 pt-2 lg:pr-2 pr-1 gap-4">
+                  <UserDetails />
+                  {isStructure(user) ? <Performance /> : <Structures />}
+                </div>
+              </div>
+              {/** Right column */}
+              <div className="h-full w-full lg:w-1/3 lg:pl-2 pl-1 lg:py-4 py-1 lg:pr-4 pr-1 lg:overflow-auto">
+                {isLoading ? (
+                  <StructureMaps
+                    structures={mappedStructure}
+                    userLocation={userLocation}
+                  />
+                ) : null}
+              </div>
             </div>
-          </div>
-          {/** Right column */}
-          <div className="h-full w-full lg:w-1/3 lg:pl-2 pl-1 lg:py-4 py-1 lg:pr-4 pr-1 lg:overflow-auto">
-            {isLoading ? (
-              <StructureMaps
-                structures={mappedStructure}
-                userLocation={userLocation}
-              />
-            ) : null}
-          </div>
-        </div>
-      ) : null}
+          ) : null}
+        </>
+      )}
     </div>
   );
 };

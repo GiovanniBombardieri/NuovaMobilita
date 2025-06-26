@@ -7,12 +7,16 @@ import PerfomanceType from "./PerformanceType";
 function isStructure(user: User | Structure | null): user is Structure {
   return (user as Structure)?.role === "structure";
 }
+type NavbarProps = {
+  setLogoutLoading: (value: boolean) => void;
+};
 
-const Navbar = () => {
+const Navbar = ({ setLogoutLoading }: NavbarProps) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    setLogoutLoading(true);
     fetch(`${import.meta.env.VITE_API_URL}/logout`, {
       method: "POST",
       headers: {
@@ -26,6 +30,9 @@ const Navbar = () => {
       })
       .catch((error) => {
         console.error("Logout error:", error);
+      })
+      .finally(() => {
+        setLogoutLoading(false);
       });
   };
 
